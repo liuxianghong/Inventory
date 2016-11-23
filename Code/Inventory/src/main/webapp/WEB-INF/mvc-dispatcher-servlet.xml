@@ -8,11 +8,16 @@
     <!--指明 controller 所在包，并扫描其中的注解-->
     <context:component-scan base-package="cn.liuxh.controller"/>
 
-    <!-- 静态资源(js、image等)的访问 -->
-    <mvc:default-servlet-handler/>
+
 
     <!-- 开启注解 -->
     <mvc:annotation-driven/>
+
+    <mvc:resources mapping="/easyui/**/" location="/WEB-INF/easyui/"/>
+    <!--<mvc:resources mapping="/styles/**" location="/static_resources/css/"/>-->
+
+    <!-- 静态资源(js、image等)的访问 -->
+    <mvc:default-servlet-handler/>
 
     <!--ViewResolver 视图解析器-->
     <!--用于支持Servlet、JSP视图解析-->
