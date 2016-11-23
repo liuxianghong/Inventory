@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Basic Panel - jQuery EasyUI Demo</title>
-    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="/easyui/themes/color.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
