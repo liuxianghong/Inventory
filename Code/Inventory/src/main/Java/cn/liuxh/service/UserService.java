@@ -3,7 +3,6 @@ package cn.liuxh.service;
 import cn.liuxh.mapper.UserMapper;
 import cn.liuxh.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 /**
