@@ -110,6 +110,16 @@
     </dependency>
 
 
+    <!-- 下面两个包 commons-dbcp,commons-pool 是配置数据源的包-->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+    </dependency>
 
   </dependencies>
 
