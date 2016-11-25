@@ -13,4 +13,22 @@
         select count(*) from orders
     </select>
 
+    <insert id="addOrder" parameterType="cn.liuxh.model.Order" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into orders(name,format,code,number,site,state,time)
+        values(#{name},#{format},#{code},#{number},#{site},#{state},#{time})
+    </insert>
+
+    <!-- 更新的配置 -->
+    <update id="updateOrder" parameterType="cn.liuxh.model.Order">
+        update orders set
+        name=#{name},format=#{format},code=#{code},number=#{number},site=#{site}
+        where id=#{id}
+    </update>
+
+    <!-- 删除配置 -->
+    <delete id="delOrder" parameterType="int">
+        delete from orders where id=#{id}
+    </delete>
+
 </mapper>

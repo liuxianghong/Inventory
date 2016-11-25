@@ -69,17 +69,48 @@ public class OrderController {
             user.setCode(code);
             user.setNumber(Integer.parseInt(number));
             user.setSite(site);
-            boolean ret = false;
-            if (ret) {
+            int ret = 0;
+            if (!userId.isEmpty()) {
                 //修改用户信息
                 user.setId(Integer.parseInt(userId));
+                ret = orderService.updateOrder(user);
                 //ret = userService.updateUser(user);
             } else {
                 //ret = userService.addUser(user);
+                ret = orderService.addOrder(user);
+            }
+            System.out.println("saveOrder:"+" ret: "+ret);
+            if (ret != 0){
+                return 1;
             }
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return 1;
+        return 0;
+    }
+
+    @RequestMapping(value = "/delOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public int delOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+
+            String id = request.getParameter("id");
+
+
+
+            System.out.println("saveOrder:"+" ParameterMap: "+request.getParameterMap().toString());
+
+            int ret = 0;
+            if (!id.isEmpty()) {
+                ret = orderService.delOrder(Integer.parseInt(id));
+            }
+            System.out.println("saveOrder:"+" ret: "+ret);
+            if (ret != 0){
+                return 1;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
     }
 }

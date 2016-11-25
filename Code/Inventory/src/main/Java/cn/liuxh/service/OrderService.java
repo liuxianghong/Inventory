@@ -27,4 +27,16 @@ public class OrderService {
     public int selectCount(){
         return orderMapper.selectCount();
     }
+
+    public int updateOrder(Order order) {
+        return  orderMapper.updateOrder(order);
+    }
+
+    public int addOrder(Order order){
+        return  orderMapper.addOrder(order);
+    }
+
+    public int delOrder(int id){
+        return  orderMapper.delOrder(id);
+    }
 }

@@ -38,8 +38,8 @@
 
 <div id="toolbar">
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addUserInfo()">添加</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editUserInfo()">编辑</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="confirm()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editOrderInfo()">编辑</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delOrder()">删除</a>
 
 </div>
 
@@ -82,9 +82,8 @@
 
 <script type="text/javascript">
 
-    var dataGrid;
 
-    dataGrid = $(function(){
+    $(function(){
         $("#dg").datagrid({
             url:"/getAllOrders",
             columns:[[
@@ -149,7 +148,7 @@
         });
     }
 
-    function editUserInfo(){
+    function editOrderInfo(){
         var rows = $("#dg").datagrid('getSelections');
         if (rows.length == 1) {
             var row =rows[0];
@@ -160,6 +159,41 @@
             return;
         }
     }
+
+    function delOrder(){
+        var rows = $("#dg").datagrid('getSelections');
+        if (rows.length <= 0) {
+            $.messager.alert('警告', '您没有选择',
+                    'error');
+        } else if (rows.length > 1) {
+            $.messager.alert('警告', '不支持批量删除',
+                    'error');
+        } else {
+            $.messager.confirm('确定','您确定要删除吗',
+                    function(t) {
+                        if (t) {
+                            $.ajax({
+                                url : '/delOrder',
+                                method : 'POST',
+                                data : rows[0],
+                                dataType : 'json',
+                                success : function(r) {
+                                    if (r==1) {
+                                        $("#dg").datagrid('acceptChanges');
+                                        $.messager.show({msg : '',title : '成功'});
+                                        $("#dg").datagrid('reload');
+                                    } else {
+                                        $("#dg").datagrid('beginEdit',editRow);
+                                        $.messager.alert('错误','','error');
+                                    }
+                                    $("#dg").datagrid('unselectAll');
+                                }
+                            });
+                        }
+                    });
+        }
+    }
+
 </script>
 </body>
 </html>

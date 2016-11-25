@@ -30,7 +30,7 @@ public class Order {
         this.state = state;
     }
 
-    private int state;
+    private int state = 0;
 
     public int getId() {
         return id;
