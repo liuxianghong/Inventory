@@ -5,5 +5,12 @@
     <select id="getOrder" resultType="cn.liuxh.model.Order">
         select id,name,format,code,number,site,state,time from orders LIMIT 1;
     </select>
+    <select id="getAllOrders" resultType="cn.liuxh.model.Order">
+        select id,name,format,code,number,site,state,time from orders limit #{start},#{rows};
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from orders
+    </select>
 
 </mapper>
