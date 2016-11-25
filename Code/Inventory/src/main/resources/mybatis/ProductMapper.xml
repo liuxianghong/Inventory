@@ -6,4 +6,30 @@
         select id,name,format,code,number,site,time from product LIMIT 1;
     </select>
 
+    <select id="getAllProducts" resultType="cn.liuxh.model.Product">
+        select id,name,format,code,number,site,time from product limit #{start},#{rows};
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from product
+    </select>
+
+    <insert id="addProduct" parameterType="cn.liuxh.model.Product" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into product(name,format,code,number,site,time)
+        values(#{name},#{format},#{code},#{number},#{site},#{time})
+    </insert>
+
+    <!-- 更新的配置 -->
+    <update id="updateProduct" parameterType="cn.liuxh.model.Product">
+        update product set
+        name=#{name},format=#{format},code=#{code},number=#{number},site=#{site}
+        where id=#{id}
+    </update>
+
+    <!-- 删除配置 -->
+    <delete id="delProduct" parameterType="int">
+        delete from product where id=#{id}
+    </delete>
+
 </mapper>
