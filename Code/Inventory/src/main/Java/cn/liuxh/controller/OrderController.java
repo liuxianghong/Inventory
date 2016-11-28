@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,14 +33,24 @@ public class OrderController {
 
     @RequestMapping("/getAllOrders")
     @ResponseBody
-    public Map getAllOrders(int page,int rows) throws Exception{
+    public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
         List students = orderService.getAllOrders(start,rows);
-        map.put("rows",students);
+        map.put("Orders",students);
         map.put("total", orderService.selectCount());
         System.out.println("getAllOrders:"+students.toString()+" page: "+page + " rows: "+ rows);
         return map;
+    }
+
+    @RequestMapping("/getAllOrdersE")
+    @ResponseBody
+    public Map getAllOrdersE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+        Map map = getAllOrders(page, rows);
+        Map mapE = new HashMap();
+        mapE.put("rows", map.get("Orders"));
+        mapE.put("total", map.get("total"));
+        return mapE;
     }
 
     /**

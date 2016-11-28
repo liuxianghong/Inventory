@@ -24,9 +24,9 @@
 
 <div style="margin:20px 0;"></div>
 <div class="easyui-tabs" data-options="tabWidth:112" style="width:900px;height:900px">
-    <div title="订单管理" style="padding:10px">
-        <table id="dgOrder"></table>
-    </div>
+    <%--<div title="订单管理" style="padding:10px">--%>
+        <%--<table id="dgOrder"></table>--%>
+    <%--</div>--%>
     <div title="产品管理" style="padding:10px">
         <table id="dgProduct"></table>
     </div>

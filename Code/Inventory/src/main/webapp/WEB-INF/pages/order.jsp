@@ -52,10 +52,9 @@
 
 <script type="text/javascript">
 
-
     $(function(){
         $("#dgOrder").datagrid({
-            url:"/getAllOrders",
+            url:"/getAllOrdersE",
             columns:[[
                 {field:'name',title:'产品名称',width:150},
                 {field:'format',title:'规格',width:150},

@@ -28,19 +28,19 @@
             </tr>
             <tr>
                 <td>规格:</td>
-                <td><input class="easyui-textbox" type="text" name="format" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+                <td><input class="easyui-textbox" type="text" name="size" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
             <tr>
                 <td>数量:</td>
-                <td><input class="easyui-textbox" type="text" name="number" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+                <td><input class="easyui-textbox" type="text" name="count" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
             <tr>
                 <td>条形码:</td>
-                <td><input class="easyui-textbox" type="text" name="code" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+                <td><input class="easyui-textbox" type="text" name="seriesNo" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
             <tr>
                 <td>库位:</td>
-                <td><input class="easyui-textbox" type="text" name="site" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+                <td><input class="easyui-textbox" type="text" name="locationNo" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
         </table>
 
@@ -56,13 +56,13 @@
 
     $(function(){
         $("#dgProduct").datagrid({
-            url:"/getAllProducts",
+            url:"/getAllGoodsE",
             columns:[[
                 {field:'name',title:'产品名称',width:150},
-                {field:'format',title:'规格',width:150},
-                {field:'number',title:'数量',width:100},
-                {field:'code',title:'条形码',width:200},
-                {field:'site',title:'库位',width:150}
+                {field:'size',title:'规格',width:150},
+                {field:'count',title:'数量',width:100},
+                {field:'seriesNo',title:'条形码',width:200},
+                {field:'locationNo',title:'库位',width:150}
             ]],
             toolbar:'#toolbarProduct',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示
@@ -84,7 +84,7 @@
 
     function saveProduct(){
         $('#productInfoForm').form('submit',{
-            url: '/saveProduct',
+            url: '/saveGoods',
             method:'post',
             success:function(data){
                 var r = data;
@@ -132,7 +132,7 @@
                     function(t) {
                         if (t) {
                             $.ajax({
-                                url : '/delProduct',
+                                url : '/delGoods',
                                 method : 'POST',
                                 data : rows[0],
                                 dataType : 'json',

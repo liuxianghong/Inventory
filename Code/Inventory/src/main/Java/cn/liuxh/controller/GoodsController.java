@@ -1,8 +1,7 @@
 package cn.liuxh.controller;
 
-import cn.liuxh.model.Order;
-import cn.liuxh.model.Product;
-import cn.liuxh.service.ProductService;
+import cn.liuxh.model.Goods;
+import cn.liuxh.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,63 +15,63 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by liuxianghong on 16/11/24.
+ * Created by liuxianghong on 2016/11/28.
  */
+
 @Controller
-public class ProductController {
+public class GoodsController {
 
     @Autowired
-    private ProductService productService;
+    private GoodsService goodsService;
 
-    @RequestMapping("/getProduct")
+    @RequestMapping("/getAllGoodsE")
     @ResponseBody
-    public Product getProduct() {
-        Product product = productService.getProduct();
-        return product;
-    }
-
-
-    @RequestMapping("/getAllProducts")
-    @ResponseBody
-    public Map getAllOrders(int page, int rows) throws Exception{
+    public Map getAllOrdersE(int page, int rows) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
-        List students = productService.getAllProducts(start,rows);
+        List students = goodsService.getAllE(start,rows);
         map.put("rows",students);
-        map.put("total", productService.selectCount());
-        System.out.println("getAllProducts:"+students.toString()+" page: "+page + " rows: "+ rows);
+        map.put("total", goodsService.count());
         return map;
     }
 
-    @RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
+    @RequestMapping("/getAllGoods")
+    @ResponseBody
+    public Map getAllOrders() throws Exception{
+        Map map = new HashMap();
+        List students = goodsService.getAll();
+        map.put("rows",students);
+        return map;
+    }
+
+    @RequestMapping(value = "/saveGoods", method = RequestMethod.POST)
     @ResponseBody
     public int saveProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
 
             String userId = request.getParameter("id");
             String name =  request.getParameter("name");
-            String format = request.getParameter("format");
-            String code = request.getParameter("code");
-            String number = request.getParameter("number");
-            String site = request.getParameter("site");
+            String Size = request.getParameter("size");
+            String SeriesNo = request.getParameter("seriesNo");
+            String Count = request.getParameter("count");
+            String LocationNo = request.getParameter("locationNo");
 
-            System.out.println("saveProduct:"+" userId: "+userId + " name: "+ name);
 
-            Product user = new Product();
+            Goods user = new Goods();
             user.setName(name);
-            user.setFormat(format);
-            user.setCode(code);
-            user.setNumber(Integer.parseInt(number));
-            user.setSite(site);
+            user.setSeriesNo(SeriesNo);
+            user.setSize(Size);
+            user.setCount(Integer.parseInt(Count));
+            user.setLocationNo(LocationNo);
             int ret = 0;
             if (!userId.isEmpty()) {
                 //修改用户信息
                 user.setId(Integer.parseInt(userId));
-                ret = productService.updateProduct(user);
+                ret = goodsService.update(user);
                 //ret = userService.updateUser(user);
             } else {
                 //ret = userService.addUser(user);
-                ret = productService.addProduct(user);
+                ret = goodsService.add(user);
             }
             System.out.println("saveProduct:"+" ret: "+ret);
             if (ret != 0){
@@ -84,22 +83,17 @@ public class ProductController {
         return 0;
     }
 
-    @RequestMapping(value = "/delProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/delGoods", method = RequestMethod.POST)
     @ResponseBody
     public int delProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
-
             String id = request.getParameter("id");
 
 
-
-            System.out.println("delProduct:"+" ParameterMap: "+request.getParameterMap().toString());
-
             int ret = 0;
             if (!id.isEmpty()) {
-                ret = productService.delProduct(Integer.parseInt(id));
+                ret = goodsService.delete(Integer.parseInt(id));
             }
-            System.out.println("delProduct:"+" ret: "+ret);
             if (ret != 0){
                 return 1;
             }
@@ -107,5 +101,14 @@ public class ProductController {
             // TODO: handle exception
         }
         return 0;
+    }
+
+
+    @RequestMapping("/getSkuDetails")
+    @ResponseBody
+    public Goods getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String seriesNo = request.getParameter("seriesNo");
+
+        return goodsService.getGoodsBySeriesNo(seriesNo);
     }
 }

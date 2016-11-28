@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.liuxh.mapper.SkuCheckOrderMapper">
+
+    <!--<select id="getProduct" resultType="cn.liuxh.model.Goods">-->
+    <!--select id,name,format,code,number,site,time from product LIMIT 1;-->
+    <!--</select>-->
+
+    <select id="getAll" resultType="cn.liuxh.model.SkuCheckOrder">
+        select * from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo;
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from SkuCheckOrder
+    </select>
+
+    <insert id="add" parameterType="cn.liuxh.model.SkuCheckOrder" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into SkuCheckOrder(seriesNo,orderName,calculate,time)
+        values(#{seriesNo},#{orderName},#{calculate},#{time})
+    </insert>
+
+    <!-- 更新的配置 -->
+    <update id="update" parameterType="cn.liuxh.model.SkuCheckOrder">
+        update SkuCheckOrder set
+        orderName=#{orderName},calculate=#{calculate}
+        where id=#{id}
+    </update>
+
+    <!-- 删除配置 -->
+    <delete id="delete" parameterType="int">
+        delete from SkuCheckOrder where id=#{id}
+    </delete>
+
+</mapper>
