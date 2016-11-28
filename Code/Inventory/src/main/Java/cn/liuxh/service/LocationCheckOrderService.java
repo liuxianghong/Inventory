@@ -1,0 +1,46 @@
+package cn.liuxh.service;
+
+import cn.liuxh.mapper.LocationCheckOrderMapper;
+import cn.liuxh.mapper.SkuCheckOrderMapper;
+import cn.liuxh.model.LocationCheckOrder;
+import cn.liuxh.model.LocationSku;
+import cn.liuxh.model.SkuCheckOrder;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by liuxianghong on 16/11/28.
+ */
+
+@Service
+public class LocationCheckOrderService {
+    @Autowired
+    private LocationCheckOrderMapper locationCheckOrderMapper;
+
+    public List getAll(){
+        return locationCheckOrderMapper.getAll();
+    }
+    public List<LocationSku> getAllSku(@Param(value="id")int id) {
+        return locationCheckOrderMapper.getAllSku(id);
+    }
+
+    public int count(){
+        return locationCheckOrderMapper.count();
+    }
+
+    public int update(LocationCheckOrder product){
+        return locationCheckOrderMapper.update(product);
+    }
+    public int add(LocationCheckOrder product){
+        return locationCheckOrderMapper.add(product);
+    }
+    public int delete(@Param(value="id")int id){
+        return locationCheckOrderMapper.delete(id);
+    }
+    public LocationCheckOrder getDetailById(@Param(value="id")int id){
+        return locationCheckOrderMapper.getDetailById(id);
+    }
+}

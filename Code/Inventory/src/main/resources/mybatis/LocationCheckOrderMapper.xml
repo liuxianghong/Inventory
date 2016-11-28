@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.liuxh.mapper.LocationCheckOrderMapper">
+
+    <!--<select id="getProduct" resultType="cn.liuxh.model.Goods">-->
+    <!--select id,name,format,code,number,site,time from product LIMIT 1;-->
+    <!--</select>-->
+
+    <select id="getAll" resultType="cn.liuxh.model.LocationCheckOrder">
+        select * from LocationCheckOrders;
+    </select>
+
+    <select id="getAllSku" resultType="cn.liuxh.model.LocationSku">
+        select * from LocationSKU where orderId = #{id};
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from LocationCheckOrders;
+    </select>
+
+    <select id="haveGoods" resultType="java.lang.Integer">
+        select count(*) from goods where seriesNo=#{seriesNo};
+    </select>
+
+    <select id="getDetailById" resultType="cn.liuxh.model.LocationCheckOrder">
+        select * from LocationCheckOrders where id = #{id};
+    </select>
+
+    <insert id="add" parameterType="cn.liuxh.model.LocationCheckOrder" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into LocationCheckOrders(locationNo,orderName,time)
+        values(#{locationNo},#{orderName},#{time})
+    </insert>
+
+    <!-- 更新的配置 -->
+    <update id="update" parameterType="cn.liuxh.model.LocationCheckOrder">
+        update LocationCheckOrders set
+        orderName=#{orderName}
+        where id=#{id}
+    </update>
+
+    <!-- 删除配置 -->
+    <delete id="delete" parameterType="int">
+        delete from LocationCheckOrders where id=#{id};
+        delete from LocationSKU where orderId=#{id};
+    </delete>
+
+</mapper>

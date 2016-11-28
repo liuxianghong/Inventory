@@ -18,4 +18,7 @@ public interface SkuCheckOrderMapper {
     int add(SkuCheckOrder product);
     int delete(@Param(value="id")int id);
 
+    SkuCheckOrder getDetailById(@Param(value="id")int id);
+
+    int haveGoods(@Param(value="seriesNo")String id);
 }

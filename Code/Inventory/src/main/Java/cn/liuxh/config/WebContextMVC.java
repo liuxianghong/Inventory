@@ -43,7 +43,7 @@ public class WebContextMVC {
     @ConfigurationProperties(locations = "classpath:application.properties",prefix="spring.datasource")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/Inventory");
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/Inventory?characterEncoding=UTF-8&amp;useUnicode=true");
         dataSource.setUsername("root");
         dataSource.setPassword("210749Qq");
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");

@@ -33,6 +33,18 @@ public class SkuCheckOrderController {
         return map;
     }
 
+    @RequestMapping(value = "/getSkuCheckOrderById")
+    @ResponseBody
+    public SkuCheckOrder getSkuCheckOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+            String id =  request.getParameter("id");
+            return skuCheckOrderService.getDetailById(Integer.parseInt(id));
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return new SkuCheckOrder();
+    }
+
     @RequestMapping(value = "/createSkuCheckOrder")
     @ResponseBody
     public SkuCheckOrder addProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -46,11 +58,14 @@ public class SkuCheckOrderController {
             sku.setSeriesNo(seriesNo);
             sku.setCalculate(Integer.parseInt(calculate));
             sku.setTime(time);
-            int ret = 0;
-            ret = skuCheckOrderService.add(sku);
-            if (ret != 0){
-                return sku;
+            if (skuCheckOrderService.haveGoods(seriesNo)) {
+                int ret = 0;
+                ret = skuCheckOrderService.add(sku);
+                if (ret != 0){
+                    return skuCheckOrderService.getDetailById(sku.getId());
+                }
             }
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -73,7 +88,7 @@ public class SkuCheckOrderController {
             int ret = 0;
             ret = skuCheckOrderService.update(sku);
             if (ret != 0){
-                return sku;
+                return skuCheckOrderService.getDetailById(sku.getId());
             }
         } catch (Exception e) {
             // TODO: handle exception

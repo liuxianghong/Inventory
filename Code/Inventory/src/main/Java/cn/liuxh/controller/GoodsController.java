@@ -73,7 +73,7 @@ public class GoodsController {
                 //ret = userService.addUser(user);
                 ret = goodsService.add(user);
             }
-            System.out.println("saveProduct:"+" ret: "+ret);
+            System.out.println("saveProduct:"+" ret: "+ret + " id: "+user.getId());
             if (ret != 0){
                 return 1;
             }

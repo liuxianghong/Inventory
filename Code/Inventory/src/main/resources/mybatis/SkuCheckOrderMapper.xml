@@ -7,11 +7,20 @@
     <!--</select>-->
 
     <select id="getAll" resultType="cn.liuxh.model.SkuCheckOrder">
-        select * from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo;
+        select *,goods.id AS gid from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo;
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from SkuCheckOrder
+        select count(*) from SkuCheckOrder;
+    </select>
+
+    <select id="haveGoods" resultType="java.lang.Integer">
+        select count(*) from goods where seriesNo=#{seriesNo};
+    </select>
+
+    <select id="getDetailById" resultType="cn.liuxh.model.SkuCheckOrder">
+        select *,goods.id AS gid from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo
+        AND SkuCheckOrder.id = #{id};
     </select>
 
     <insert id="add" parameterType="cn.liuxh.model.SkuCheckOrder" useGeneratedKeys="true"

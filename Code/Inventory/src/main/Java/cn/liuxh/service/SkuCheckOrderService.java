@@ -33,4 +33,9 @@ public class SkuCheckOrderService {
     public int delete(@Param(value="id")int id){
         return skuCheckOrderMapper.delete(id);
     }
+    public SkuCheckOrder getDetailById(@Param(value="id")int id){
+        return skuCheckOrderMapper.getDetailById(id);
+    }
+
+    public boolean haveGoods(String seriesNo) { return skuCheckOrderMapper.haveGoods(seriesNo) > 0;}
 }
