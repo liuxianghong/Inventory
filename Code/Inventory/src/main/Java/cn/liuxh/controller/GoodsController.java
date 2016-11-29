@@ -2,14 +2,26 @@ package cn.liuxh.controller;
 
 import cn.liuxh.model.Goods;
 import cn.liuxh.service.GoodsService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,5 +139,93 @@ public class GoodsController {
 
 
         return goodsService.getGoodsBySeriesNo(seriesNo);
+    }
+
+
+    @RequestMapping(value = "/upload")
+    public String upload(@RequestParam(value = "file", required = false) MultipartFile file
+            , HttpServletRequest request, ModelMap model) {
+
+        System.out.println("upload:"+"开始");
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String fileName = file.getOriginalFilename();
+//        String fileName = new Date().getTime()+".jpg";
+        System.out.println("upload getRealPath:"+path);
+        File targetFile = new File(path, fileName);
+        if(!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+
+        //保存
+        try {
+            file.transferTo(targetFile);
+            getExcelInfo(fileName,targetFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("fileUrl", request.getContextPath()+"/upload/"+fileName);
+
+
+
+        System.out.println("upload getContextPath:"+request.getContextPath()+"/upload/"+fileName);
+        return "index";
+    }
+
+
+    Workbook create(String filePath,FileInputStream is) throws IOException {
+        return new HSSFWorkbook(is);
+    }
+
+    public boolean validateExcel(String filePath){
+        return(filePath.endsWith(".xls") || filePath.endsWith(".xlsx"));
+    }
+
+    public List getExcelInfo(String fileName,File Mfile) throws IOException {
+
+        if (!validateExcel(fileName)){
+            return  null;
+        }
+        FileInputStream fis = null;
+        fis = new FileInputStream(Mfile);
+        HSSFWorkbook workbook = new HSSFWorkbook(fis);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        int totalRows=sheet.getPhysicalNumberOfRows();
+
+        int totalCells = 0;
+        //得到Excel的列数(前提是有行数)
+        if(totalRows>=1 && sheet.getRow(0) != null){
+            totalCells =sheet.getRow(0).getPhysicalNumberOfCells();
+        }
+
+        List<Goods> customerList=new ArrayList<Goods>();
+        //循环Excel行数,从第二行开始。标题不入库
+        for(int r=1;r<totalRows;r++){
+
+            Row row = sheet.getRow(r);
+            if (row == null) continue;
+            Goods goods = new Goods();
+            //循环Excel的列
+            for(int c = 0; c <totalCells; c++) {
+                Cell cell = row.getCell(c);
+                if (null != cell) {
+                    if (c == 0) {
+                        goods.setName(cell.getStringCellValue());
+                    } else if (c == 1) {
+                        goods.setSize(cell.getStringCellValue());
+                    } else if (c == 2) {
+                        goods.setSeriesNo(cell.getStringCellValue());
+                    } else if (c == 3) {
+                        goods.setCount(Integer.parseInt(cell.getStringCellValue()));
+                    } else if (c == 4) {
+                        goods.setLocationNo(cell.getStringCellValue());
+                    }
+                    System.out.println("getExcelInfo:"+cell.getStringCellValue());
+                }
+            }
+            customerList.add(goods);
+        }
+        workbook.close();
+        return customerList;
     }
 }

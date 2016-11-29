@@ -20,10 +20,10 @@
 <body>
 
 <%@ include file="product.jsp"%>
-<%@ include file="order.jsp"%>
+<%--<%@ include file="order.jsp"%>--%>
 
 <div style="margin:20px 0;"></div>
-<div class="easyui-tabs" data-options="tabWidth:112" style="width:900px;height:900px">
+<div class="easyui-tabs" data-options="tabWidth:112" style="width:900px;height:600px">
     <%--<div title="订单管理" style="padding:10px">--%>
         <%--<table id="dgOrder"></table>--%>
     <%--</div>--%>
@@ -31,6 +31,12 @@
         <table id="dgProduct"></table>
     </div>
 </div>
+
+<form name="Form2" action="/upload" method="post"  enctype="multipart/form-data">
+    <h1>采用multipart提供的file.transfer方法上传文件</h1>
+    <input type="file" name="file">
+    <input type="submit" value="upload"/>
+</form>
 
 </body>
 </html>
