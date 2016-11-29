@@ -12,7 +12,19 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addProduct()">添加</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editProduct()">编辑</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delProduct()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importProduct()">导入</a>
+</div>
 
+<div id="productFileWin" class="easyui-window" title="导入Excel"
+     style="width: 500px; height: auto;" closed="true">
+    <form name="FormFile" action="/upload" method="post"  enctype="multipart/form-data">
+        <h1>选择上传文件</h1>
+        <input type="file" name="file">
+
+        <div style="padding: 5px; text-align: center;">
+            <input type="submit" value="upload"/><a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#productFileWin').window('close')">取消</a>
+        </div>
+    </form>
 </div>
 
 
@@ -117,6 +129,10 @@
             alert("请选择一条记录！");
             return;
         }
+    }
+
+    function importProduct(){
+        $("#productFileWin").window('open');
     }
 
     function delProduct(){

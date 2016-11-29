@@ -45,4 +45,8 @@ public class GoodsService {
     public int updateSkuLocation(Goods product) {
         return goodsMapper.updateSkuLocation(product);
     }
+
+    public int importGoods(List godds)  {
+        return goodsMapper.importGoods(godds);
+    }
 }

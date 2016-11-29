@@ -22,4 +22,6 @@ public interface GoodsMapper {
 
     int updateSkuLocation(Goods product);
 
+    int importGoods(List godds);
+
 }

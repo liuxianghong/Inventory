@@ -3,10 +3,9 @@ package cn.liuxh.controller;
 import cn.liuxh.model.Goods;
 import cn.liuxh.service.GoodsService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +24,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import static org.apache.poi.ss.usermodel.CellType.STRING;
 
 /**
  * Created by liuxianghong on 2016/11/28.
@@ -150,6 +152,9 @@ public class GoodsController {
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
 //        String fileName = new Date().getTime()+".jpg";
+        if (!validateExcel(fileName)){
+            return "index";
+        }
         System.out.println("upload getRealPath:"+path);
         File targetFile = new File(path, fileName);
         if(!targetFile.exists()){
@@ -159,13 +164,12 @@ public class GoodsController {
         //保存
         try {
             file.transferTo(targetFile);
-            getExcelInfo(fileName,targetFile);
+            List<Goods> goodses = getExcelInfo(fileName,targetFile);
+            goodsService.importGoods(goodses);
         } catch (Exception e) {
             e.printStackTrace();
         }
         model.addAttribute("fileUrl", request.getContextPath()+"/upload/"+fileName);
-
-
 
         System.out.println("upload getContextPath:"+request.getContextPath()+"/upload/"+fileName);
         return "index";
@@ -180,14 +184,13 @@ public class GoodsController {
         return(filePath.endsWith(".xls") || filePath.endsWith(".xlsx"));
     }
 
-    public List getExcelInfo(String fileName,File Mfile) throws IOException {
+    public List<Goods> getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return  null;
         }
-        FileInputStream fis = null;
-        fis = new FileInputStream(Mfile);
-        HSSFWorkbook workbook = new HSSFWorkbook(fis);
+
+        Workbook workbook = WorkbookFactory.create(file);//new HSSFWorkbook(fis);
         Sheet sheet = workbook.getSheetAt(0);
 
         int totalRows=sheet.getPhysicalNumberOfRows();
@@ -200,8 +203,7 @@ public class GoodsController {
 
         List<Goods> customerList=new ArrayList<Goods>();
         //循环Excel行数,从第二行开始。标题不入库
-        for(int r=1;r<totalRows;r++){
-
+        for(int r=2;r<totalRows;r++){
             Row row = sheet.getRow(r);
             if (row == null) continue;
             Goods goods = new Goods();
@@ -209,21 +211,36 @@ public class GoodsController {
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
                 if (null != cell) {
+                    String str = "";
                     if (c == 0) {
                         goods.setName(cell.getStringCellValue());
+                        str = cell.getStringCellValue();
                     } else if (c == 1) {
                         goods.setSize(cell.getStringCellValue());
+                        str = cell.getStringCellValue();
                     } else if (c == 2) {
                         goods.setSeriesNo(cell.getStringCellValue());
+                        str = cell.getStringCellValue();
                     } else if (c == 3) {
-                        goods.setCount(Integer.parseInt(cell.getStringCellValue()));
+                        if (cell.getCellTypeEnum() == CellType.NUMERIC){
+                            goods.setCount((int)cell.getNumericCellValue());
+                            str += cell.getNumericCellValue();
+                        } else if (cell.getCellTypeEnum() == CellType.STRING) {
+                            goods.setCount(Integer.parseInt(cell.getStringCellValue()));
+                            str = cell.getStringCellValue();
+                        }
                     } else if (c == 4) {
                         goods.setLocationNo(cell.getStringCellValue());
+                        str = cell.getStringCellValue();
                     }
-                    System.out.println("getExcelInfo:"+cell.getStringCellValue());
+                    System.out.println("getExcelInfo:"+str);
                 }
             }
-            customerList.add(goods);
+            if (goods.getSeriesNo() != null
+                    && !goods.getSeriesNo().trim().isEmpty()) {
+                customerList.add(goods);
+                System.out.println("getExcelInfo:"+customerList.size());
+            }
         }
         workbook.close();
         return customerList;
