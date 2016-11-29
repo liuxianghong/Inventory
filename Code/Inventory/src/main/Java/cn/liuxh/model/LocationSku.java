@@ -1,7 +1,5 @@
 package cn.liuxh.model;
 
-import java.sql.Timestamp;
-
 /**
  * Created by liuxianghong on 16/11/28.
  */
@@ -16,17 +14,36 @@ import java.sql.Timestamp;
 
 public class LocationSku {
 
-    int id;
     String seriesNo;
     int calculate;
     int orderId;
 
-    public int getId() {
-        return id;
+    int count;
+    String name;
+    String size;
+
+    public int getCount() {
+        return count;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public String getSeriesNo() {

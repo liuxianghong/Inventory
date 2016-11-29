@@ -42,7 +42,7 @@ public class SkuCheckOrderController {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return new SkuCheckOrder();
+        return null;
     }
 
     @RequestMapping(value = "/createSkuCheckOrder")
@@ -69,7 +69,7 @@ public class SkuCheckOrderController {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return new SkuCheckOrder();
+        return null;
     }
 
     @RequestMapping(value = "/updateSkuCheckOrder")
@@ -93,7 +93,7 @@ public class SkuCheckOrderController {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return new SkuCheckOrder();
+        return null;
     }
 
     @RequestMapping(value = "/deleteSkuCheckOrder")
@@ -113,6 +113,6 @@ public class SkuCheckOrderController {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return getAllOrders();
+        return null;
     }
 }

@@ -19,4 +19,7 @@ public interface GoodsMapper {
     int delete(@Param(value="id")int id);
 
     Goods getGoodsBySeriesNo(String seriesNo);
+
+    int updateSkuLocation(Goods product);
+
 }

@@ -38,6 +38,14 @@
         where id=#{id}
     </update>
 
+    <!-- 更新的配置 -->
+    <update id="updateSkuLocation" parameterType="cn.liuxh.model.Goods">
+        update goods set
+        locationNo=#{locationNo}
+        where seriesNo=#{seriesNo}
+    </update>
+
+
     <!-- 删除配置 -->
     <delete id="delete" parameterType="int">
         delete from goods where id=#{id}

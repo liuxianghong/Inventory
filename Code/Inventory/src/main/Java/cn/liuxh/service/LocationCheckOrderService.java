@@ -43,4 +43,19 @@ public class LocationCheckOrderService {
     public LocationCheckOrder getDetailById(@Param(value="id")int id){
         return locationCheckOrderMapper.getDetailById(id);
     }
+
+    public LocationCheckOrder getDetailByLocationNo(String id){
+        return locationCheckOrderMapper.getDetailByLocationNo(id);
+    }
+
+    public int deleteSku(@Param(value="id")int id){
+        return locationCheckOrderMapper.deleteSku(id);
+    }
+    public int addSku(List list){
+        return locationCheckOrderMapper.addSku(list);
+    }
+    List<LocationSku> getSkus(@Param(value="orderId")int id) {
+        return locationCheckOrderMapper.getSkus(id);
+    }
+
 }

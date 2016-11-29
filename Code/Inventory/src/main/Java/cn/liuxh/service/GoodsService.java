@@ -41,4 +41,8 @@ public class GoodsService {
     public Goods getGoodsBySeriesNo(String seriesNo){
         return goodsMapper.getGoodsBySeriesNo(seriesNo);
     }
+
+    public int updateSkuLocation(Goods product) {
+        return goodsMapper.updateSkuLocation(product);
+    }
 }

@@ -111,4 +111,21 @@ public class GoodsController {
 
         return goodsService.getGoodsBySeriesNo(seriesNo);
     }
+
+    @RequestMapping("/updateSkuLocation")
+    @ResponseBody
+    public Goods updateSkuLocation(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String seriesNo = request.getParameter("seriesNo");
+
+        String locationNo = request.getParameter("locationNo");
+
+        Goods user = new Goods();
+        user.setSeriesNo(seriesNo);
+        user.setLocationNo(locationNo);
+
+        goodsService.updateSkuLocation(user);
+
+
+        return goodsService.getGoodsBySeriesNo(seriesNo);
+    }
 }

@@ -1,7 +1,7 @@
 package cn.liuxh.mapper;
 
 import cn.liuxh.model.LocationCheckOrder;
-import cn.liuxh.model.SkuCheckOrder;
+import cn.liuxh.model.LocationSku;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,4 +22,9 @@ public interface LocationCheckOrderMapper {
     int delete(@Param(value="id")int id);
 
     LocationCheckOrder getDetailById(@Param(value="id")int id);
+    LocationCheckOrder getDetailByLocationNo(@Param(value="id")String id);
+
+    int deleteSku(@Param(value="id")int id);
+    int addSku(List list);
+    List<LocationSku> getSkus(@Param(value="orderId")int id);
 }

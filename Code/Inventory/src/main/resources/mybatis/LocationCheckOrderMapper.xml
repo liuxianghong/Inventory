@@ -11,7 +11,7 @@
     </select>
 
     <select id="getAllSku" resultType="cn.liuxh.model.LocationSku">
-        select * from LocationSKU where orderId = #{id};
+        select * from LocationSKU INNER JOIN goods ON LocationSKU.seriesNo = goods.seriesNo AND LocationSKU.orderId = #{id};
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -26,10 +26,25 @@
         select * from LocationCheckOrders where id = #{id};
     </select>
 
+    <select id="getDetailByLocationNo" resultType="cn.liuxh.model.LocationCheckOrder">
+        select * from LocationCheckOrders where locationNo = #{id};
+    </select>
+
+    <select id="getSkus" resultType="cn.liuxh.model.LocationCheckOrder">
+        select * from LocationSKU where orderId = #{orderId};
+    </select>
+
     <insert id="add" parameterType="cn.liuxh.model.LocationCheckOrder" useGeneratedKeys="true"
             keyProperty="id">
         insert into LocationCheckOrders(locationNo,orderName,time)
         values(#{locationNo},#{orderName},#{time})
+    </insert>
+
+    <insert id="addSku" parameterType="java.util.List">
+        insert into LocationSKU (seriesNo,calculate,orderId) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.seriesNo},#{item.calculate},#{item.orderId})
+        </foreach>
     </insert>
 
     <!-- 更新的配置 -->
@@ -42,7 +57,13 @@
     <!-- 删除配置 -->
     <delete id="delete" parameterType="int">
         delete from LocationCheckOrders where id=#{id};
+    </delete>
+
+
+    <!-- 删除配置 -->
+    <delete id="deleteSku" parameterType="int">
         delete from LocationSKU where orderId=#{id};
     </delete>
+
 
 </mapper>
