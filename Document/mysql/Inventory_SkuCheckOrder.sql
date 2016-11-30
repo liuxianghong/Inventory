@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for osx10.9 (x86_64)
 --
--- Host: 139.196.109.168    Database: Inventory
+-- Host: localhost    Database: Inventory
 -- ------------------------------------------------------
--- Server version	5.6.34
+-- Server version	5.7.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `SkuCheckOrder`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `SkuCheckOrder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `SeriesNo` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `SeriesNo` varchar(45) NOT NULL,
   `Calculate` int(11) NOT NULL DEFAULT '1',
-  `OrderName` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `OrderName` varchar(45) DEFAULT NULL,
   `Time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `SkuCheckOrder` (
 
 LOCK TABLES `SkuCheckOrder` WRITE;
 /*!40000 ALTER TABLE `SkuCheckOrder` DISABLE KEYS */;
+INSERT INTO `SkuCheckOrder` VALUES (1,'5',5,'11','2016-11-28 19:36:00');
 /*!40000 ALTER TABLE `SkuCheckOrder` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 11:23:03
+-- Dump completed on 2016-11-30 20:01:53

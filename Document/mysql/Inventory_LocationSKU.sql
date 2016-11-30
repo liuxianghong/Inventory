@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for osx10.9 (x86_64)
 --
--- Host: 139.196.109.168    Database: Inventory
+-- Host: localhost    Database: Inventory
 -- ------------------------------------------------------
--- Server version	5.6.34
+-- Server version	5.7.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `LocationSKU`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocationSKU` (
-  `id` int(11) NOT NULL,
-  `SeriesNo` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `SeriesNo` varchar(45) NOT NULL,
   `Calculate` int(11) NOT NULL DEFAULT '1',
   `OrderId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `LocationSKU` (
 
 LOCK TABLES `LocationSKU` WRITE;
 /*!40000 ALTER TABLE `LocationSKU` DISABLE KEYS */;
+INSERT INTO `LocationSKU` VALUES (7,'MX000000001',5,4),(8,'MX000000001',5,4);
 /*!40000 ALTER TABLE `LocationSKU` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 11:23:04
+-- Dump completed on 2016-11-30 20:01:52

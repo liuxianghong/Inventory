@@ -1,0 +1,57 @@
+-- MySQL dump 10.13  Distrib 5.7.12, for osx10.9 (x86_64)
+--
+-- Host: localhost    Database: Inventory
+-- ------------------------------------------------------
+-- Server version	5.7.15
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `SortSku`
+--
+
+DROP TABLE IF EXISTS `SortSku`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SortSku` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `calculate` int(11) DEFAULT NULL,
+  `productName` varchar(45) DEFAULT NULL,
+  `size` varchar(45) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL,
+  `seriesNo` varchar(45) DEFAULT NULL,
+  `location` varchar(45) DEFAULT NULL,
+  `orderName` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `SortSku`
+--
+
+LOCK TABLES `SortSku` WRITE;
+/*!40000 ALTER TABLE `SortSku` DISABLE KEYS */;
+INSERT INTO `SortSku` VALUES (17,0,'存爱','肤色中厚-70B',21,'mx6219F070B2','华中','PICK-2000445473-25'),(18,0,'存爱','肤色中厚-75B',10,'mx6219F075B2','华中','PICK-2000445473-25'),(19,0,'存爱','肤色中厚-75C',20,'mx621942','华中','PICK-2000445473-25'),(20,0,'存爱','肤色中厚-80B',30,'mx6219F080B2','华中','PICK-2000445473-25'),(21,0,'存爱','肤色中厚-80C',11,'mx621945','华中','PICK-2000445473-25'),(22,0,'存爱','黑色中厚-70B',9,'mx6219H070B2','华中','PICK-2000445473-25'),(23,0,'存爱','肤色中厚-70B',10,'mx6219F070B2','华北','PICK-2000445473-30'),(24,0,'存爱','肤色中厚-75B',11,'mx6219F075B2','华北','PICK-2000445473-30'),(25,0,'存爱','肤色中厚-75C',23,'mx621942','华北','PICK-2000445473-30'),(26,0,'存爱','肤色中厚-80B',26,'mx6219F080B2','华北','PICK-2000445473-30'),(27,0,'存爱','肤色中厚-80C',13,'mx621945','华北','PICK-2000445473-30'),(28,0,'存爱','黑色中厚-70B',10,'mx6219H070B2','华北','PICK-2000445473-30');
+/*!40000 ALTER TABLE `SortSku` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-11-30 20:01:53

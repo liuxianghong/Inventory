@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for osx10.9 (x86_64)
 --
--- Host: 139.196.109.168    Database: Inventory
+-- Host: localhost    Database: Inventory
 -- ------------------------------------------------------
--- Server version	5.6.34
+-- Server version	5.7.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,14 +24,14 @@ DROP TABLE IF EXISTS `goods`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `SeriesNo` varchar(45) CHARACTER SET latin1 NOT NULL,
-  `Size` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
-  `Name` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `SeriesNo` varchar(45) NOT NULL,
+  `Size` varchar(45) DEFAULT NULL,
+  `Name` varchar(45) DEFAULT NULL,
   `Count` int(11) NOT NULL DEFAULT '1',
-  `LocationNo` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `LocationNo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `SeriesNo_UNIQUE` (`SeriesNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `goods` (
 
 LOCK TABLES `goods` WRITE;
 /*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-INSERT INTO `goods` VALUES (1,'123','222','111',12,'111'),(4,'4','2','1',3,'5'),(5,'44','2','??',3,'5');
+INSERT INTO `goods` VALUES (1,'43a','223a','1222',3,'5'),(2,'5','3','2',4,'6'),(3,'0x001','dsaddd','ads',1,'2'),(4,'MX000000001','ss','ss',12,'3'),(7,'MX000002','红色-XL','保暖1',1,'A01-01-01'),(8,'MX000003','红色-XL','保暖2',2,'A01-01-01'),(9,'MX000004','红色-XL','保暖3',3,'A01-01-01'),(10,'MX000005','红色-XL','保暖4',3,'A01-01-01'),(11,'MX000006','红色-XL','保暖5',3,'A01-01-01'),(12,'MX000007','红色-XL','保暖6',3,'A01-01-01'),(13,'MX000008','红色-XL','保暖7',3,'A01-01-01');
 /*!40000 ALTER TABLE `goods` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 11:23:05
+-- Dump completed on 2016-11-30 20:01:53

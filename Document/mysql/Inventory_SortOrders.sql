@@ -16,29 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `LocationCheckOrders`
+-- Table structure for table `SortOrders`
 --
 
-DROP TABLE IF EXISTS `LocationCheckOrders`;
+DROP TABLE IF EXISTS `SortOrders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `LocationCheckOrders` (
+CREATE TABLE `SortOrders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `OrderName` varchar(45) DEFAULT NULL,
-  `LocationNo` varchar(45) DEFAULT NULL,
-  `Time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `orderName` varchar(45) NOT NULL,
+  `state` int(11) DEFAULT '0',
+  `address` varchar(45) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `orderName_UNIQUE` (`orderName`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `LocationCheckOrders`
+-- Dumping data for table `SortOrders`
 --
 
-LOCK TABLES `LocationCheckOrders` WRITE;
-/*!40000 ALTER TABLE `LocationCheckOrders` DISABLE KEYS */;
-INSERT INTO `LocationCheckOrders` VALUES (4,'盘点1','A01-01-01','2016-11-29 13:53:18');
-/*!40000 ALTER TABLE `LocationCheckOrders` ENABLE KEYS */;
+LOCK TABLES `SortOrders` WRITE;
+/*!40000 ALTER TABLE `SortOrders` DISABLE KEYS */;
+INSERT INTO `SortOrders` VALUES (14,'PICK-2000445473-25',0,'华中','2016-11-30 19:51:09'),(15,'PICK-2000445473-30',0,'华北','2016-11-30 19:51:09');
+/*!40000 ALTER TABLE `SortOrders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
