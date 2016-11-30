@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.liuxh.mapper.SortOrdersMapper">
+
+    <!--<select id="getProduct" resultType="cn.liuxh.model.Goods">-->
+    <!--select id,name,format,code,number,site,time from product LIMIT 1;-->
+    <!--</select>-->
+
+    <select id="getAll" resultType="cn.liuxh.model.SortOrders">
+        select * from SortOrders;
+    </select>
+
+    <select id="getAllSku" resultType="cn.liuxh.model.SortSku">
+        select * from SortSku where orderName = #{orderName};
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from SortOrders;
+    </select>
+
+    <select id="haveGoods" resultType="java.lang.Integer">
+        select count(*) from goods where seriesNo=#{seriesNo};
+    </select>
+
+    <select id="getDetailById" resultType="cn.liuxh.model.SortOrders">
+        select * from SortOrders where id = #{id};
+    </select>
+
+    <select id="getDetailByLocationNo" resultType="cn.liuxh.model.SortOrders">
+        select * from SortOrders where locationNo = #{id};
+    </select>
+
+    <select id="getSkus" resultType="cn.liuxh.model.SortOrders">
+        select * from SortSku where orderId = #{orderId};
+    </select>
+
+    <insert id="add" parameterType="cn.liuxh.model.SortOrders" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into SortOrders(locationNo,orderName,time)
+        values(#{locationNo},#{orderName},#{time})
+    </insert>
+
+    <insert id="addSku" parameterType="java.util.List">
+        insert into SortSku (seriesNo,calculate,orderId) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.seriesNo},#{item.calculate},#{item.orderId})
+        </foreach>
+    </insert>
+
+    <update id="updateSku" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator="" >
+            update SortSku <set>
+            calculate=#{item.calculate}
+            </set> where id=#{item.id};
+        </foreach>
+    </update>
+
+    <!-- 更新的配置 -->
+    <update id="update" parameterType="cn.liuxh.model.SortOrders">
+        update LocationCheckOrders set
+        orderName=#{orderName}
+        where id=#{id}
+    </update>
+
+    <!-- 删除配置 -->
+    <delete id="delete" parameterType="int">
+        delete from LocationCheckOrders where id=#{id};
+    </delete>
+
+
+    <!-- 删除配置 -->
+    <delete id="deleteSku" parameterType="String">
+        delete from SortSku where orderName=#{orderName};
+    </delete>
+
+    <insert id="importOrders" parameterType="cn.liuxh.model.SortOrders" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into SortOrders(state,orderName,address,time)
+        values(#{state},#{orderName},#{address},#{time})
+        ON DUPLICATE KEY UPDATE state = #{state},address = #{address}
+    </insert>
+
+    <insert id="importSkus" parameterType="java.util.List">
+        insert into SortSku(orderName,seriesNo,calculate,count,productName,size,location)
+        values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (#{item.orderName},#{item.seriesNo},#{item.calculate},#{item.count},#{item.productName},#{item.size},#{item.location})
+        </foreach>
+    </insert>
+
+
+    <!--<insert id="importOrders" parameterType="java.util.List" useGeneratedKeys="true"-->
+            <!--keyProperty="id">-->
+        <!--insert into SortOrders(state,orderName,address,time)-->
+        <!--values-->
+        <!--<foreach collection="list" item="item" index="index" open="" close="" separator=",">-->
+            <!--(#{state},#{orderName},#{address},#{time})-->
+        <!--</foreach>-->
+        <!--ON DUPLICATE KEY UPDATE state=VALUES(state),address=VALUES(address),time=VALUES(time);-->
+    <!--</insert>-->
+
+</mapper>

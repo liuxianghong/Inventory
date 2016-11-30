@@ -18,18 +18,24 @@
     <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
 </head>
 <body>
-
 <%@ include file="product.jsp"%>
+<%@ include file="sortOrder.jsp"%>
 <%--<%@ include file="order.jsp"%>--%>
 
 <div style="margin:20px 0;"></div>
 <div class="easyui-tabs" data-options="tabWidth:112" style="width:900px;height:600px">
-    <%--<div title="订单管理" style="padding:10px">--%>
-        <%--<table id="dgOrder"></table>--%>
-    <%--</div>--%>
+
     <div title="产品管理" style="padding:10px">
         <table id="dgProduct"></table>
     </div>
+
+    <div title="订单管理" style="padding:10px">
+
+        <div id="toolbarSortOrder">
+            <a href="#" class="easyui-linkbutton" icon="iconCls:'icon-undo" onclick="importSortOrder()">导入</a>
+        </div>
+    </div>
+
 </div>
 
 </body>

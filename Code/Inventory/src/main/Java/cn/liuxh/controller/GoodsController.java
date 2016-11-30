@@ -5,7 +5,6 @@ import cn.liuxh.service.GoodsService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,9 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
-import static org.apache.poi.ss.usermodel.CellType.STRING;
 
 /**
  * Created by liuxianghong on 2016/11/28.
@@ -166,6 +162,10 @@ public class GoodsController {
             file.transferTo(targetFile);
             List<Goods> goodses = getExcelInfo(fileName,targetFile);
             goodsService.importGoods(goodses);
+            for (Goods good:
+            goodses) {
+                System.out.println("importGoods: "+good.getId());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,7 +203,7 @@ public class GoodsController {
 
         List<Goods> customerList=new ArrayList<Goods>();
         //循环Excel行数,从第二行开始。标题不入库
-        for(int r=2;r<totalRows;r++){
+        for(int r=1;r<totalRows;r++){
             Row row = sheet.getRow(r);
             if (row == null) continue;
             Goods goods = new Goods();

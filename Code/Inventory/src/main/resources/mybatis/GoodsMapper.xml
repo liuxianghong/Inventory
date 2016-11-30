@@ -28,7 +28,8 @@
         values(#{seriesNo},#{size},#{name},#{count},#{locationNo})
     </insert>
 
-    <insert id="importGoods" parameterType="java.util.List">
+    <insert id="importGoods" parameterType="java.util.List" useGeneratedKeys="true"
+            keyProperty="id">
         insert into goods(seriesNo,size,name,count,locationNo)
         values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
