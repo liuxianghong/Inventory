@@ -1,5 +1,7 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by liuxianghong on 2016/11/30.
  */
@@ -17,6 +19,7 @@ public class SortSku {
         this.orderName = orderName;
     }
 
+    @JsonIgnore
     String orderName;
 
     int count;
