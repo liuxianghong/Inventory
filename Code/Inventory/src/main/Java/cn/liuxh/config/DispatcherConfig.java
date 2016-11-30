@@ -46,5 +46,21 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/easyui/**/").addResourceLocations("/WEB-INF/easyui/").setCachePeriod(31556926);
     }
+
+//    @Override
+//    public void configureMessageConverters(List converters) {
+//        converters.add(converter());
+//    }
+//    @Bean
+//    MappingJackson2HttpMessageConverter converter() {
+//        //Set HTTP Message converter using a JSON implementation.
+//        MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+//        // Add supported media type returned by BI API.
+//        List supportedMediaTypes = new ArrayList();
+//        supportedMediaTypes.add(new MediaType("text", "plain"));
+//        supportedMediaTypes.add(new MediaType("application", "json"));
+//        jsonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
+//        return jsonMessageConverter;
+//    }
 }
 
