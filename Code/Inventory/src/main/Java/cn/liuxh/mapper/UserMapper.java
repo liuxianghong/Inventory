@@ -7,4 +7,5 @@ import cn.liuxh.model.User;
  */
 public interface UserMapper {
     public User findUserInfo();
+    int login(User usr);
 }

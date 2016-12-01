@@ -105,9 +105,6 @@ public class OrderController {
         try {
 
             String id = request.getParameter("id");
-
-
-
             System.out.println("saveOrder:"+" ParameterMap: "+request.getParameterMap().toString());
 
             int ret = 0;

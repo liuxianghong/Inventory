@@ -21,6 +21,7 @@ public class UserService {
         return user;
     }
 
-
-
+    public int login(User usr){
+        return userMapper.login(usr);
+    }
 }

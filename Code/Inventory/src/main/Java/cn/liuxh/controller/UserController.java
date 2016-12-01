@@ -28,4 +28,11 @@ public class UserController {
         }
         return user;
     }
+
+    @RequestMapping("/getUserInfo")
+    @ResponseBody
+    public User login(User user){
+        int ret = userService.login(user);
+        return user;
+    }
 }

@@ -6,6 +6,17 @@ package cn.liuxh.model;
 public class User {
     private String name;
     private String pw;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
 
     public String getName() {
         return name;
