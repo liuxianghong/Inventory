@@ -26,4 +26,28 @@
     function importSortOrder(){
         $("#sortOrderFileWin").window('open');
     }
+
+    function truncateSortOrder(){
+        $.messager.confirm('警告','您确定要清空吗',
+                function(t) {
+                    if (t) {
+                        $.ajax({
+                            url : '/truncateSortOrder',
+                            method : 'POST',
+                            dataType : 'json',
+                            success : function(r) {
+                                if (r==1) {
+//                                    $("#dgProduct").datagrid('acceptChanges');
+                                    $.messager.show({msg : '',title : '成功'});
+//                                    $("#dgProduct").datagrid('reload');
+                                } else {
+//                                    $("#dgProduct").datagrid('beginEdit',editRow);
+                                    $.messager.alert('错误','','error');
+                                }
+//                                $("#dgProduct").datagrid('unselectAll');
+                            }
+                        });
+                    }
+                });
+    }
 </script>

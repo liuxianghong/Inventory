@@ -60,4 +60,6 @@ public class SortOrdersService {
 
     public int importOrders(SortOrders list){return sortOrdersMapper.importOrders(list);}
     public int importSkus(List list){return sortOrdersMapper.importSkus(list);}
+
+    public int truncate() {return sortOrdersMapper.truncate();}
 }

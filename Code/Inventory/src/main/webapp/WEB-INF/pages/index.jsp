@@ -32,7 +32,8 @@
     <div title="订单管理" style="padding:10px">
 
         <div id="toolbarSortOrder">
-            <a href="#" class="easyui-linkbutton" icon="iconCls:'icon-undo" onclick="importSortOrder()">导入</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSortOrder()">导入</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSortOrder()">清空</a>
         </div>
     </div>
 

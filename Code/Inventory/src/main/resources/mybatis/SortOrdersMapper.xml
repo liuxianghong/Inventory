@@ -75,16 +75,16 @@
 
     <insert id="importOrders" parameterType="cn.liuxh.model.SortOrders" useGeneratedKeys="true"
             keyProperty="id">
-        insert into SortOrders(state,orderName,address,time)
-        values(#{state},#{orderName},#{address},#{time})
-        ON DUPLICATE KEY UPDATE state = #{state},address = #{address}
+        insert into SortOrders(state,orderName,address,time,po,type,inTime)
+        values(#{state},#{orderName},#{address},#{time},#{po},#{type},#{inTime})
+        ON DUPLICATE KEY UPDATE state = #{state},address = #{address},po = #{po},type = #{type},inTime = #{inTime}
     </insert>
 
     <insert id="importSkus" parameterType="java.util.List">
-        insert into SortSku(orderName,seriesNo,calculate,count,productName,size,location)
+        insert into SortSku(orderName,seriesNo,calculate,count,productName,size,location,shipped,unShipped,goodNo)
         values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
-            (#{item.orderName},#{item.seriesNo},#{item.calculate},#{item.count},#{item.productName},#{item.size},#{item.location})
+            (#{item.orderName},#{item.seriesNo},#{item.calculate},#{item.count},#{item.productName},#{item.size},#{item.location},#{item.shipped},#{item.unShipped},#{item.goodNo})
         </foreach>
     </insert>
 
@@ -98,5 +98,10 @@
         <!--</foreach>-->
         <!--ON DUPLICATE KEY UPDATE state=VALUES(state),address=VALUES(address),time=VALUES(time);-->
     <!--</insert>-->
+
+    <delete id="truncate">
+        DELETE from SortSku WHERE id != 0;
+        DELETE from SortOrders WHERE id != 0;
+    </delete>
 
 </mapper>

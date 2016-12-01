@@ -16,6 +16,36 @@ public class SortOrders {
     private Timestamp time = new Timestamp(System.currentTimeMillis());
     List<SortSku> sku;
 
+    String po;
+    String type;
+    String inTime;
+
+    public String getPo() {
+        return po;
+    }
+
+    public void setPo(String po) {
+        this.po = po;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getInTime() {
+        return inTime;
+    }
+
+    public void setInTime(String inTime) {
+        this.inTime = inTime;
+    }
+
+
+
     public int getId() {
         return id;
     }

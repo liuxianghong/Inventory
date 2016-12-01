@@ -2,6 +2,7 @@ package cn.liuxh.service;
 
 import cn.liuxh.mapper.LocationCheckOrderMapper;
 import cn.liuxh.mapper.SkuCheckOrderMapper;
+import cn.liuxh.model.Goods;
 import cn.liuxh.model.LocationCheckOrder;
 import cn.liuxh.model.LocationSku;
 import cn.liuxh.model.SkuCheckOrder;
@@ -44,7 +45,7 @@ public class LocationCheckOrderService {
         return locationCheckOrderMapper.getDetailById(id);
     }
 
-    public LocationCheckOrder getDetailByLocationNo(String id){
+    public List<Goods> getDetailByLocationNo(String id){
         return locationCheckOrderMapper.getDetailByLocationNo(id);
     }
 

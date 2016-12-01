@@ -184,6 +184,15 @@ public class GoodsController {
         return(filePath.endsWith(".xls") || filePath.endsWith(".xlsx"));
     }
 
+    public int safeInt(String string) {
+        try {
+            return (int)Double.parseDouble(string);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public List<Goods> getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
@@ -212,26 +221,21 @@ public class GoodsController {
                 Cell cell = row.getCell(c);
                 if (null != cell) {
                     String str = "";
+                    if (cell.getCellTypeEnum() == CellType.NUMERIC){
+                        str += cell.getNumericCellValue();
+                    } else if (cell.getCellTypeEnum() == CellType.STRING) {
+                        str = cell.getStringCellValue();
+                    }
                     if (c == 0) {
-                        goods.setName(cell.getStringCellValue());
-                        str = cell.getStringCellValue();
+                        goods.setName(str);
                     } else if (c == 1) {
-                        goods.setSize(cell.getStringCellValue());
-                        str = cell.getStringCellValue();
+                        goods.setSize(str);
                     } else if (c == 2) {
-                        goods.setSeriesNo(cell.getStringCellValue());
-                        str = cell.getStringCellValue();
+                        goods.setSeriesNo(str);
                     } else if (c == 3) {
-                        if (cell.getCellTypeEnum() == CellType.NUMERIC){
-                            goods.setCount((int)cell.getNumericCellValue());
-                            str += cell.getNumericCellValue();
-                        } else if (cell.getCellTypeEnum() == CellType.STRING) {
-                            goods.setCount(Integer.parseInt(cell.getStringCellValue()));
-                            str = cell.getStringCellValue();
-                        }
+                        goods.setLocationNo(str);
                     } else if (c == 4) {
-                        goods.setLocationNo(cell.getStringCellValue());
-                        str = cell.getStringCellValue();
+                        goods.setCount(safeInt(str));
                     }
                     System.out.println("getExcelInfo:"+str);
                 }
@@ -239,10 +243,26 @@ public class GoodsController {
             if (goods.getSeriesNo() != null
                     && !goods.getSeriesNo().trim().isEmpty()) {
                 customerList.add(goods);
-                System.out.println("getExcelInfo:"+customerList.size());
+                //System.out.println("getExcelInfo:"+customerList.size());
             }
         }
         workbook.close();
         return customerList;
+    }
+
+
+    @RequestMapping("/truncateProduct")
+    @ResponseBody
+    public int truncate() {
+        try {
+
+            int ret = goodsService.truncate();
+            if (ret != 0){
+                return 1;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
     }
 }

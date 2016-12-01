@@ -30,4 +30,5 @@ public interface SortOrdersMapper {
 
     int importOrders(SortOrders list);
     int importSkus(List list);
+    int truncate();
 }

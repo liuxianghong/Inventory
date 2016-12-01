@@ -178,6 +178,15 @@ public class SortOrdersController {
         return(filePath.endsWith(".xls") || filePath.endsWith(".xlsx"));
     }
 
+    public int safeInt(String string) {
+        try {
+            return (int)Double.parseDouble(string);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public void getExcelInfo(String fileName,File file,List<SortOrders> sortOrders,List<SortSku> skus) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
@@ -205,66 +214,59 @@ public class SortOrdersController {
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
+                String po = "";
                 if (null != cell) {
                     String str = "";
-                    if (c == 0) {
-                        //str = cell.getStringCellValue();
-                    } else if (c == 1) {
+                    if (cell.getCellTypeEnum() == CellType.NUMERIC){
+                        str += cell.getNumericCellValue();
+                    } else if (cell.getCellTypeEnum() == CellType.STRING) {
                         str = cell.getStringCellValue();
+                    }
+                    if (c == 0) {
+                        po = str;
+                    } else if (c == 1) {
                         sku.setOrderName(str);
-                        if (order == null || order.getOrderName() != str) {
+                        if (order == null || !order.getOrderName().equalsIgnoreCase(str)) {
                             order = new SortOrders();
                             order.setOrderName(str);
+                            order.setPo(po);
                             if (str != null
                                     && !str.trim().isEmpty()) {
                                 sortOrders.add(order);
                             }
                         }
                     } else if (c == 2) {
-                        str = cell.getStringCellValue();
+                        order.setType(str);
                     } else if (c == 3) {
-                        str = cell.getStringCellValue();
                         order.setAddress(str);
                         sku.setLocation(str);
-//                        if (cell.getCellTypeEnum() == CellType.NUMERIC){
-//                            goods.setCount((int)cell.getNumericCellValue());
-//                            str += cell.getNumericCellValue();
-//                        } else if (cell.getCellTypeEnum() == CellType.STRING) {
-//                            goods.setCount(Integer.parseInt(cell.getStringCellValue()));
-//                            str = cell.getStringCellValue();
-//                        }
                     } else if (c == 4) {
-                        if (cell.getCellTypeEnum() == CellType.STRING){
-                            str = cell.getStringCellValue();
-                        }
+                        order.setInTime(str);
                     }
                     else if (c == 5) {
-                        str = cell.getStringCellValue();
                         sku.setSeriesNo(str);
                     }
                     else if (c == 6) {
-                        str = cell.getStringCellValue();
+                        sku.setGoodNo(str);
 
                     }
                     else if (c == 7) {
-                        str = cell.getStringCellValue();
                         sku.setProductName(str);
                     }
                     else if (c == 8) {
-                        str = cell.getStringCellValue();
                         sku.setSize(str);
                     }
                     else if (c == 9) {
 
-                        if (cell.getCellTypeEnum() == CellType.NUMERIC){
-                            sku.setCount((int)cell.getNumericCellValue());
-                            str += cell.getNumericCellValue();
-                        } else if (cell.getCellTypeEnum() == CellType.STRING) {
-                            sku.setCount(Integer.parseInt(cell.getStringCellValue()));
-                            str = cell.getStringCellValue();
-                        }
+                        sku.setCount(safeInt(str));
+                    }else if (c == 10) {
+
+                        sku.setShipped(safeInt(str));
+                    }else if (c == 11) {
+
+                        sku.setUnShipped(safeInt(str));
                     }
-                    System.out.println("getExcelInfo:"+str);
+                    //System.out.println("getExcelInfo:"+str);
                 }
             }
             if (sku.getSeriesNo() != null
@@ -276,5 +278,20 @@ public class SortOrdersController {
             }
         }
         workbook.close();
+    }
+
+    @RequestMapping("/truncateSortOrder")
+    @ResponseBody
+    public int truncate() {
+        try {
+
+            int ret = sortOrdersService.truncate();
+            if (ret != 0){
+                return 1;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
     }
 }

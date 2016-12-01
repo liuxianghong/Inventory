@@ -1,6 +1,8 @@
 package cn.liuxh.controller;
 
+import cn.liuxh.model.Goods;
 import cn.liuxh.model.LocationCheckOrder;
+import cn.liuxh.model.LocationLocation;
 import cn.liuxh.model.LocationSku;
 import cn.liuxh.service.LocationCheckOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +40,11 @@ public class LocationCheckOrderController {
         List<LocationCheckOrder> students = locationCheckOrderService.getAll(start, rows);
         for (int i = 0; i < students.size(); i++) {
             LocationCheckOrder order = students.get(i);
-            List<LocationSku> sku = locationCheckOrderService.getAllSku(order.getId());
-            order.setSku(sku);
+            List<LocationSku> skus = locationCheckOrderService.getAllSku(order.getId());
+            for (LocationSku sku:
+                 skus) {
+                order.addSku(sku);
+            }
             System.out.println("getLocationCheckOrders: "+order.toString());
         }
         map.put("total",locationCheckOrderService.count());
@@ -56,9 +62,14 @@ public class LocationCheckOrderController {
             int ret = 0;
             ret = locationCheckOrderService.add(order);
 
-            List<LocationSku> skus = order.getSku();
-            for (LocationSku sku:skus) {
-                sku.setOrderId(order.getId());
+            List<LocationSku> skus = new ArrayList<LocationSku>();
+            List<LocationLocation> locations = order.getLocations();
+            for (LocationLocation location:locations) {
+                for (LocationSku sku:
+                location.getSku()) {
+                    skus.add(sku);
+                    sku.setOrderId(order.getId());
+                }
             }
             locationCheckOrderService.addSku(skus);
 
@@ -73,8 +84,11 @@ public class LocationCheckOrderController {
 
     public LocationCheckOrder getOrderDetail(int id) {
         LocationCheckOrder order = locationCheckOrderService.getDetailById(id);
-        List skus = locationCheckOrderService.getAllSku(id);
-        order.setSku(skus);
+        List<LocationSku> skus = locationCheckOrderService.getAllSku(id);
+        for (LocationSku sku:
+                skus) {
+            order.addSku(sku);
+        }
 
         System.out.println("getOrderDetail: "+order.toString());
 
@@ -84,35 +98,37 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/getLocationDetails")
     @ResponseBody
-    public LocationCheckOrder getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String LocationNo = request.getParameter("locationNo");
-        LocationCheckOrder order = locationCheckOrderService.getDetailByLocationNo(LocationNo);
-        List skus = locationCheckOrderService.getAllSku(order.getId());
-        order.setSku(skus);
-        return order;
+        List<Goods> goodses = locationCheckOrderService.getDetailByLocationNo(LocationNo);
+
+        Map map = new HashMap();
+        map.put("locationNo",LocationNo);
+        map.put("sku",goodses);
+        return map;
     }
 
-    @RequestMapping("/updateLocationCheckOrder")
-    @ResponseBody
-    public LocationCheckOrder updateOrder(@RequestBody LocationCheckOrder order) throws Exception {
-        try {
-            int ret = 0;
-            locationCheckOrderService.deleteSku(order.getId());
-            ret = locationCheckOrderService.update(order);
-            List<LocationSku> skus = order.getSku();
-            for (LocationSku sku:skus) {
-                sku.setOrderId(order.getId());
-            }
-            locationCheckOrderService.addSku(skus);
-            if (ret != 0){
-                return getOrderDetail(order.getId());
-            }
-
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return null;
-    }
+//    @RequestMapping("/updateLocationCheckOrder")
+//    @ResponseBody
+//    public LocationCheckOrder updateOrder(@RequestBody LocationCheckOrder order) throws Exception {
+//        try {
+//            int ret = 0;
+//            locationCheckOrderService.deleteSku(order.getId());
+//            ret = locationCheckOrderService.update(order);
+//            List<LocationSku> skus = order.getSku();
+//            for (LocationSku sku:skus) {
+//                sku.setOrderId(order.getId());
+//            }
+//            locationCheckOrderService.addSku(skus);
+//            if (ret != 0){
+//                return getOrderDetail(order.getId());
+//            }
+//
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
+//        return null;
+//    }
 
     @RequestMapping(value = "/deleteLocationCheckOrder")
     @ResponseBody

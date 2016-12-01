@@ -27,6 +27,36 @@ public class SortSku {
     String size;
     String location;
 
+    int shipped;
+    int unShipped;
+    String goodNo;
+
+    public int getShipped() {
+        return shipped;
+    }
+
+    public void setShipped(int shipped) {
+        this.shipped = shipped;
+    }
+
+    public int getUnShipped() {
+        return unShipped;
+    }
+
+    public void setUnShipped(int unShipped) {
+        this.unShipped = unShipped;
+    }
+
+    public String getGoodNo() {
+        return goodNo;
+    }
+
+    public void setGoodNo(String goodNo) {
+        this.goodNo = goodNo;
+    }
+
+
+
     public int getId() {
         return id;
     }

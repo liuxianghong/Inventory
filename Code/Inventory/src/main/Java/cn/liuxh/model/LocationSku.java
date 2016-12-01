@@ -1,5 +1,7 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by liuxianghong on 16/11/28.
  */
@@ -21,6 +23,17 @@ public class LocationSku {
     int count;
     String name;
     String size;
+
+    public String getLocationNo() {
+        return locationNo;
+    }
+
+    public void setLocationNo(String locationNo) {
+        this.locationNo = locationNo;
+    }
+
+    @JsonIgnore
+    String locationNo;
 
     public int getCount() {
         return count;

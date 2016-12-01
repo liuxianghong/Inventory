@@ -49,4 +49,6 @@ public class GoodsService {
     public int importGoods(List godds)  {
         return goodsMapper.importGoods(godds);
     }
+
+    public int truncate() {return goodsMapper.truncate();}
 }

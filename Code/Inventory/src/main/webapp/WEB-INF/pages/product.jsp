@@ -13,6 +13,7 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editProduct()">编辑</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delProduct()">删除</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importProduct()">导入</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateProduct()">清空</a>
 </div>
 
 <div id="productFileWin" class="easyui-window" title="导入Excel"
@@ -133,6 +134,30 @@
 
     function importProduct(){
         $("#productFileWin").window('open');
+    }
+
+    function truncateProduct() {
+        $.messager.confirm('警告','您确定要清空所有数据吗？',
+                function(t) {
+                    if (t) {
+                        $.ajax({
+                            url : '/truncateProduct',
+                            method : 'POST',
+                            dataType : 'json',
+                            success : function(r) {
+                                if (r==1) {
+                                    $("#dgProduct").datagrid('acceptChanges');
+                                    $.messager.show({msg : '',title : '成功'});
+                                    $("#dgProduct").datagrid('reload');
+                                } else {
+                                    $("#dgProduct").datagrid('beginEdit',editRow);
+                                    $.messager.alert('错误','','error');
+                                }
+                                $("#dgProduct").datagrid('unselectAll');
+                            }
+                        });
+                    }
+                });
     }
 
     function delProduct(){

@@ -27,7 +27,7 @@
     </select>
 
     <select id="getDetailByLocationNo" resultType="cn.liuxh.model.LocationCheckOrder">
-        select * from LocationCheckOrders where locationNo = #{id};
+        select * from goods where locationNo = #{id};
     </select>
 
     <select id="getSkus" resultType="cn.liuxh.model.LocationCheckOrder">
@@ -36,8 +36,8 @@
 
     <insert id="add" parameterType="cn.liuxh.model.LocationCheckOrder" useGeneratedKeys="true"
             keyProperty="id">
-        insert into LocationCheckOrders(locationNo,orderName,time)
-        values(#{locationNo},#{orderName},#{time})
+        insert into LocationCheckOrders(orderName,time)
+        values(#{orderName},#{time})
     </insert>
 
     <insert id="addSku" parameterType="java.util.List">

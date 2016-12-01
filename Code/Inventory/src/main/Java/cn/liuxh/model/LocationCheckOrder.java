@@ -1,7 +1,10 @@
 package cn.liuxh.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,20 +14,21 @@ import java.util.List;
 public class LocationCheckOrder {
     int id;
     String orderName;
+
+    @JsonIgnore
     String locationNo;
     private Timestamp time = new Timestamp(System.currentTimeMillis());
 
 
-    public List<LocationSku> getSku() {
-        return sku;
+    public List<LocationLocation> getLocations() {
+        return locations;
     }
 
-    public void setSku(List<LocationSku> sku) {
-        this.sku = sku;
+    public void setLocations(List<LocationLocation> locations) {
+        this.locations = locations;
     }
 
-    List<LocationSku> sku;
-
+    List<LocationLocation> locations = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -62,13 +66,33 @@ public class LocationCheckOrder {
     public  String toString() {
         String str =  " orderName: " + orderName
                 +" locationNo: " + locationNo;
-        if (sku != null) {
-            for (int i = 0; i < sku.size(); i++) {
-                str += " seriesNo: " + sku.get(i).getSeriesNo();
-                str += " getCalculate: " + sku.get(i).getCalculate();
+        if (locations != null) {
+            for (int i = 0; i < locations.size(); i++) {
+                str += " LocationNo: " + locations.get(i).getLocationNo();
             }
         }
 
         return str;
+    }
+
+    public void addSku(LocationSku sku) {
+        if (locations == null) {
+            locations = new ArrayList<LocationLocation>();
+        }
+        for (LocationLocation location:
+        locations) {
+            System.out.println("addSku: "+location.getLocationNo() + " " + sku.getLocationNo());
+            if (location.getLocationNo().equalsIgnoreCase(sku.getLocationNo())){
+                location.addSku(sku);
+                System.out.println("addSku: " + "didaddSku");
+                return;
+            }
+        }
+
+        LocationLocation location = new LocationLocation();
+        location.setLocationNo(sku.getLocationNo());
+        location.addSku(sku);
+        System.out.println("addSku: " + "newLocation: " + location.getLocationNo());
+        locations.add(location);
     }
 }
