@@ -10,7 +10,7 @@ import java.util.List;
  * Created by liuxianghong on 2016/11/30.
  */
 public interface SortOrdersMapper {
-    List getAll();
+    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
 
     List getAllSku(@Param(value="orderName")String orderName);
 

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface SkuCheckOrderMapper {
 
-    List getAll();
+    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
 
     int count();
 

@@ -5,6 +5,7 @@ import cn.liuxh.service.SkuCheckOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +27,12 @@ public class SkuCheckOrderController {
 
     @RequestMapping("/getSkuCheckOrders")
     @ResponseBody
-    public Map getAllOrders() throws Exception{
+    public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
+            , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
         Map map = new HashMap();
-        List students = skuCheckOrderService.getAll();
+        int start = (page-1)*rows;
+        List students = skuCheckOrderService.getAll(start,rows);
+        map.put("total",skuCheckOrderService.count());
         map.put("orders",students);
         return map;
     }
@@ -108,7 +112,7 @@ public class SkuCheckOrderController {
                 ret = skuCheckOrderService.delete(Integer.parseInt(id));
             }
             if (ret != 0){
-                return getAllOrders();
+                return getAllOrders(1,100);
             }
         } catch (Exception e) {
             // TODO: handle exception

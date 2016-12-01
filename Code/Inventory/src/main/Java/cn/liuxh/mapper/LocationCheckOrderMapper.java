@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface LocationCheckOrderMapper {
 
-    List getAll();
+    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
 
     List getAllSku(@Param(value="id")int id);
 

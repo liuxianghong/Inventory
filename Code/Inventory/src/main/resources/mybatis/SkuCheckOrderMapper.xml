@@ -7,7 +7,9 @@
     <!--</select>-->
 
     <select id="getAll" resultType="cn.liuxh.model.SkuCheckOrder">
-        select *,goods.id AS gid from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo;
+        select *,goods.id AS gid from SkuCheckOrder
+        INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo
+        limit #{start},#{rows};
     </select>
 
     <select id="count" resultType="java.lang.Integer">

@@ -7,7 +7,7 @@
     <!--</select>-->
 
     <select id="getAll" resultType="cn.liuxh.model.SortOrders">
-        select * from SortOrders;
+        select * from SortOrders limit #{start},#{rows};
     </select>
 
     <select id="getAllSku" resultType="cn.liuxh.model.SortSku">

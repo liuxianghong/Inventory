@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,15 +29,19 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/getLocationCheckOrders")
     @ResponseBody
-    public Map getAllOrders() throws Exception{
+    public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
+            , @RequestParam(value="rows", defaultValue="100") int rows)
+            throws Exception{
+        int start = (page-1)*rows;
         Map map = new HashMap();
-        List<LocationCheckOrder> students = locationCheckOrderService.getAll();
+        List<LocationCheckOrder> students = locationCheckOrderService.getAll(start, rows);
         for (int i = 0; i < students.size(); i++) {
             LocationCheckOrder order = students.get(i);
             List<LocationSku> sku = locationCheckOrderService.getAllSku(order.getId());
             order.setSku(sku);
             System.out.println("getLocationCheckOrders: "+order.toString());
         }
+        map.put("total",locationCheckOrderService.count());
         map.put("orders",students);
         return map;
     }
@@ -121,7 +126,7 @@ public class LocationCheckOrderController {
                 ret = locationCheckOrderService.delete(Integer.parseInt(id));
                 ret2 = locationCheckOrderService.deleteSku(Integer.parseInt(id));
             }
-            return getAllOrders();
+            return getAllOrders(1,100);
         } catch (Exception e) {
             // TODO: handle exception
         }

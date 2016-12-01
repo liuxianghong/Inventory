@@ -16,8 +16,8 @@ public class SkuCheckOrderService {
     @Autowired
     private SkuCheckOrderMapper skuCheckOrderMapper;
 
-    public List getAll(){
-        return skuCheckOrderMapper.getAll();
+    public List getAll(int start,int rows){
+        return skuCheckOrderMapper.getAll(start, rows);
     }
 
     public int count(){

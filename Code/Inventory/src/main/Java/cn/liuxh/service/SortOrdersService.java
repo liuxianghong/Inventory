@@ -17,8 +17,8 @@ public class SortOrdersService {
     @Autowired
     private SortOrdersMapper sortOrdersMapper;
 
-    public List getAll(){
-        return sortOrdersMapper.getAll();
+    public List getAll(int start,int rows){
+        return sortOrdersMapper.getAll(start, rows);
     }
     public List getAllSku(@Param(value="orderName")String orderName) {
         return sortOrdersMapper.getAllSku(orderName);

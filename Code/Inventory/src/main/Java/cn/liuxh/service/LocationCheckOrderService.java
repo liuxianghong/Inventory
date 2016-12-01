@@ -20,8 +20,8 @@ public class LocationCheckOrderService {
     @Autowired
     private LocationCheckOrderMapper locationCheckOrderMapper;
 
-    public List getAll(){
-        return locationCheckOrderMapper.getAll();
+    public List getAll(int start,int rows){
+        return locationCheckOrderMapper.getAll(start, rows);
     }
     public List<LocationSku> getAllSku(@Param(value="id")int id) {
         return locationCheckOrderMapper.getAllSku(id);

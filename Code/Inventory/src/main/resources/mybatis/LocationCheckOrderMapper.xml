@@ -7,7 +7,7 @@
     <!--</select>-->
 
     <select id="getAll" resultType="cn.liuxh.model.LocationCheckOrder">
-        select * from LocationCheckOrders;
+        select * from LocationCheckOrders limit #{start},#{rows};
     </select>
 
     <select id="getAllSku" resultType="cn.liuxh.model.LocationSku">

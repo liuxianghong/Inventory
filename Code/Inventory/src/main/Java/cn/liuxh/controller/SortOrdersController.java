@@ -34,15 +34,18 @@ public class SortOrdersController {
 
     @RequestMapping("/getSortOrders")
     @ResponseBody
-    public Map getAllOrders() throws Exception{
+    public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
+            , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
         Map map = new HashMap();
-        List<SortOrders> students = sortOrdersService.getAll();
+        int start = (page-1)*rows;
+        List<SortOrders> students = sortOrdersService.getAll(start,rows);
         for (int i = 0; i < students.size(); i++) {
             SortOrders order = students.get(i);
             List<SortSku> sku = sortOrdersService.getAllSku(order.getOrderName());
             order.setSku(sku);
         }
         map.put("orders",students);
+        map.put("total",sortOrdersService.count());
         return map;
     }
 
