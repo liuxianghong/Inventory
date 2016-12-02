@@ -154,15 +154,9 @@ public class SortOrdersController {
         //保存
         try {
             file.transferTo(targetFile);
-            List<SortOrders> sortOrders = new ArrayList<SortOrders>();
-            List<SortSku> skus = new ArrayList<SortSku>();
-            getExcelInfo(fileName,targetFile,sortOrders,skus);
-            for (SortOrders order:
-            sortOrders) {
-                sortOrdersService.importOrders(order);
-                sortOrdersService.deleteSku(order.getOrderName());
-            }
-            sortOrdersService.importSkus(skus);
+
+            getExcelInfo(fileName,targetFile);
+
             //goodsService.importGoods(goodses);
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,11 +185,13 @@ public class SortOrdersController {
         return 0;
     }
 
-    public void getExcelInfo(String fileName,File file,List<SortOrders> sortOrders,List<SortSku> skus) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return;
         }
+
+        List<SortSku> skus = new ArrayList<SortSku>();
 
         Workbook workbook = WorkbookFactory.create(file);//new HSSFWorkbook(fis);
         Sheet sheet = workbook.getSheetAt(0);
@@ -209,10 +205,16 @@ public class SortOrdersController {
         }
 
         SortOrders order = null;
+        boolean neddSave = false;
         //循环Excel行数,从第二行开始。标题不入库
         for(int r=1;r<totalRows;r++){
             Row row = sheet.getRow(r);
             if (row == null) continue;
+
+            if (neddSave && order != null) {
+                sortOrdersService.importOrders(order);
+                neddSave = false;
+            }
             SortSku sku = new SortSku();
             sku.setCalculate(0);
             //循环Excel的列
@@ -236,7 +238,8 @@ public class SortOrdersController {
                             order.setPo(po);
                             if (str != null
                                     && !str.trim().isEmpty()) {
-                                sortOrders.add(order);
+                                sortOrdersService.deleteSku(order.getOrderName());
+                                neddSave = true;
                             }
                         }
                     } else if (c == 2) {
@@ -279,8 +282,18 @@ public class SortOrdersController {
                     && !sku.getOrderName().trim().isEmpty()) {
                 //order.addSku(sku);
                 skus.add(sku);
+                if (skus.size() > 2000) {
+                    sortOrdersService.importSkus(skus);
+                    skus.clear();
+                }
             }
         }
+
+        if (neddSave && order != null) {
+            sortOrdersService.importOrders(order);
+        }
+        sortOrdersService.importSkus(skus);
+        skus.clear();
         workbook.close();
     }
 
