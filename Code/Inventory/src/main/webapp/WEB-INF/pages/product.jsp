@@ -139,6 +139,20 @@
 
     function exportProduct() {
 
+        var url="/exportProduct";
+        window.open(url);
+//        $.ajax({
+//            url : '/exportProduct',
+//            method : 'POST',
+//            dataType : 'json',
+//            success : function(r) {
+//                if (r==1) {
+//                    $.messager.show({msg : '',title : '成功'});
+//                } else {
+//                    $.messager.alert('错误','','error');
+//                }
+//            }
+//        });
     }
     
     function truncateProduct() {
