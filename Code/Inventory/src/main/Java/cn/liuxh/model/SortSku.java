@@ -27,8 +27,11 @@ public class SortSku {
     String size;
     String location;
 
+    @JsonIgnore
     int shipped;
+    @JsonIgnore
     int unShipped;
+    @JsonIgnore
     String goodNo;
 
     public int getShipped() {

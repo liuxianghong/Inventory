@@ -1,9 +1,6 @@
 package cn.liuxh.controller;
 
-import cn.liuxh.model.Goods;
-import cn.liuxh.model.LocationCheckOrder;
-import cn.liuxh.model.LocationLocation;
-import cn.liuxh.model.LocationSku;
+import cn.liuxh.model.*;
 import cn.liuxh.service.LocationCheckOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,9 +30,10 @@ public class LocationCheckOrderController {
     @RequestMapping("/getLocationCheckOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
-            , @RequestParam(value="rows", defaultValue="100") int rows)
+            , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid)
             throws Exception{
         int start = (page-1)*rows;
+        if (!UserController.userController.haveUser(uid)) return null;
         Map map = new HashMap();
         List<LocationCheckOrder> students = locationCheckOrderService.getAll(start, rows);
         for (int i = 0; i < students.size(); i++) {
@@ -54,9 +52,11 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/createLocationCheckOrder")
     @ResponseBody
-    public LocationCheckOrder addOrder(@RequestBody LocationCheckOrder order,HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public LocationCheckOrder addOrder(@RequestBody LocationCheckOrderUser orderUser,HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
 
+            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            LocationCheckOrder order = orderUser.getOrder();
             Timestamp time = new Timestamp(System.currentTimeMillis());
             order.setTime(time);
             int ret = 0;
@@ -100,6 +100,8 @@ public class LocationCheckOrderController {
     @ResponseBody
     public Map getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String LocationNo = request.getParameter("locationNo");
+        String uid = request.getParameter("uid");
+        if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
         List<Goods> goodses = locationCheckOrderService.getDetailByLocationNo(LocationNo);
 
         Map map = new HashMap();
@@ -108,27 +110,34 @@ public class LocationCheckOrderController {
         return map;
     }
 
-//    @RequestMapping("/updateLocationCheckOrder")
-//    @ResponseBody
-//    public LocationCheckOrder updateOrder(@RequestBody LocationCheckOrder order) throws Exception {
-//        try {
-//            int ret = 0;
-//            locationCheckOrderService.deleteSku(order.getId());
-//            ret = locationCheckOrderService.update(order);
-//            List<LocationSku> skus = order.getSku();
-//            for (LocationSku sku:skus) {
-//                sku.setOrderId(order.getId());
-//            }
-//            locationCheckOrderService.addSku(skus);
-//            if (ret != 0){
-//                return getOrderDetail(order.getId());
-//            }
-//
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//        }
-//        return null;
-//    }
+    @RequestMapping("/updateLocationCheckOrder")
+    @ResponseBody
+    public LocationCheckOrder updateOrder(@RequestBody LocationCheckOrderUser orderUser) throws Exception {
+        try {
+            int ret = 0;
+            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            LocationCheckOrder order = orderUser.getOrder();
+            locationCheckOrderService.deleteSku(order.getId());
+            ret = locationCheckOrderService.update(order);
+            List<LocationSku> skus = new ArrayList<>();
+            for (LocationLocation locations:
+                    order.getLocations()) {
+                skus.addAll(locations.getSku());
+            }
+
+            for (LocationSku sku:skus) {
+                sku.setOrderId(order.getId());
+            }
+            locationCheckOrderService.addSku(skus);
+            if (ret != 0){
+                return getOrderDetail(order.getId());
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return null;
+    }
 
     @RequestMapping(value = "/deleteLocationCheckOrder")
     @ResponseBody
@@ -136,13 +145,15 @@ public class LocationCheckOrderController {
         try {
             String id = request.getParameter("id");
 
+            String uid = request.getParameter("uid");
+            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
             int ret = 0;
             int ret2 = 0;
             if (!id.isEmpty()) {
                 ret = locationCheckOrderService.delete(Integer.parseInt(id));
                 ret2 = locationCheckOrderService.deleteSku(Integer.parseInt(id));
             }
-            return getAllOrders(1,100);
+            return getAllOrders(1,100,Integer.parseInt(uid));
         } catch (Exception e) {
             // TODO: handle exception
         }

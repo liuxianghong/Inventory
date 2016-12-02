@@ -3,7 +3,11 @@
 <mapper namespace="cn.liuxh.mapper.UserMapper">
  
   <select id="findUserInfo" resultType="cn.liuxh.model.User">
-    select name,pw from user LIMIT 1;
+    select name,pw,id from user WHERE name = #{userName} LIMIT 1;
+  </select>
+
+  <select id="getUserInfoById" resultType="cn.liuxh.model.User">
+    select name,pw from user WHERE id = #{id} LIMIT 1;
   </select>
  
 </mapper>

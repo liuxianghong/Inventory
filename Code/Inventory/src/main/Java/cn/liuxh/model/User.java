@@ -1,10 +1,24 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by liuxianghong on 16/11/23.
  */
 public class User {
+
+    @JsonProperty("userName")
     private String name;
+
+    public String getPw() {
+        return pw;
+    }
+
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
+
+    @JsonProperty("password")
     private String pw;
     private int id;
 
@@ -24,13 +38,5 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPassword() {
-        return pw;
-    }
-
-    public void setPassword(String password) {
-        this.pw = password;
     }
 }

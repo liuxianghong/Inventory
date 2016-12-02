@@ -1,6 +1,7 @@
 package cn.liuxh.controller;
 
 import cn.liuxh.model.SortOrders;
+import cn.liuxh.model.SortOrdersUser;
 import cn.liuxh.model.SortSku;
 import cn.liuxh.service.SortOrdersService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,9 +36,10 @@ public class SortOrdersController {
     @RequestMapping("/getSortOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
-            , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
+            , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
+        if (!UserController.userController.haveUser(uid)) return null;
         List<SortOrders> students = sortOrdersService.getAll(start,rows);
         for (int i = 0; i < students.size(); i++) {
             SortOrders order = students.get(i);
@@ -95,9 +97,11 @@ public class SortOrdersController {
 
     @RequestMapping("/updateSortOrder")
     @ResponseBody
-    public SortOrders updateOrder(@RequestBody SortOrders order) throws Exception {
+    public SortOrders updateOrder(@RequestBody SortOrdersUser orderUser) throws Exception {
         try {
             int ret = 0;
+            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            SortOrders order = orderUser.getOrder();
             System.out.println("updateSortOrder: "+order.toString());
             List<SortSku> skus = order.getSku();
             ret = sortOrdersService.updateSku(skus);

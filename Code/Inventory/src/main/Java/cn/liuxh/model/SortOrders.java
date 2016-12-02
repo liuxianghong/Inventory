@@ -1,5 +1,7 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,11 @@ public class SortOrders {
     private Timestamp time = new Timestamp(System.currentTimeMillis());
     List<SortSku> sku;
 
+    @JsonIgnore
     String po;
+    @JsonIgnore
     String type;
+    @JsonIgnore
     String inTime;
 
     public String getPo() {

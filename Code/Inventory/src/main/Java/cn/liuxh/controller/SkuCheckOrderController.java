@@ -28,9 +28,10 @@ public class SkuCheckOrderController {
     @RequestMapping("/getSkuCheckOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
-            , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
+            , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
+        if (!UserController.userController.haveUser(uid)) return null;
         List students = skuCheckOrderService.getAll(start,rows);
         map.put("total",skuCheckOrderService.count());
         map.put("orders",students);
@@ -42,6 +43,8 @@ public class SkuCheckOrderController {
     public SkuCheckOrder getSkuCheckOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
             String id =  request.getParameter("id");
+            String uid = request.getParameter("uid");
+            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
             return skuCheckOrderService.getDetailById(Integer.parseInt(id));
         } catch (Exception e) {
             // TODO: handle exception
@@ -53,6 +56,8 @@ public class SkuCheckOrderController {
     @ResponseBody
     public SkuCheckOrder addProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
+            String uid = request.getParameter("uid");
+            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
             Timestamp time = new Timestamp(System.currentTimeMillis());
             String seriesNo =  request.getParameter("seriesNo");
             String orderName = request.getParameter("orderName");
@@ -80,6 +85,8 @@ public class SkuCheckOrderController {
     @ResponseBody
     public SkuCheckOrder updateProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
+            String uid = request.getParameter("uid");
+            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
             Timestamp time = new Timestamp(System.currentTimeMillis());
             String orderName = request.getParameter("orderName");
             String calculate = request.getParameter("calculate");
@@ -104,6 +111,8 @@ public class SkuCheckOrderController {
     @ResponseBody
     public Map delProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
+            String uid = request.getParameter("uid");
+            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
             String id = request.getParameter("id");
 
 
@@ -112,7 +121,7 @@ public class SkuCheckOrderController {
                 ret = skuCheckOrderService.delete(Integer.parseInt(id));
             }
             if (ret != 0){
-                return getAllOrders(1,100);
+                return getAllOrders(1,100,Integer.parseInt(uid));
             }
         } catch (Exception e) {
             // TODO: handle exception

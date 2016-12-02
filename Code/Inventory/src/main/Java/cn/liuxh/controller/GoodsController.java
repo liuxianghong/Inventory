@@ -118,7 +118,8 @@ public class GoodsController {
     @ResponseBody
     public Goods getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String seriesNo = request.getParameter("seriesNo");
-
+        String uid = request.getParameter("uid");
+        if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
         return goodsService.getGoodsBySeriesNo(seriesNo);
     }
 
@@ -160,18 +161,18 @@ public class GoodsController {
         //保存
         try {
             file.transferTo(targetFile);
-            List<Goods> goodses = getExcelInfo(fileName,targetFile);
-            goodsService.importGoods(goodses);
-            for (Goods good:
-            goodses) {
-                System.out.println("importGoods: "+good.getId());
-            }
+            getExcelInfo(fileName,targetFile);
+
+//            for (Goods good:
+//            goodses) {
+//                System.out.println("importGoods: "+good.getId());
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         model.addAttribute("fileUrl", request.getContextPath()+"/upload/"+fileName);
 
-        System.out.println("upload getContextPath:"+request.getContextPath()+"/upload/"+fileName);
+        //System.out.println("upload getContextPath:"+request.getContextPath()+"/upload/"+fileName);
         return "index";
     }
 
@@ -193,10 +194,10 @@ public class GoodsController {
         return 0;
     }
 
-    public List<Goods> getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
-            return  null;
+            return;
         }
 
         Workbook workbook = WorkbookFactory.create(file);//new HSSFWorkbook(fis);
@@ -244,10 +245,17 @@ public class GoodsController {
                     && !goods.getSeriesNo().trim().isEmpty()) {
                 customerList.add(goods);
                 //System.out.println("getExcelInfo:"+customerList.size());
+                if (customerList.size() > 2000) {
+                    goodsService.importGoods(customerList);
+                    customerList.clear();
+                }
             }
         }
+        if (!customerList.isEmpty()) {
+            goodsService.importGoods(customerList);
+            customerList.clear();
+        }
         workbook.close();
-        return customerList;
     }
 
 

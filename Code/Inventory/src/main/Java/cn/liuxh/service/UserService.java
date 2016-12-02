@@ -15,13 +15,18 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public User getUserInfo(){
-        User user=userMapper.findUserInfo();
+    public User getUserInfo(String name){
+        User user=userMapper.findUserInfo(name);
         //User user=null;
         return user;
     }
 
     public int login(User usr){
         return userMapper.login(usr);
+    }
+
+    public User getUserInfoById(int name){
+        User user=userMapper.getUserInfoById(name);
+        return user;
     }
 }

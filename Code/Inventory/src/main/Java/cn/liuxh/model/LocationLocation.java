@@ -6,6 +6,8 @@ import java.util.List;
 /**
  * Created by liuxianghong on 16/12/1.
  */
+
+
 public class LocationLocation {
     public List<LocationSku> getSku() {
         return sku;
