@@ -9,6 +9,32 @@
   <select id="getUserInfoById" resultType="cn.liuxh.model.User">
     select name,pw from user WHERE id = #{id} LIMIT 1;
   </select>
+
+  <select id="getAllUsers" resultType="cn.liuxh.model.User">
+    select name,pw,id from User limit #{start},#{rows};
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from User
+  </select>
+
+  <insert id="addUser" parameterType="cn.liuxh.model.User" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into User(name,pw)
+    values(#{name},#{pw})
+  </insert>
+
+  <!-- 更新的配置 -->
+  <update id="updateUser" parameterType="cn.liuxh.model.User">
+    update User set
+    name=#{name},pw=#{pw}
+    where id=#{id}
+  </update>
+
+  <!-- 删除配置 -->
+  <delete id="delUser" parameterType="int">
+    delete from User where id=#{id}
+  </delete>
  
 </mapper>
 

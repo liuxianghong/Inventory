@@ -13,6 +13,7 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editProduct()">编辑</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delProduct()">删除</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importProduct()">导入</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportProduct()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateProduct()">清空</a>
 </div>
 
@@ -136,6 +137,10 @@
         $("#productFileWin").window('open');
     }
 
+    function exportProduct() {
+
+    }
+    
     function truncateProduct() {
         $.messager.confirm('警告','您确定要清空所有数据吗？',
                 function(t) {

@@ -33,6 +33,19 @@ public class SortOrdersController {
     @Autowired
     private SortOrdersService sortOrdersService;
 
+
+    @RequestMapping("/getAllSortOrdersE")
+    @ResponseBody
+    public Map getAllUsersE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+        int start = (page-1)*rows;
+        List students = sortOrdersService.getAllSkuPage(start,rows);
+        Map map = new HashMap();
+        map.put("rows",students);
+        map.put("total", sortOrdersService.selectSkUCount());
+        return map;
+    }
+
+
     @RequestMapping("/getSortOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page

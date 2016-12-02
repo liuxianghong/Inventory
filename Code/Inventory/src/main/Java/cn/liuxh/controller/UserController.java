@@ -1,15 +1,17 @@
 package cn.liuxh.controller;
 
 import cn.liuxh.model.User;
+import cn.liuxh.model.User;
 import cn.liuxh.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,14 +32,78 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/getUserInfo")
+
+    @RequestMapping("/getAllUsersE")
     @ResponseBody
-    public User getUserInfo() {
-        User user = userService.getUserInfo("admin");
-        if(user!=null){
-            System.out.println("user.getName():"+user.getName());
+    public Map getAllUsersE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+        int start = (page-1)*rows;
+        List students = userService.getAllUsers(start,rows);
+        Map map = new HashMap();
+        map.put("rows",students);
+        map.put("total", userService.selectCount());
+        return map;
+    }
+
+    /**
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
+    @ResponseBody
+    public int saveUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+
+            String userId = request.getParameter("id");
+            String name =  request.getParameter("userName");
+            String pw =  request.getParameter("password");
+
+            System.out.println("saveUser:"+" userId: "+userId + " name: "+ name);
+
+            User user = new User();
+            user.setName(name);
+            user.setPw(pw);
+            int ret = 0;
+            if (!userId.isEmpty()) {
+                //修改用户信息
+                user.setId(Integer.parseInt(userId));
+                ret = userService.updateUser(user);
+                //ret = userService.updateUser(user);
+            } else {
+                //ret = userService.addUser(user);
+                ret = userService.addUser(user);
+            }
+            System.out.println("saveUser:"+" ret: "+ret);
+            if (ret != 0){
+                return 1;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
         }
-        return user;
+        return 0;
+    }
+
+    @RequestMapping(value = "/delUser", method = RequestMethod.POST)
+    @ResponseBody
+    public int delUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+
+            String id = request.getParameter("id");
+            System.out.println("saveUser:"+" ParameterMap: "+request.getParameterMap().toString());
+
+            int ret = 0;
+            if (!id.isEmpty()) {
+                ret = userService.delUser(Integer.parseInt(id));
+            }
+            System.out.println("saveUser:"+" ret: "+ret);
+            if (ret != 0){
+                return 1;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
     }
 
     @RequestMapping(value = "/login")

@@ -24,6 +24,14 @@ public class SortOrdersService {
         return sortOrdersMapper.getAllSku(orderName);
     }
 
+    public List getAllSkuPage(int start,int rows){
+        return sortOrdersMapper.getAllSkuPage(start, rows);
+    }
+
+    public int selectSkUCount() {
+        return sortOrdersMapper.selectSkUCount();
+    }
+
     public int count(){
         return sortOrdersMapper.count();
     }

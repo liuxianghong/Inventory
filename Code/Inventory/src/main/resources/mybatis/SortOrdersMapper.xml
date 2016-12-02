@@ -14,8 +14,16 @@
         select * from SortSku where orderName = #{orderName};
     </select>
 
+    <select id="getAllSkuPage" resultType="cn.liuxh.model.SortSku">
+        select * from SortSku limit #{start},#{rows};
+    </select>
+
     <select id="count" resultType="java.lang.Integer">
         select count(*) from SortOrders;
+    </select>
+
+    <select id="selectSkUCount" resultType="java.lang.Integer">
+        select count(*) from SortSku;
     </select>
 
     <select id="haveGoods" resultType="java.lang.Integer">
