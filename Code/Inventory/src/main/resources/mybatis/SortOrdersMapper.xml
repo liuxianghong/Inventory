@@ -15,7 +15,10 @@
     </select>
 
     <select id="getAllSkuPage" resultType="cn.liuxh.model.SortSku">
-        select * from SortSku limit #{start},#{rows};
+        select SortSku.id,SortSku.orderName,SortSku.count,SortSku.productName
+        ,SortSku.size,SortSku.location,SortSku.calculate,SortSku.seriesNo
+        ,SortOrders.id AS oid from SortSku
+        INNER JOIN SortOrders ON SortOrders.orderName = SortSku.orderName limit #{start},#{rows};
     </select>
 
     <select id="count" resultType="java.lang.Integer">

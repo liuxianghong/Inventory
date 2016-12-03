@@ -10,6 +10,29 @@ public class SortSku {
     int id;
     String seriesNo;
     int calculate;
+    int count;
+    String productName;
+    String size;
+    String location;
+
+    @JsonIgnore
+    String orderName;
+    @JsonIgnore
+    int oid;
+    @JsonIgnore
+    int shipped;
+    @JsonIgnore
+    int unShipped;
+    @JsonIgnore
+    String goodNo;
+
+    public int getOid() {
+        return oid;
+    }
+
+    public void setOid(int oid) {
+        this.oid = oid;
+    }
 
     public String getOrderName() {
         return orderName;
@@ -19,20 +42,6 @@ public class SortSku {
         this.orderName = orderName;
     }
 
-    @JsonIgnore
-    String orderName;
-
-    int count;
-    String productName;
-    String size;
-    String location;
-
-    @JsonIgnore
-    int shipped;
-    @JsonIgnore
-    int unShipped;
-    @JsonIgnore
-    String goodNo;
 
     public int getShipped() {
         return shipped;

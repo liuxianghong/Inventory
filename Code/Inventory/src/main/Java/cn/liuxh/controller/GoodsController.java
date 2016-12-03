@@ -2,8 +2,7 @@ package cn.liuxh.controller;
 
 import cn.liuxh.model.Goods;
 import cn.liuxh.service.GoodsService;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
@@ -275,7 +274,7 @@ public class GoodsController {
     @RequestMapping("/exportProduct")
     public String exportProduct(HttpServletRequest request,HttpServletResponse response) throws IOException {
         XSSFWorkbook webBook = new XSSFWorkbook();
-        XSSFSheet sheet = webBook.createSheet("学生信息表");
+        XSSFSheet sheet = webBook.createSheet("产品信息");
         XSSFRow row = sheet.createRow((int)0);
 
         XSSFCellStyle style = webBook.createCellStyle();

@@ -7,6 +7,7 @@ import cn.liuxh.service.SortOrdersService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by liuxianghong on 2016/11/30.
@@ -323,5 +321,101 @@ public class SortOrdersController {
             // TODO: handle exception
         }
         return 0;
+    }
+
+
+    @RequestMapping("/exportSortOrder")
+    public String exportSortOrder(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        XSSFWorkbook webBook = new XSSFWorkbook();
+        XSSFSheet sheet = webBook.createSheet("订单数据");
+        XSSFRow row = sheet.createRow((int)0);
+
+        XSSFCellStyle style = webBook.createCellStyle();
+        String[] strs = {"系统订单编码","拣货单","产品名称","规格","条形码","数量","订单状态"};
+        for (int i = 0; i < strs.length; i++) {
+            XSSFCell cell = row.createCell(i);
+            cell.setCellValue(strs[i]);
+            cell.setCellStyle(style);
+        }
+
+        int count = sortOrdersService.selectSkUCount();
+        int rows = 2000;
+        for (int i=0 ;i*rows < count ; i++) {
+            List<SortSku> goodsList = sortOrdersService.getAllSkuPage(i*rows,rows);
+
+            for (int j=0;j<goodsList.size();j++){
+                row = sheet.createRow(i * 2000 + j + 1);
+
+                SortSku goods = goodsList.get(j);
+                row.createCell(0).setCellValue("SOI" + goods.getOid());
+                row.createCell(1).setCellValue(goods.getOrderName());
+                row.createCell(2).setCellValue(goods.getProductName());
+                row.createCell(3).setCellValue(goods.getSize());
+                row.createCell(4).setCellValue(goods.getSeriesNo());
+                row.createCell(5).setCellValue(goods.getCount());
+                row.createCell(6).setCellValue(goods.getCalculate());
+            }
+        }
+
+        String msg = "操作失败！";
+        boolean flag = false;
+        //第六步 将文件存放到指定位置
+        try{
+
+            String path = request.getSession().getServletContext().getRealPath("download");
+            String fileName = "订单数据" + new Date().getTime();
+            System.out.println("download getRealPath:"+path);
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            //FileOutputStream fout = new FileOutputStream(targetFile.getAbsolutePath());
+            webBook.write(os);
+            webBook.close();
+
+            byte[] content = os.toByteArray();
+            InputStream is = new ByteArrayInputStream(content);
+            // 设置response参数，可以打开下载页面
+            response.reset();
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+            response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName).getBytes(), "iso-8859-1"));
+            ServletOutputStream out = response.getOutputStream();
+            BufferedInputStream bis = null;
+            BufferedOutputStream bos = null;
+            try {
+                bis = new BufferedInputStream(is);
+                bos = new BufferedOutputStream(out);
+                byte[] buff = new byte[2048];
+                int bytesRead;
+                // Simple read/write loop.
+                while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                    bos.write(buff, 0, bytesRead);
+                }
+            } catch (final IOException e) {
+                throw e;
+            } finally {
+                if (bis != null)
+                    bis.close();
+                if (bos != null)
+                    bos.close();
+            }
+            return null;
+
+
+
+//            flag = true;
+//            msg = "操作成功！";
+        }catch(Exception e){
+            e.printStackTrace();
+            msg = "操作失败";
+            throw e;
+        }
+
+
+
+
+//        Map<String, Object> modelMap = new HashMap<String, Object>();
+//        modelMap.put("flag", 1);
+//        modelMap.put("msg", 2);
+//        return JSONObject.toJSONString(modelMap);
     }
 }

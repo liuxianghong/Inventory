@@ -57,6 +57,8 @@
 
     function exportSortOrder(){
 
+        var url="/exportSortOrder";
+        window.open(url);
 
     }
 
