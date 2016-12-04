@@ -26,7 +26,7 @@
         select * from LocationCheckOrders where id = #{id};
     </select>
 
-    <select id="getDetailByLocationNo" resultType="cn.liuxh.model.LocationCheckOrder">
+    <select id="getDetailByLocationNo" resultType="cn.liuxh.model.Goods">
         select * from goods where locationNo = #{id};
     </select>
 

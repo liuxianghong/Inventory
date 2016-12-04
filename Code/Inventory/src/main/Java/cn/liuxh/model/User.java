@@ -1,5 +1,6 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -9,6 +10,10 @@ public class User {
 
     @JsonProperty("userName")
     private String name;
+    @JsonProperty("password")
+    private String pw;
+    private int id;
+    private String nickName = "";
 
     public String getPw() {
         return pw;
@@ -17,10 +22,6 @@ public class User {
     public void setPw(String pw) {
         this.pw = pw;
     }
-
-    @JsonProperty("password")
-    private String pw;
-    private int id;
 
     public int getId() {
         return id;
@@ -31,12 +32,19 @@ public class User {
     }
 
 
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

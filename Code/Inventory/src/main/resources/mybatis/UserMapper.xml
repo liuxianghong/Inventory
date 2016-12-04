@@ -3,15 +3,15 @@
 <mapper namespace="cn.liuxh.mapper.UserMapper">
  
   <select id="findUserInfo" resultType="cn.liuxh.model.User">
-    select name,pw,id from user WHERE name = #{userName} LIMIT 1;
+    select * from user WHERE name = #{userName} LIMIT 1;
   </select>
 
   <select id="getUserInfoById" resultType="cn.liuxh.model.User">
-    select name,pw from user WHERE id = #{id} LIMIT 1;
+    select * from user WHERE id = #{id} LIMIT 1;
   </select>
 
   <select id="getAllUsers" resultType="cn.liuxh.model.User">
-    select name,pw,id from User limit #{start},#{rows};
+    select * from User limit #{start},#{rows};
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer">
@@ -20,14 +20,14 @@
 
   <insert id="addUser" parameterType="cn.liuxh.model.User" useGeneratedKeys="true"
           keyProperty="id">
-    insert into User(name,pw)
-    values(#{name},#{pw})
+    insert into User(name,pw,nickName)
+    values(#{name},#{pw},#{nickName})
   </insert>
 
   <!-- 更新的配置 -->
   <update id="updateUser" parameterType="cn.liuxh.model.User">
     update User set
-    name=#{name},pw=#{pw}
+    name=#{name},pw=#{pw},nickName=#{nickName}
     where id=#{id}
   </update>
 

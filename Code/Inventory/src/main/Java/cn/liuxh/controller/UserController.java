@@ -3,6 +3,10 @@ package cn.liuxh.controller;
 import cn.liuxh.model.User;
 import cn.liuxh.model.User;
 import cn.liuxh.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,12 +62,14 @@ public class UserController {
             String userId = request.getParameter("id");
             String name =  request.getParameter("userName");
             String pw =  request.getParameter("password");
+            String nickName =  request.getParameter("nickName");
 
             System.out.println("saveUser:"+" userId: "+userId + " name: "+ name);
 
             User user = new User();
             user.setName(name);
             user.setPw(pw);
+            user.setNickName(nickName);
             int ret = 0;
             if (!userId.isEmpty()) {
                 //修改用户信息
@@ -122,6 +128,7 @@ public class UserController {
 
             if (userResult != null) {
                 if (userResult.getPw().equals(password)) {
+
                     map.put("data",userResult);
                     map.put("result", "0");
                     map.put("msg", "登录成功");

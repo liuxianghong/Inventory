@@ -29,6 +29,13 @@
                 <td>密码:</td>
                 <td><input class="easyui-textbox" type="text" name="password" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
+
+            <tr>
+                <td>昵称:</td>
+                <td><input class="easyui-textbox" type="text" name="nickName" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+            </tr>
+
+
         </table>
 
         <div style="padding: 5px; text-align: center;">
@@ -46,6 +53,7 @@
             columns:[[
                 {field:'userName',title:'用户名',width:150},
                 {field:'password',title:'密码',width:150},
+                {field:'nickName',title:'昵称',width:150}
             ]],
             toolbar:'#toolbarUser',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示
