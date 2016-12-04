@@ -21,6 +21,8 @@
 <%@ include file="user.jsp"%>
 <%@ include file="product.jsp"%>
 <%@ include file="sortOrder.jsp"%>
+<%@ include file="skuOrder.jsp"%>
+<%@ include file="locationOrder.jsp"%>
 <%--<%@ include file="order.jsp"%>--%>
 
 <div style="margin:20px 0;"></div>
@@ -36,6 +38,14 @@
 
     <div title="订单管理" style="padding:10px">
         <table id="dgSortOrder"></table>
+    </div>
+
+    <div title="SKU盘点" style="padding:10px">
+        <table id="dgSkuOrder"></table>
+    </div>
+
+    <div title="库位盘点" style="padding:10px">
+        <table id="dgLocationOrder"></table>
     </div>
 
 </div>

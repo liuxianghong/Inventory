@@ -1,36 +1,24 @@
 <%--
   Created by IntelliJ IDEA.
   User: liuxianghong
-  Date: 2016/11/30
-  Time: 下午4:53
+  Date: 16/12/5
+  Time: 上午12:17
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-<div id="toolbarSortOrder">
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSortOrder()">导入</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSortOrder()">导出</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSortOrder()">清空</a>
+<div id="toolbarLocationOrder">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportLocationOrder()">导出</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateLocationOrder()">清空</a>
 </div>
 
-<div id="SortOrderFileWin" class="easyui-window" title="导入Excel"
-     style="width: 500px; height: auto;" closed="true">
-    <form name="FormFile" action="/uploadOrder" method="post"  enctype="multipart/form-data">
-        <h1>选择上传文件</h1>
-        <input type="file" name="file">
-
-        <div style="padding: 5px; text-align: center;">
-            <input type="submit" value="upload"/><a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#SortOrderFileWin').window('close')">取消</a>
-        </div>
-    </form>
-</div>
 
 <script type="text/javascript">
 
     $(function(){
-        $("#dgSortOrder").datagrid({
-            url:"/getAllSortOrdersE",
+        $("#dgLocationOrder").datagrid({
+            url:"/getAllLocationOrdersE",
             columns:[[
                 {field:'productName',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
@@ -39,7 +27,7 @@
                 {field:'calculate',title:'盘点',width:200},
                 {field:'location',title:'地址',width:150}
             ]],
-            toolbar:'#toolbarSortOrder',  //表格菜单
+            toolbar:'#toolbarLocationOrder',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示
             pagination:true, //显示分页工具栏
             rownumbers:true, //显示行号列
@@ -50,19 +38,16 @@
             }
         });
     });
-    
-    function importSortOrder(){
-        $("#SortOrderFileWin").window('open');
-    }
 
-    function exportSortOrder(){
 
-        var url="/exportSortOrder";
+    function exportLocationOrder(){
+
+        var url="/exportLocationOrder";
         window.open(url);
 
     }
 
-    function truncateSortOrder(){
+    function truncateLocationOrder(){
         $.messager.confirm('警告','您确定要清空吗',
                 function(t) {
                     if (t) {
@@ -72,14 +57,14 @@
                             dataType : 'json',
                             success : function(r) {
                                 if (r==1) {
-                                    $("#dgSortOrder").datagrid('acceptChanges');
+                                    $("#dgLocationOrder").datagrid('acceptChanges');
                                     $.messager.show({msg : '',title : '成功'});
-                                    $("#dgSortOrder").datagrid('reload');
+                                    $("#dgLocationOrder").datagrid('reload');
                                 } else {
-                                    $("#dgSortOrder").datagrid('beginEdit',editRow);
+                                    $("#dgLocationOrder").datagrid('beginEdit',editRow);
                                     $.messager.alert('错误','','error');
                                 }
-                                $("#dgSortOrder").datagrid('unselectAll');
+                                $("#dgLocationOrder").datagrid('unselectAll');
                             }
                         });
                     }

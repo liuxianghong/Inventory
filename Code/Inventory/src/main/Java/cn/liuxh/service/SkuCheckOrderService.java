@@ -38,4 +38,5 @@ public class SkuCheckOrderService {
     }
 
     public boolean haveGoods(String seriesNo) { return skuCheckOrderMapper.haveGoods(seriesNo) > 0;}
+
 }

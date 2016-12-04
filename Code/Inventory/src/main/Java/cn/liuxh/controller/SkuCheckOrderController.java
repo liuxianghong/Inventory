@@ -128,4 +128,17 @@ public class SkuCheckOrderController {
         }
         return null;
     }
+
+    @RequestMapping(value = "/getAllSkuOrdersE")
+    @ResponseBody
+    public Map getAllSkuOrdersE(@RequestParam(value="page", defaultValue="1") int page
+            , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
+        Map map = new HashMap();
+        int start = (page-1)*rows;
+        List students = skuCheckOrderService.getAll(start,rows);
+        map.put("rows",students);
+        map.put("total", skuCheckOrderService.count());
+        System.out.println("getAllSkuOrdersE: " + students.size());
+        return map;
+    }
 }
