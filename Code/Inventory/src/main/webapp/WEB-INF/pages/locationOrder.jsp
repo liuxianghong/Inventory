@@ -20,12 +20,13 @@
         $("#dgLocationOrder").datagrid({
             url:"/getAllLocationOrdersE",
             columns:[[
-                {field:'productName',title:'产品名称',width:150},
+                {field:'orderName',title:'盘点表单名称',width:150},
+                {field:'name',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
                 {field:'count',title:'数量',width:100},
                 {field:'seriesNo',title:'条形码',width:200},
                 {field:'calculate',title:'盘点',width:200},
-                {field:'location',title:'地址',width:150}
+                {field:'locationNo',title:'地址',width:150}
             ]],
             toolbar:'#toolbarLocationOrder',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示
@@ -52,7 +53,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateOrder',
+                            url : '/truncateLocationOrder',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {

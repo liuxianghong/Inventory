@@ -53,7 +53,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateOrder',
+                            url : '/truncateSkuOrder',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {

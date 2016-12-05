@@ -18,6 +18,16 @@
         select count(*) from LocationCheckOrders;
     </select>
 
+    <select id="getAllLocationOrdersE" resultType="cn.liuxh.model.LocationSkuE">
+        select * from LocationSKU
+        INNER JOIN goods ON LocationSKU.seriesNo = goods.seriesNo
+        INNER JOIN LocationCheckOrders ON LocationSKU.OrderId = LocationCheckOrders.id
+        limit #{start},#{rows};
+    </select>
+    <select id="SkuCount" resultType="java.lang.Integer">
+        select count(*) from LocationSKU;
+    </select>
+
     <select id="haveGoods" resultType="java.lang.Integer">
         select count(*) from goods where seriesNo=#{seriesNo};
     </select>
@@ -65,5 +75,9 @@
         delete from LocationSKU where orderId=#{id};
     </delete>
 
+    <delete id="truncate">
+        DELETE from LocationCheckOrders WHERE id != 0;
+        DELETE from LocationSKU WHERE id != 0;
+    </delete>
 
 </mapper>

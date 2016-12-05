@@ -21,4 +21,6 @@ public interface SkuCheckOrderMapper {
     SkuCheckOrder getDetailById(@Param(value="id")int id);
 
     int haveGoods(@Param(value="seriesNo")String id);
+
+    int truncate();
 }

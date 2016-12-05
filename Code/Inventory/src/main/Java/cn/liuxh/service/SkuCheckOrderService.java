@@ -39,4 +39,5 @@ public class SkuCheckOrderService {
 
     public boolean haveGoods(String seriesNo) { return skuCheckOrderMapper.haveGoods(seriesNo) > 0;}
 
+    public int truncate() {return skuCheckOrderMapper.truncate();}
 }

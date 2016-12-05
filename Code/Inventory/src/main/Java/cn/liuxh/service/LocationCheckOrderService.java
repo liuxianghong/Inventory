@@ -32,6 +32,13 @@ public class LocationCheckOrderService {
         return locationCheckOrderMapper.count();
     }
 
+    public List getAllLocationOrdersE(int start,int rows){
+        return locationCheckOrderMapper.getAllLocationOrdersE(start, rows);
+    }
+    public int SkuCount(){
+        return locationCheckOrderMapper.SkuCount();
+    }
+
     public int update(LocationCheckOrder product){
         return locationCheckOrderMapper.update(product);
     }
@@ -59,4 +66,5 @@ public class LocationCheckOrderService {
         return locationCheckOrderMapper.getSkus(id);
     }
 
+    public int truncate() {return locationCheckOrderMapper.truncate();}
 }

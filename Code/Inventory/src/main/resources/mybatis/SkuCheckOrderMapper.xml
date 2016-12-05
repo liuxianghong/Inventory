@@ -43,4 +43,8 @@
         delete from SkuCheckOrder where id=#{id}
     </delete>
 
+    <delete id="truncate">
+        DELETE from SkuCheckOrder WHERE id != 0;
+    </delete>
+
 </mapper>

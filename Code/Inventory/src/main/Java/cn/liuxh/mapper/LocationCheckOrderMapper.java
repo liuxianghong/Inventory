@@ -18,6 +18,9 @@ public interface LocationCheckOrderMapper {
 
     int count();
 
+    List getAllLocationOrdersE(@Param(value="start")int start, @Param(value="rows")int rows);
+    int SkuCount();
+
     int update(LocationCheckOrder product);
     int add(LocationCheckOrder product);
     int delete(@Param(value="id")int id);
@@ -28,4 +31,6 @@ public interface LocationCheckOrderMapper {
     int deleteSku(@Param(value="id")int id);
     int addSku(List list);
     List<LocationSku> getSkus(@Param(value="orderId")int id);
+
+    int truncate();
 }
