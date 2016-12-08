@@ -297,7 +297,7 @@ public class GoodsController {
                 row.createCell(0).setCellValue(goods.getName());
                 row.createCell(1).setCellValue(goods.getSize());
                 row.createCell(2).setCellValue(goods.getSeriesNo());
-                row.createCell(2).setCellValue(goods.getLocationNo());
+                row.createCell(3).setCellValue(goods.getLocationNo());
             }
         }
 
