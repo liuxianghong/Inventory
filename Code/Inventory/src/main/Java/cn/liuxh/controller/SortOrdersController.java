@@ -43,7 +43,6 @@ public class SortOrdersController {
         return map;
     }
 
-
     @RequestMapping("/getSortOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
@@ -223,11 +222,14 @@ public class SortOrdersController {
                     if (addsku.getCount() > 0) unpickOrder.addSku(addsku);
                 }
 
-
+                if (unpickOrder.getCount() < 150) {
+                    sortOrdersService.updatePickOrderPickState(unpickOrder.getId(),1);
+                }
+                sortOrdersService.addPickSkus(unpickOrder.getSkus());
             }
 
             map.put("state",0);
-            map.put("msg","查询成功");
+            map.put("msg","成功");
 
         } catch (Exception e) {
             // TODO: handle exception
@@ -405,6 +407,10 @@ public class SortOrdersController {
 
                         }
                         if (skus.size() < rows) {
+                            if (pickorder.getCount() < 150){
+                                sortOrdersService.updatePickOrderPickState(pickorder.getId(),1);
+                            }
+                            sortOrdersService.addPickSkus(pickorder.getSkus());
                             break;
                         }
                         j++;
