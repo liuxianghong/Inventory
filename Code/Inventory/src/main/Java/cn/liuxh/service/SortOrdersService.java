@@ -1,6 +1,7 @@
 package cn.liuxh.service;
 
 import cn.liuxh.mapper.SortOrdersMapper;
+import cn.liuxh.model.PickOrder;
 import cn.liuxh.model.SortOrders;
 import cn.liuxh.model.SortSku;
 import org.apache.ibatis.annotations.Param;
@@ -22,6 +23,10 @@ public class SortOrdersService {
     }
     public List getAllSku(@Param(value="orderName")String orderName) {
         return sortOrdersMapper.getAllSku(orderName);
+    }
+
+    public List getAllSkuCountAndSort(String orderName,int start,int rows) {
+        return sortOrdersMapper.getAllSkuCountAndSort(orderName,start,rows);
     }
 
     public List getAllSkuPage(int start,int rows){
@@ -70,4 +75,33 @@ public class SortOrdersService {
     public int importSkus(List list){return sortOrdersMapper.importSkus(list);}
 
     public int truncate() {return sortOrdersMapper.truncate();}
+
+    public int adPickOrder(PickOrder order){return sortOrdersMapper.adPickOrder(order);}
+    public int addPickSkus(List list){return sortOrdersMapper.addPickSkus(list);}
+
+    public int updatePickOrderState(int id, int state){return sortOrdersMapper.updatePickOrderState(id,state);}
+    public int updatePickOrderPickState(int id, int state){return sortOrdersMapper.updatePickOrderPickState(id,state);}
+
+    public PickOrder getPickOrderDetailById(int id){
+        return sortOrdersMapper.getPickOrderDetailById(id);
+    }
+
+    public int lockPickOrderById(int id,int uid){
+        return sortOrdersMapper.lockPickOrderById(id,uid);
+    }
+
+    public List getAllPickOrders(int start,int rows,int state){
+        return sortOrdersMapper.getAllPickOrders(start, rows, state);
+    }
+    public List getAllPickSkus(@Param(value="orderName")int orderid) {
+        return sortOrdersMapper.getAllPickSkus(orderid);
+    }
+
+    public int deletePickSku(@Param(value="id")int id){
+        return sortOrdersMapper.deletePickSku(id);
+    }
+
+    public PickOrder getUnPickOrder(PickOrder order){
+        return sortOrdersMapper.getUnPickOrder(order);
+    }
 }

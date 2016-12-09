@@ -1,9 +1,9 @@
 package cn.liuxh.controller;
 
-import cn.liuxh.model.SortOrders;
-import cn.liuxh.model.SortOrdersUser;
-import cn.liuxh.model.SortSku;
+import cn.liuxh.model.*;
 import cn.liuxh.service.SortOrdersService;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -62,30 +62,6 @@ public class SortOrdersController {
         return map;
     }
 
-//    @RequestMapping("/createLocationCheckOrder")
-//    @ResponseBody
-//    public LocationCheckOrder addOrder(@RequestBody LocationCheckOrder order, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        try {
-//
-//            Timestamp time = new Timestamp(System.currentTimeMillis());
-//            order.setTime(time);
-//            int ret = 0;
-//            ret = sortOrdersService.add(order);
-//
-//            List<LocationSku> skus = order.getSku();
-//            for (LocationSku sku:skus) {
-//                sku.setOrderId(order.getId());
-//            }
-//            sortOrdersService.addSku(skus);
-//
-//            if (ret != 0){
-//                return getOrderDetail(order.getId());
-//            }
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//        }
-//        return null;
-//    }
 
     public SortOrders getOrderDetail(int id) {
         SortOrders order = sortOrdersService.getDetailById(id);
@@ -96,15 +72,6 @@ public class SortOrdersController {
     }
 
 
-//    @RequestMapping("/getLocationDetails")
-//    @ResponseBody
-//    public LocationCheckOrder getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        String LocationNo = request.getParameter("locationNo");
-//        LocationCheckOrder order = sortOrdersService.getDetailByLocationNo(LocationNo);
-//        List skus = sortOrdersService.getAllSku(order.getId());
-//        order.setSku(skus);
-//        return order;
-//    }
 
     @RequestMapping("/updateSortOrder")
     @ResponseBody
@@ -126,24 +93,242 @@ public class SortOrdersController {
         return null;
     }
 
-//    @RequestMapping(value = "/deleteLocationCheckOrder")
-//    @ResponseBody
-//    public Map delProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        try {
-//            String id = request.getParameter("id");
-//
-//            int ret = 0;
-//            int ret2 = 0;
-//            if (!id.isEmpty()) {
-//                ret = sortOrdersService.delete(Integer.parseInt(id));
-//                ret2 = sortOrdersService.deleteSku(Integer.parseInt(id));
-//            }
-//            return getAllOrders();
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//        }
-//        return null;
-//    }
+
+    @RequestMapping("/getPickOrder")
+    @ResponseBody
+    public Map getPickOrder(@RequestBody JSONObject jsonObj) throws Exception{
+        Map map = new HashMap();
+
+        map.put("state",1);
+        try {
+
+            int uid = jsonObj.getInteger("uid");
+            int state = jsonObj.getInteger("state");
+            int page = jsonObj.getInteger("page");
+            int row = jsonObj.getInteger("rows");
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+                map.put("msg","用户不存在");
+                return map;
+            }
+            int start = (page-1)*row;
+            List<PickOrder> orderList = sortOrdersService.getAllPickOrders(start,row,state);
+
+            if (orderList == null) orderList = new ArrayList();
+            for (int i = 0; i < orderList.size(); i++) {
+                PickOrder order = orderList.get(i);
+                List<PickSku> skus = sortOrdersService.getAllPickSkus(order.getId());
+                if (skus == null) skus = new ArrayList();
+                order.setSkus(skus);
+            }
+            map.put("state",0);
+            map.put("data",orderList);
+            map.put("msg","查询成功");
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
+    @RequestMapping("/updateOrderData")
+    @ResponseBody
+    public Map updateOrderData(@RequestBody JSONObject jsonObj) throws Exception{
+        Map map = new HashMap();
+
+        map.put("state",1);
+        try {
+
+            int id = jsonObj.getInteger("id");
+            int uid = jsonObj.getInteger("uid");
+            JSONArray array = jsonObj.getJSONArray("sku");
+
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+                map.put("msg","用户不存在");
+                return map;
+            }
+            PickOrder pickOrder = sortOrdersService.getPickOrderDetailById(id);
+
+            if (pickOrder.getState() == 1) {
+                map.put("msg","订单已完成");
+                return map;
+            }
+
+            if (pickOrder.getLockUserId() != 0 && pickOrder.getLockUserId() != uid) {
+                map.put("msg","订单已被他人锁定");
+                return map;
+            }
+            List<PickSku> skus = sortOrdersService.getAllPickSkus(id);
+
+            List<PickSku> unSkus = new ArrayList<>();
+            for (int i = 0 ; i < array.size() ; i++) {
+                JSONObject jsku = array.getJSONObject(i);
+                String jseriesNo = jsku.getString("seriesNo");
+                int jcount = jsku.getInteger("count");
+                for (PickSku sku:
+                skus) {
+                    if (sku.getSeriesNo().equals(jseriesNo)){
+                        int count = sku.getCount();
+                        sku.setCount(jcount);
+                        if (count > jcount) {
+                            PickSku unSku = PickSku.NameCopy(sku);
+                            unSku.setCount(count - jcount);
+                            unSkus.add(unSku);
+                        }
+                    } else
+                    {
+                        sortOrdersService.deletePickSku(sku.getId());
+                        unSkus.add(sku);
+                    }
+                }
+            }
+            sortOrdersService.updatePickOrderState(id,1);
+            if (unSkus.size() > 0) {
+                PickOrder unpickOrder = sortOrdersService.getUnPickOrder(pickOrder);
+                if (unpickOrder == null) {
+                    unpickOrder = new PickOrder();
+                    unpickOrder.setLocation(pickOrder.getLocation());
+                    unpickOrder.setShortName(pickOrder.getShortName());
+                    sortOrdersService.adPickOrder(unpickOrder);
+                }
+
+                List<PickSku> unpickOrderskus = sortOrdersService.getAllPickSkus(unpickOrder.getId());
+                unpickOrder.setSkus(unpickOrderskus);
+
+                for (PickSku addsku:
+                unSkus) {
+                    int countOrder = unpickOrder.getCount();
+                    int countSku = addsku.getCount();
+
+                    while (countSku + countOrder >= 150) {
+
+                        PickSku pickskuCopy = PickSku.NameCopy(addsku);
+                        pickskuCopy.setCount(countSku + countOrder - 150);
+                        addsku.setCount(150 - countOrder);
+                        unpickOrder.addSku(addsku);
+
+                        sortOrdersService.addPickSkus(unpickOrder.getSkus());
+
+                        addsku = pickskuCopy;
+
+                        unpickOrder = new PickOrder();
+                        unpickOrder.setLocation(pickOrder.getLocation());
+                        unpickOrder.setShortName(pickOrder.getShortName());
+                        sortOrdersService.adPickOrder(unpickOrder);
+                        countOrder = unpickOrder.getCount();
+                        countSku = addsku.getCount();
+                    }
+                    if (addsku.getCount() > 0) unpickOrder.addSku(addsku);
+                }
+
+
+            }
+
+            map.put("state",0);
+            map.put("msg","查询成功");
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
+
+    @RequestMapping("/lockPickOrder")
+    @ResponseBody
+    public Map lockPickOrder(@RequestBody JSONObject jsonObj){
+        Map map = new HashMap();
+        map.put("state",1);
+        try {
+            int uid = jsonObj.getInteger("uid");
+            int orderId = jsonObj.getInteger("id");
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+                map.put("msg","用户不存在");
+                return map;
+            }
+
+            PickOrder pickOrder = sortOrdersService.getPickOrderDetailById(orderId);
+            if (pickOrder == null){
+                map.put("msg","订单不存在");
+            }
+            else if (pickOrder.getPickState() == 1) {
+                map.put("msg","订单已完成");
+            }
+            else
+                {
+                if (pickOrder.getLockUserId() != 0) {
+                    User userLock = UserController.userController.getUser(pickOrder.getLockUserId());
+                    map.put("msg","已被锁定");
+                    map.put("data",userLock);
+                } else {
+                    int ret = sortOrdersService.lockPickOrderById(orderId,uid);
+                    if (ret == 0) {
+                        map.put("msg","锁定失败");
+                    } else {
+                        map.put("state",0);
+                        map.put("msg","锁定成功");
+                    }
+
+                }
+
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
+    @RequestMapping("/unlockPickOrder")
+    @ResponseBody
+    public Map unlockPickOrder(@RequestBody JSONObject jsonObj) {
+        Map map = new HashMap();
+        map.put("state",1);
+        try {
+            int uid = jsonObj.getInteger("uid");
+            int orderId = jsonObj.getInteger("id");
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+
+                map.put("msg","用户不存在");
+                return map;
+            }
+
+            PickOrder pickOrder = sortOrdersService.getPickOrderDetailById(orderId);
+            if (pickOrder == null){
+                map.put("msg","订单不存在");
+            } else {
+                if (pickOrder.getLockUserId() == 0) {
+
+                    map.put("msg","没有被锁定");
+
+                } else if (pickOrder.getLockUserId() != uid){
+                    User userLock = UserController.userController.getUser(pickOrder.getLockUserId());
+                    map.put("msg","锁定人和解锁人不一致");
+                    map.put("data",userLock);
+                }
+                else {
+                    int ret = sortOrdersService.lockPickOrderById(orderId,0);
+                    if (ret == 0) {
+                        map.put("msg","解锁失败");
+                    } else {
+                        map.put("state",0);
+                        map.put("msg","解锁成功");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
+
 
     @RequestMapping(value = "/uploadOrder")
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
@@ -167,6 +352,66 @@ public class SortOrdersController {
             file.transferTo(targetFile);
 
             getExcelInfo(fileName,targetFile);
+
+            int orderCount = sortOrdersService.count();
+            final int rows = 150;
+            for (int i = 0 ; i * rows < orderCount; i++){
+                List<SortOrders> sortOrders = sortOrdersService.getAll(i * rows,rows);
+                for (SortOrders order: sortOrders) {
+                    int j = 0;
+                    String location = null;
+                    PickOrder pickorder = null;
+                    while (true){
+                        List<SortSku> skus = sortOrdersService.getAllSkuCountAndSort(order.getOrderName(),j * rows,rows);
+                        for (SortSku sku:
+                                skus) {
+                            PickSku picksku = new PickSku(sku);
+                            if (location != null && !location.equals(picksku.getLocation())){
+                                if (pickorder.getCount() < 150){
+                                    sortOrdersService.updatePickOrderPickState(pickorder.getId(),1);
+                                }
+                                sortOrdersService.addPickSkus(pickorder.getSkus());
+                                pickorder = null;
+                            }
+                            if (pickorder == null){
+                                pickorder = new PickOrder();
+                                pickorder.setLocation(location);
+                                pickorder.setShortName(order.getOrderName());
+                                sortOrdersService.adPickOrder(pickorder);
+                            }
+                            int countOrder = pickorder.getCount();
+                            int countSku = picksku.getCount();
+
+                            while (countSku + countOrder >= 150) {
+
+
+                                PickSku pickskuCopy = PickSku.NameCopy(picksku);
+                                pickskuCopy.setCount(countSku + countOrder - 150);
+                                picksku.setCount(150 - countOrder);
+                                pickorder.addSku(picksku);
+
+                                sortOrdersService.addPickSkus(pickorder.getSkus());
+
+                                picksku = pickskuCopy;
+
+                                pickorder = new PickOrder();
+                                pickorder.setLocation(location);
+                                pickorder.setShortName(order.getOrderName());
+                                sortOrdersService.adPickOrder(pickorder);
+                                countOrder = pickorder.getCount();
+                                countSku = picksku.getCount();
+                            }
+                            if (picksku.getCount() > 0) pickorder.addSku(picksku);
+
+                        }
+                        if (skus.size() < rows) {
+                            break;
+                        }
+                        j++;
+                    }
+
+                }
+            }
 
             //goodsService.importGoods(goodses);
         } catch (Exception e) {
@@ -308,7 +553,7 @@ public class SortOrdersController {
         workbook.close();
     }
 
-    @RequestMapping("/truncateSortOrder")
+    @RequestMapping("/truncateOrder")
     @ResponseBody
     public int truncate() {
         try {

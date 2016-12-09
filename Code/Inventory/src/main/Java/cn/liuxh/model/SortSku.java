@@ -26,6 +26,17 @@ public class SortSku {
     @JsonIgnore
     String goodNo;
 
+    @JsonIgnore
+    String locationNo;
+    public String getLocationNo() {
+        return locationNo;
+    }
+
+    public void setLocationNo(String locationNo) {
+        this.locationNo = locationNo;
+    }
+
+
     public int getOid() {
         return oid;
     }

@@ -1,12 +1,7 @@
 package cn.liuxh.controller;
 
 import cn.liuxh.model.User;
-import cn.liuxh.model.User;
 import cn.liuxh.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -146,5 +141,9 @@ public class UserController {
     public boolean haveUser(int id) {
         User user = userService.getUserInfoById(id);
         return user != null;
+    }
+
+    public User getUser(int id) {
+        return userService.getUserInfoById(id);
     }
 }
