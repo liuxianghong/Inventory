@@ -104,4 +104,17 @@ public class SortOrdersService {
     public PickOrder getUnPickOrder(PickOrder order){
         return sortOrdersMapper.getUnPickOrder(order);
     }
+
+    public List getAllPickSku(int start,int rows){
+        return sortOrdersMapper.getAllPickSku(start, rows);
+    }
+
+    public int selectPickSkuCount() {
+        return sortOrdersMapper.selectPickSkuCount();
+    }
+
+    public int updatePickSkus(List skus) {
+        return sortOrdersMapper.updatePickSkus(skus);
+    }
+
 }

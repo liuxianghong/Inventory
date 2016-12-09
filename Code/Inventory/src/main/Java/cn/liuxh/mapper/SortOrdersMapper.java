@@ -55,4 +55,10 @@ public interface SortOrdersMapper {
     int deletePickSku(@Param(value="id")int id);
 
     PickOrder getUnPickOrder(PickOrder order);
+
+    List getAllPickSku(@Param(value="start")int start, @Param(value="rows")int rows);
+
+    int selectPickSkuCount();
+
+    int updatePickSkus(List skus);
 }

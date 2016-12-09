@@ -30,14 +30,13 @@
 
     $(function(){
         $("#dgSortOrder").datagrid({
-            url:"/getAllSortOrdersE",
+            url:"/getAllPickSkuE",
             columns:[[
                 {field:'productName',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
                 {field:'count',title:'数量',width:100},
                 {field:'seriesNo',title:'条形码',width:200},
-                {field:'calculate',title:'盘点',width:200},
-                {field:'location',title:'地址',width:150}
+                {field:'locationNo',title:'库位',width:150}
             ]],
             toolbar:'#toolbarSortOrder',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示

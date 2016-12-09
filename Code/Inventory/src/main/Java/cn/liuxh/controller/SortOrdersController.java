@@ -43,6 +43,17 @@ public class SortOrdersController {
         return map;
     }
 
+    @RequestMapping("/getAllPickSkuE")
+    @ResponseBody
+    public Map getAllPickSkuE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+        int start = (page-1)*rows;
+        List students = sortOrdersService.getAllPickSku(start,rows);
+        Map map = new HashMap();
+        map.put("rows",students);
+        map.put("total", sortOrdersService.selectPickSkuCount());
+        return map;
+    }
+
     @RequestMapping("/getSortOrders")
     @ResponseBody
     public Map getAllOrders(@RequestParam(value="page", defaultValue="1") int page
@@ -53,6 +64,7 @@ public class SortOrdersController {
         List<SortOrders> students = sortOrdersService.getAll(start,rows);
         for (int i = 0; i < students.size(); i++) {
             SortOrders order = students.get(i);
+
             List<SortSku> sku = sortOrdersService.getAllSku(order.getOrderName());
             order.setSku(sku);
         }
@@ -119,6 +131,16 @@ public class SortOrdersController {
                 List<PickSku> skus = sortOrdersService.getAllPickSkus(order.getId());
                 if (skus == null) skus = new ArrayList();
                 order.setSkus(skus);
+
+                int state2 = order.getState();
+                int lockUid = order.getLockUserId();
+                if (state2 == 1){
+                    order.setState(2);
+                } else if (lockUid != 0){
+                    order.setState(3);
+                } else {
+                    order.setState(1);
+                }
             }
             map.put("state",0);
             map.put("data",orderList);
@@ -162,12 +184,18 @@ public class SortOrdersController {
             List<PickSku> skus = sortOrdersService.getAllPickSkus(id);
 
             List<PickSku> unSkus = new ArrayList<>();
-            for (int i = 0 ; i < array.size() ; i++) {
-                JSONObject jsku = array.getJSONObject(i);
-                String jseriesNo = jsku.getString("seriesNo");
-                int jcount = jsku.getInteger("count");
-                for (PickSku sku:
-                skus) {
+
+            List<PickSku> haveSkus = new ArrayList<>();
+
+            for (PickSku sku:
+                    skus) {
+
+                boolean have = false;
+                for (int i = 0 ; i < array.size() ; i++) {
+                    JSONObject jsku = array.getJSONObject(i);
+                    String jseriesNo = jsku.getString("seriesNo");
+                    int jcount = jsku.getInteger("count");
+
                     if (sku.getSeriesNo().equals(jseriesNo)){
                         int count = sku.getCount();
                         sku.setCount(jcount);
@@ -176,14 +204,21 @@ public class SortOrdersController {
                             unSku.setCount(count - jcount);
                             unSkus.add(unSku);
                         }
-                    } else
-                    {
-                        sortOrdersService.deletePickSku(sku.getId());
-                        unSkus.add(sku);
+                        haveSkus.add(sku);
+                        have = true;
+                        break;
                     }
                 }
+
+                if (!have){
+                    sortOrdersService.deletePickSku(sku.getId());
+                    unSkus.add(sku);
+                }
+
             }
+
             sortOrdersService.updatePickOrderState(id,1);
+            sortOrdersService.updatePickSkus(haveSkus);
             if (unSkus.size() > 0) {
                 PickOrder unpickOrder = sortOrdersService.getUnPickOrder(pickOrder);
                 if (unpickOrder == null) {
@@ -194,6 +229,10 @@ public class SortOrdersController {
                 }
 
                 List<PickSku> unpickOrderskus = sortOrdersService.getAllPickSkus(unpickOrder.getId());
+                for (PickSku ss:
+                        unpickOrderskus) {
+                    sortOrdersService.deletePickSku(ss.getId());
+                }
                 unpickOrder.setSkus(unpickOrderskus);
 
                 for (PickSku addsku:
@@ -375,6 +414,7 @@ public class SortOrdersController {
                                 sortOrdersService.addPickSkus(pickorder.getSkus());
                                 pickorder = null;
                             }
+                            location = picksku.getLocation();
                             if (pickorder == null){
                                 pickorder = new PickOrder();
                                 pickorder.setLocation(location);
@@ -592,19 +632,25 @@ public class SortOrdersController {
         int count = sortOrdersService.selectSkUCount();
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
-            List<SortSku> goodsList = sortOrdersService.getAllSkuPage(i*rows,rows);
+            List<PickSku> goodsList = sortOrdersService.getAllPickSku(i*rows,rows);
 
             for (int j=0;j<goodsList.size();j++){
                 row = sheet.createRow(i * 2000 + j + 1);
 
-                SortSku goods = goodsList.get(j);
-                row.createCell(0).setCellValue("SOI" + goods.getOid());
-                row.createCell(1).setCellValue(goods.getOrderName());
+                PickSku goods = goodsList.get(j);
+                row.createCell(0).setCellValue("SOI" + goods.getPickOrderId());
+                row.createCell(1).setCellValue(goods.getShortName());
                 row.createCell(2).setCellValue(goods.getProductName());
                 row.createCell(3).setCellValue(goods.getSize());
                 row.createCell(4).setCellValue(goods.getSeriesNo());
                 row.createCell(5).setCellValue(goods.getCount());
-                row.createCell(6).setCellValue(goods.getCalculate());
+                String state = "未开始";
+                if (goods.getState() == 1){
+                    state = "已完成";
+                } else if (goods.getLockUserId() != 0){
+                    state = "分拣中";
+                }
+                row.createCell(6).setCellValue(state);
             }
         }
 

@@ -82,6 +82,7 @@ public class PickOrder {
         this.skus = skus;
     }
 
+    @JsonIgnore
     public int getCount(){
         if (skus == null) return 0;
         int count = 0;
@@ -95,6 +96,13 @@ public class PickOrder {
     public void addSku(PickSku sku){
         if (skus == null) skus = new ArrayList<>();
         sku.setPickOrderId(id);
+        for (PickSku sku2:
+        skus) {
+            if (sku2.seriesNo.equals(sku.seriesNo)){
+                sku2.setCount(sku.getCount() + sku2.getCount());
+                return;
+            }
+        }
         skus.add(sku);
     }
 }

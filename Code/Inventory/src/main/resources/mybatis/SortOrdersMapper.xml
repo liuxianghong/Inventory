@@ -31,6 +31,18 @@
         limit #{start},#{rows};
     </select>
 
+
+    <select id="getAllPickSku" resultType="cn.liuxh.model.PickSku">
+        select *
+        from pickSku INNER JOIN PickOrder ON PickOrder.id = pickSku.pickOrderId
+        order by shortName asc,location asc,pickOrderId asc, LocationNo asc
+        limit #{start},#{rows};
+    </select>
+
+    <select id="selectPickSkuCount" resultType="java.lang.Integer">
+        select count(*) from pickSku;
+    </select>
+
     <select id="count" resultType="java.lang.Integer">
         select count(*) from SortOrders;
     </select>
@@ -121,6 +133,16 @@
         </foreach>
     </update>
 
+    <update id="updatePickSkus" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator="" >
+            update pickSku <set>
+            count=#{item.count}
+        </set> where id=#{item.id};
+        </foreach>
+    </update>
+
+
+
     <!-- 更新的配置 -->
     <update id="update" parameterType="cn.liuxh.model.SortOrders">
         update LocationCheckOrders set
@@ -193,6 +215,8 @@
     <delete id="truncate">
         DELETE from SortSku WHERE id != 0;
         DELETE from SortOrders WHERE id != 0;
+        DELETE from PickOrder WHERE id != 0;
+        DELETE from pickSku WHERE id != 0;
     </delete>
 
 </mapper>

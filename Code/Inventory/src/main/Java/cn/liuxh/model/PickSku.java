@@ -10,6 +10,8 @@ public class PickSku {
     int id;
     @JsonIgnore
     String shortName;
+
+    @JsonIgnore
     String location;
     String productName;
     String size;
@@ -21,6 +23,26 @@ public class PickSku {
     @JsonIgnore
     int pickOrderId;
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getLockUserId() {
+        return lockUserId;
+    }
+
+    public void setLockUserId(int lockUserId) {
+        this.lockUserId = lockUserId;
+    }
+
+    @JsonIgnore
+    int state;
+    @JsonIgnore
+    int lockUserId;
 
     public PickSku()
     {
