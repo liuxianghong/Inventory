@@ -90,11 +90,20 @@ public class SortOrdersService {
         return sortOrdersMapper.lockPickOrderById(id,uid);
     }
 
-    public List getAllPickOrders(int start,int rows,int state){
-        return sortOrdersMapper.getAllPickOrders(start, rows, state);
+    public List getAllPickOrders(int start,int rows,int state,String location){
+        return sortOrdersMapper.getAllPickOrders(start, rows, state, location);
     }
+
+    public int getPickOrdersCount(int start,int rows,int state,String location){
+        return sortOrdersMapper.getPickOrdersCount(start, rows, state, location);
+    }
+
     public List getAllPickSkus(@Param(value="orderName")int orderid) {
         return sortOrdersMapper.getAllPickSkus(orderid);
+    }
+
+    public List getAllPickLocations() {
+        return sortOrdersMapper.getAllPickLocations();
     }
 
     public int deletePickSku(@Param(value="id")int id){
@@ -117,4 +126,11 @@ public class SortOrdersService {
         return sortOrdersMapper.updatePickSkus(skus);
     }
 
+    public int setSetting(String key, String value){
+        return sortOrdersMapper.setSetting(key,value);
+    }
+
+    public String getSetting(String key) {
+        return sortOrdersMapper.getSetting(key);
+    }
 }

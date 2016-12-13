@@ -25,8 +25,8 @@
         select SortSku.id,SortSku.orderName,SortSku.count,SortSku.productName
         ,SortSku.size,SortSku.location,SortSku.calculate,SortSku.seriesNo,
         goods.LocationNo
-         from SortSku INNER JOIN goods ON SortSku.seriesNo = goods.seriesNo
-        where orderName = #{orderName} AND LocationNo is not null AND LocationNo !=''
+         from SortSku Left JOIN goods ON SortSku.seriesNo = goods.seriesNo
+        where orderName = #{orderName}
         order by location asc,LocationNo asc
         limit #{start},#{rows};
     </select>
@@ -41,6 +41,14 @@
 
     <select id="selectPickSkuCount" resultType="java.lang.Integer">
         select count(*) from pickSku;
+    </select>
+
+    <select id="getAllPickLocations" resultType="java.lang.String">
+        select location
+        FROM PickOrder
+        where location is not null and location != ''
+        group by location
+        order by location asc;
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -79,21 +87,51 @@
     </select>
 
     <select id="getAllPickOrders" resultType="cn.liuxh.model.PickOrder">
-        select * from PickOrder
+        select * from PickOrder where id != 0
         <if test="state == 1">
-        where state = 0 AND lockUserId = 0
+            AND state = 0 AND lockUserId = 0
         </if>
         <if test="state == 2">
-            where state = 1
+            AND state = 1
         </if>
         <if test="state == 3">
-            where state = 0 AND lockUserId != 0
+            AND state = 0 AND lockUserId != 0
         </if>
         <if test="state == 4">
-            where state = 0
+            AND state = 0
+        </if>
+        <if test="location != null and location != '' ">
+            AND location = #{location}
         </if>
         limit #{start},#{rows};
     </select>
+
+    <select id="getPickOrdersCount" resultType="java.lang.Integer">
+        select count(*) from PickOrder where id != 0
+        <if test="state == 1">
+            AND state = 0 AND lockUserId = 0
+        </if>
+        <if test="state == 2">
+            AND state = 1
+        </if>
+        <if test="state == 3">
+            AND state = 0 AND lockUserId != 0
+        </if>
+        <if test="state == 4">
+            AND state = 0
+        </if>
+        <if test="location != null and location != '' ">
+            AND location = #{location}
+        </if>
+        limit #{start},#{rows};
+    </select>
+
+    <select id="getSetting" resultType="java.lang.String">
+        select value FROM setting
+        WHERE name = #{key}
+    </select>
+
+
 
     <select id="getAllPickSkus" resultType="cn.liuxh.model.PickSku">
         select * from pickSku where pickOrderId = #{id};
@@ -169,6 +207,12 @@
         update PickOrder set
         lockUserId=#{uid}
         where id=#{id}
+    </update>
+
+    <update id="setSetting" parameterType="String">
+        update setting set
+        value=#{value}
+        where name=#{key}
     </update>
 
 

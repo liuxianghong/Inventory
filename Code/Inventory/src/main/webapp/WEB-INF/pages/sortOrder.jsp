@@ -12,6 +12,7 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSortOrder()">导入</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSortOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSortOrder()">清空</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editnum()">设置</a>
 </div>
 
 <div id="SortOrderFileWin" class="easyui-window" title="导入Excel"
@@ -22,6 +23,25 @@
 
         <div style="padding: 5px; text-align: center;">
             <input type="submit" value="upload"/><a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#SortOrderFileWin').window('close')">取消</a>
+        </div>
+    </form>
+</div>
+
+
+<!-- 用户信息窗口 -->
+<div id="sortOrderMunWin" class="easyui-window" title="订单分隔产品数量"
+     style="width: 500px; height: auto;" closed="true">
+    <form id="sortOrderMunForm" style="padding: 10px 20px 10px 40px;" method="post">
+        <table align="center">
+            <tr>
+                <td>分隔产品数量:</td>
+                <td><input class="easyui-textbox" type="text" name="pickOrderMun" style="width:310px" data-options="required:true,validType:'length[0,100]'"/></td>
+            </tr>
+        </table>
+
+        <div style="padding: 5px; text-align: center;">
+            <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="javascript:savenum()">确定</a> <a
+                href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#sortOrderMunWin').window('close')">取消</a>
         </div>
     </form>
 </div>
@@ -83,5 +103,34 @@
                         });
                     }
                 });
+    }
+
+    function editnum(){
+        $("#sortOrderMunWin").window('open');
+        $("#sortOrderMunForm").form("load", row);
+    }
+
+    function savenum(){
+        $('#sortOrderMunForm').form('submit',{
+            url: '/savePickOrderMun',
+            method:'post',
+            success:function(data){
+                var r = data;
+                if(r==1){
+                    $.messager.alert({
+                        msg : "操作成功",
+                        title : '成功'
+                    });
+                    $('#sortOrderMunWin').window('close');
+                }else{
+                    $.messager.alert(
+                            '错误',
+                            "操作失败",
+                            'error');
+                    $("#sortOrderMunForm").form("clear");
+                }
+                $('#sortOrderMunWin').window('close');
+            }
+        });
     }
 </script>

@@ -49,8 +49,12 @@ public interface SortOrdersMapper {
     int lockPickOrderById(@Param(value="id")int id,@Param(value="uid")int uid);
 
     List getAllPickOrders(@Param(value="start")int start, @Param(value="rows")int rows
-            ,@Param(value="state")int state);
+            ,@Param(value="state")int state, @Param(value="location")String location);
+    int getPickOrdersCount(@Param(value="start")int start, @Param(value="rows")int rows
+            ,@Param(value="state")int state, @Param(value="location")String location);
+
     List getAllPickSkus(@Param(value="id")int orderid);
+    List getAllPickLocations();
 
     int deletePickSku(@Param(value="id")int id);
 
@@ -61,4 +65,8 @@ public interface SortOrdersMapper {
     int selectPickSkuCount();
 
     int updatePickSkus(List skus);
+
+    int setSetting(@Param(value="key")String key,@Param(value="value") String value);
+
+    String getSetting(@Param(value="key")String key);
 }
