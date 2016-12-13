@@ -142,6 +142,7 @@ public class SortOrdersController {
                     order.setState(1);
                 }
             }
+            map.put("total",sortOrdersService.selectPickOrderCount());
             map.put("state",0);
             map.put("data",orderList);
             map.put("msg","查询成功");

@@ -55,6 +55,12 @@
         select count(*) from goods where seriesNo=#{seriesNo};
     </select>
 
+    <select id="selectPickOrderCount" resultType="java.lang.Integer">
+        select count(*) from PickOrder;
+    </select>
+
+
+
     <select id="getDetailById" resultType="cn.liuxh.model.SortOrders">
         select * from SortOrders where id = #{id};
     </select>

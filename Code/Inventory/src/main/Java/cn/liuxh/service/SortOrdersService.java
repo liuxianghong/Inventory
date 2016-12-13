@@ -113,6 +113,10 @@ public class SortOrdersService {
         return sortOrdersMapper.selectPickSkuCount();
     }
 
+    public int selectPickOrderCount() {
+        return sortOrdersMapper.selectPickOrderCount();
+    }
+
     public int updatePickSkus(List skus) {
         return sortOrdersMapper.updatePickSkus(skus);
     }

@@ -60,5 +60,7 @@ public interface SortOrdersMapper {
 
     int selectPickSkuCount();
 
+    int selectPickOrderCount();
+
     int updatePickSkus(List skus);
 }
