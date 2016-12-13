@@ -176,7 +176,6 @@ public class SortOrdersController {
                     order.setState(1);
                 }
             }
-            map.put("total",sortOrdersService.selectPickOrderCount());
             map.put("state",0);
             map.put("total",total);
             map.put("data",orderList);

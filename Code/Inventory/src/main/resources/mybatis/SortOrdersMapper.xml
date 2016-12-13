@@ -129,7 +129,6 @@
         <if test="location != null and location != '' ">
             AND location = #{location}
         </if>
-        limit #{start},#{rows};
     </select>
 
     <select id="getSetting" resultType="java.lang.String">
