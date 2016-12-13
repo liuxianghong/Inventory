@@ -11,10 +11,7 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -31,6 +28,8 @@ public class SortOrdersController {
     @Autowired
     private SortOrdersService sortOrdersService;
 
+
+    private int pickOrderMaxMun = 150;
 
     @RequestMapping("/getAllSortOrdersE")
     @ResponseBody
@@ -104,6 +103,36 @@ public class SortOrdersController {
         return null;
     }
 
+//
+//    getPickLocations
+//            请求
+//    {
+//        "uid":1
+//    }
+//    返回
+//    {"msg":"查询成功","data":["华中","华北","华南"],"state":0}
+//
+//
+//
+//
+//
+//    getPickOrder
+//            请求
+//
+//    {
+//        "uid": 1,
+//            "state": 0, 		//0:全部；1：未开始；2：已完成；3：分拣中 4:未开始and分拣中
+//            "page": 1,
+//            "rows": 1,
+//            "location": “华北" //不传为所有地区
+//    }
+//    返回
+//    {"msg":"查询成功","total":44,"data":[{"id":191427,"state":1,"shortName":"PICK-6100060655-52","location":"华南","skus":[{"productName":"镂花美背","size":"红色薄杯-75B","locationNo":"#","seriesNo":"MX64211075B3","count":8}]}],"state":0}
+//
+//
+//
+
+
 
     @RequestMapping("/getPickOrder")
     @ResponseBody
@@ -117,14 +146,19 @@ public class SortOrdersController {
             int state = jsonObj.getInteger("state");
             int page = jsonObj.getInteger("page");
             int row = jsonObj.getInteger("rows");
+            String location = null;
+            if (jsonObj.containsKey("location")){
+                location = jsonObj.getString("location");
+            }
+
             User user = UserController.userController.getUser(uid);
             if (user == null) {
                 map.put("msg","用户不存在");
                 return map;
             }
             int start = (page-1)*row;
-            List<PickOrder> orderList = sortOrdersService.getAllPickOrders(start,row,state);
-
+            List<PickOrder> orderList = sortOrdersService.getAllPickOrders(start,row,state,location);
+            int total = sortOrdersService.getPickOrdersCount(start,row,state,location);
             if (orderList == null) orderList = new ArrayList();
             for (int i = 0; i < orderList.size(); i++) {
                 PickOrder order = orderList.get(i);
@@ -144,10 +178,36 @@ public class SortOrdersController {
             }
             map.put("total",sortOrdersService.selectPickOrderCount());
             map.put("state",0);
+            map.put("total",total);
             map.put("data",orderList);
             map.put("msg","查询成功");
 
         } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
+    @RequestMapping("/getPickLocations")
+    @ResponseBody
+    public Map getPickLocations(@RequestBody JSONObject jsonObj){
+        Map map = new HashMap();
+        map.put("state",1);
+        try {
+            int uid = jsonObj.getInteger("uid");
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+                map.put("msg","用户不存在");
+                return map;
+            }
+
+            List<String> locations = sortOrdersService.getAllPickLocations();
+            map.put("state",0);
+            map.put("data",locations);
+            map.put("msg","查询成功");
+        }
+        catch (Exception e) {
             // TODO: handle exception
             map.put("msg",e.toString());
         }
@@ -241,11 +301,11 @@ public class SortOrdersController {
                     int countOrder = unpickOrder.getCount();
                     int countSku = addsku.getCount();
 
-                    while (countSku + countOrder >= 150) {
+                    while (countSku + countOrder >= pickOrderMaxMun) {
 
                         PickSku pickskuCopy = PickSku.NameCopy(addsku);
-                        pickskuCopy.setCount(countSku + countOrder - 150);
-                        addsku.setCount(150 - countOrder);
+                        pickskuCopy.setCount(countSku + countOrder - pickOrderMaxMun);
+                        addsku.setCount(pickOrderMaxMun - countOrder);
                         unpickOrder.addSku(addsku);
 
                         sortOrdersService.addPickSkus(unpickOrder.getSkus());
@@ -262,7 +322,7 @@ public class SortOrdersController {
                     if (addsku.getCount() > 0) unpickOrder.addSku(addsku);
                 }
 
-                if (unpickOrder.getCount() < 150) {
+                if (unpickOrder.getCount() < pickOrderMaxMun) {
                     sortOrdersService.updatePickOrderPickState(unpickOrder.getId(),1);
                 }
                 sortOrdersService.addPickSkus(unpickOrder.getSkus());
@@ -277,7 +337,6 @@ public class SortOrdersController {
         }
         return map;
     }
-
 
     @RequestMapping("/lockPickOrder")
     @ResponseBody
@@ -376,6 +435,7 @@ public class SortOrdersController {
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
+        pickOrderMaxMun = Integer.parseInt(sortOrdersService.getSetting("pickOrderMun"));
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
@@ -396,7 +456,7 @@ public class SortOrdersController {
             getExcelInfo(fileName,targetFile);
 
             int orderCount = sortOrdersService.count();
-            final int rows = 150;
+            final int rows = 200;
             for (int i = 0 ; i * rows < orderCount; i++){
                 List<SortOrders> sortOrders = sortOrdersService.getAll(i * rows,rows);
                 for (SortOrders order: sortOrders) {
@@ -409,7 +469,7 @@ public class SortOrdersController {
                                 skus) {
                             PickSku picksku = new PickSku(sku);
                             if (location != null && !location.equals(picksku.getLocation())){
-                                if (pickorder.getCount() < 150){
+                                if (pickorder.getCount() < pickOrderMaxMun){
                                     sortOrdersService.updatePickOrderPickState(pickorder.getId(),1);
                                 }
                                 sortOrdersService.addPickSkus(pickorder.getSkus());
@@ -425,12 +485,12 @@ public class SortOrdersController {
                             int countOrder = pickorder.getCount();
                             int countSku = picksku.getCount();
 
-                            while (countSku + countOrder >= 150) {
+                            while (countSku + countOrder >= pickOrderMaxMun) {
 
 
                                 PickSku pickskuCopy = PickSku.NameCopy(picksku);
-                                pickskuCopy.setCount(countSku + countOrder - 150);
-                                picksku.setCount(150 - countOrder);
+                                pickskuCopy.setCount(countSku + countOrder - pickOrderMaxMun);
+                                picksku.setCount(pickOrderMaxMun - countOrder);
                                 pickorder.addSku(picksku);
 
                                 sortOrdersService.addPickSkus(pickorder.getSkus());
@@ -448,7 +508,7 @@ public class SortOrdersController {
 
                         }
                         if (skus.size() < rows) {
-                            if (pickorder.getCount() < 150){
+                            if (pickorder.getCount() < pickOrderMaxMun){
                                 sortOrdersService.updatePickOrderPickState(pickorder.getId(),1);
                             }
                             sortOrdersService.addPickSkus(pickorder.getSkus());
@@ -715,5 +775,30 @@ public class SortOrdersController {
 //        modelMap.put("flag", 1);
 //        modelMap.put("msg", 2);
 //        return JSONObject.toJSONString(modelMap);
+    }
+
+
+    @RequestMapping(value = "/savePickOrderMun", method = RequestMethod.POST)
+    @ResponseBody
+    public int saveUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+
+            String pickOrderMun = request.getParameter("pickOrderMun");
+
+            System.out.println("savePickOrderMun : " + pickOrderMun);
+            int mun = Integer.parseInt(pickOrderMun);
+            if (mun > 0 && mun < 10000) {
+                int ret = sortOrdersService.setSetting("pickOrderMun",pickOrderMun);
+
+                //System.out.println("savePickOrderMun : get" + sortOrdersService.getSetting("pickOrderMun"));
+                if (ret != 0){
+                    return 1;
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
     }
 }
