@@ -130,7 +130,7 @@ public class SortOrdersController {
 //    {"msg":"查询成功","total":44,"data":[{"id":191427,"state":1,"shortName":"PICK-6100060655-52","location":"华南","skus":[{"productName":"镂花美背","size":"红色薄杯-75B","locationNo":"#","seriesNo":"MX64211075B3","count":8}]}],"state":0}
 //
 //
-//
+
 
 
 
