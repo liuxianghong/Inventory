@@ -355,7 +355,7 @@ public class SortOrdersController {
             if (pickOrder == null){
                 map.put("msg","订单不存在");
             }
-            else if (pickOrder.getPickState() == 1) {
+            else if (pickOrder.getState() == 1) {
                 map.put("msg","订单已完成");
             }
             else
