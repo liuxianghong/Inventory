@@ -88,7 +88,7 @@
     <select id="getUnPickOrder" parameterType="cn.liuxh.model.PickOrder"
             resultType="cn.liuxh.model.PickOrder">
         select * from PickOrder
-        where shortName = #{shortName} AND location = #{location} AND pickState = 1
+        where shortName = #{shortName} AND location = #{location} AND pickState = 1 AND state != 1
         limit 1;
     </select>
 
