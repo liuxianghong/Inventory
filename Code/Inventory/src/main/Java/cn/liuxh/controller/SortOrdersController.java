@@ -786,7 +786,7 @@ public class SortOrdersController {
 
             System.out.println("savePickOrderMun : " + pickOrderMun);
             int mun = Integer.parseInt(pickOrderMun);
-            if (mun > 0 && mun < 10000) {
+            if (mun > 0 && mun < 1000000) {
                 int ret = sortOrdersService.setSetting("pickOrderMun",pickOrderMun);
 
                 //System.out.println("savePickOrderMun : get" + sortOrdersService.getSetting("pickOrderMun"));
