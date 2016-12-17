@@ -682,7 +682,7 @@ public class SortOrdersController {
         XSSFRow row = sheet.createRow((int)0);
 
         XSSFCellStyle style = webBook.createCellStyle();
-        String[] strs = {"系统订单编码","拣货单","产品名称","规格","条形码","数量","订单状态"};
+        String[] strs = {"系统订单编码","拣货单","产品名称","规格","条形码","数量","订单状态","地址"};
         for (int i = 0; i < strs.length; i++) {
             XSSFCell cell = row.createCell(i);
             cell.setCellValue(strs[i]);
@@ -711,6 +711,7 @@ public class SortOrdersController {
                     state = "分拣中";
                 }
                 row.createCell(6).setCellValue(state);
+                row.createCell(7).setCellValue(goods.getLocation());
             }
         }
 
