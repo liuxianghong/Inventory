@@ -56,7 +56,7 @@
     </select>
 
     <select id="selectSkUCount" resultType="java.lang.Integer">
-        select count(*) from SortSku;
+        select count(*) from pickSku;
     </select>
 
     <select id="haveGoods" resultType="java.lang.Integer">
