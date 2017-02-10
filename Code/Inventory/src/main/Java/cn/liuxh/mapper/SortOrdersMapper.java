@@ -37,6 +37,7 @@ public interface SortOrdersMapper {
     int importOrders(SortOrders list);
     int importSkus(List list);
     int truncate();
+    int truncateSort();
 
     int adPickOrder(PickOrder order);
     int addPickSkus(List list);

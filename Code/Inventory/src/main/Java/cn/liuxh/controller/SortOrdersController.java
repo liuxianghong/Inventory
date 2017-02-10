@@ -452,6 +452,7 @@ public class SortOrdersController {
         try {
             file.transferTo(targetFile);
 
+            sortOrdersService.truncateSort();
             getExcelInfo(fileName,targetFile);
 
             int orderCount = sortOrdersService.count();
@@ -479,6 +480,7 @@ public class SortOrdersController {
                                 pickorder = new PickOrder();
                                 pickorder.setLocation(location);
                                 pickorder.setShortName(order.getOrderName());
+                                pickorder.setPo(order.getPo());
                                 sortOrdersService.adPickOrder(pickorder);
                             }
                             int countOrder = pickorder.getCount();
@@ -665,6 +667,7 @@ public class SortOrdersController {
         try {
 
             int ret = sortOrdersService.truncate();
+            System.out.println("truncateOrder : ret" + ret);
             if (ret != 0){
                 return 1;
             }
@@ -698,7 +701,7 @@ public class SortOrdersController {
                 row = sheet.createRow(i * 2000 + j + 1);
 
                 PickSku goods = goodsList.get(j);
-                row.createCell(0).setCellValue("SOI" + goods.getPickOrderId());
+                row.createCell(0).setCellValue(goods.getPickOrderId());
                 row.createCell(1).setCellValue(goods.getShortName());
                 row.createCell(2).setCellValue(goods.getProductName());
                 row.createCell(3).setCellValue(goods.getSize());

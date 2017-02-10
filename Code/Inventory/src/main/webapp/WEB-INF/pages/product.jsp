@@ -56,6 +56,14 @@
                 <td>库位:</td>
                 <td><input class="easyui-textbox" type="text" name="locationNo" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
             </tr>
+            <tr>
+                <td>备注1:</td>
+                <td><input class="easyui-textbox" type="text" name="remarks1" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+            </tr>
+            <tr>
+                <td>备注2:</td>
+                <td><input class="easyui-textbox" type="text" name="remarks2" style="width:310px"  data-options="required:true,validType:'length[0,100]'"/></td>
+            </tr>
         </table>
 
         <div style="padding: 5px; text-align: center;">
@@ -76,7 +84,9 @@
                 {field:'size',title:'规格',width:150},
                 {field:'count',title:'数量',width:100},
                 {field:'seriesNo',title:'条形码',width:200},
-                {field:'locationNo',title:'库位',width:150}
+                {field:'locationNo',title:'库位',width:150},
+                {field:'remarks1',title:'备注1',width:150},
+                {field:'remarks2',title:'备注2',width:150}
             ]],
             toolbar:'#toolbarProduct',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示

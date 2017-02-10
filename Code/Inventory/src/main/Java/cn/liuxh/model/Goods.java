@@ -11,6 +11,25 @@ public class Goods {
     int count;
     String locationNo;
 
+    public String getRemarks1() {
+        return remarks1;
+    }
+
+    public void setRemarks1(String remarks1) {
+        this.remarks1 = remarks1;
+    }
+
+    public String getRemarks2() {
+        return remarks2;
+    }
+
+    public void setRemarks2(String remarks2) {
+        this.remarks2 = remarks2;
+    }
+
+    String remarks1;
+    String remarks2;
+
     public int getId() {
         return id;
     }

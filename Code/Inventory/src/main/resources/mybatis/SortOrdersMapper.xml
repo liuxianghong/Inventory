@@ -35,7 +35,8 @@
     <select id="getAllPickSku" resultType="cn.liuxh.model.PickSku">
         select *
         from pickSku INNER JOIN PickOrder ON PickOrder.id = pickSku.pickOrderId
-        order by shortName asc,location asc,pickOrderId asc, LocationNo asc
+        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo
+        order by shortName asc,location asc,pickOrderId asc, pickSku.LocationNo asc
         limit #{start},#{rows};
     </select>
 
@@ -136,10 +137,12 @@
         WHERE name = #{key}
     </select>
 
-
-
     <select id="getAllPickSkus" resultType="cn.liuxh.model.PickSku">
-        select * from pickSku where pickOrderId = #{id};
+        select pickSku.id,pickSku.productName
+        ,pickSku.size,pickSku.locationNo
+        ,pickSku.count,pickSku.seriesNo,pickSku.pickOrderId
+        ,goods.name,goods.remarks1,goods.remarks2 from pickSku
+        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo where pickOrderId = #{id};
     </select>
 
     <insert id="add" parameterType="cn.liuxh.model.SortOrders" useGeneratedKeys="true"
@@ -157,8 +160,8 @@
 
     <insert id="adPickOrder" parameterType="cn.liuxh.model.PickOrder" useGeneratedKeys="true"
             keyProperty="id">
-        insert into PickOrder(location,shortName)
-        values(#{location},#{shortName})
+        insert into PickOrder(location,shortName,po)
+        values(#{location},#{shortName},#{po})
     </insert>
 
     <insert id="addPickSkus" parameterType="java.util.List">
@@ -265,10 +268,15 @@
     <!--</insert>-->
 
     <delete id="truncate">
-        DELETE from SortSku WHERE id != 0;
-        DELETE from SortOrders WHERE id != 0;
-        DELETE from PickOrder WHERE id != 0;
-        DELETE from pickSku WHERE id != 0;
+        TRUNCATE TABLE SortSku;
+        TRUNCATE TABLE SortOrders;
+        TRUNCATE TABLE PickOrder;
+        TRUNCATE TABLE pickSku;
+    </delete>
+
+    <delete id="truncateSort">
+        TRUNCATE TABLE SortSku;
+        TRUNCATE TABLE SortOrders;
     </delete>
 
 </mapper>

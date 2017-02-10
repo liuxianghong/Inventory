@@ -62,6 +62,8 @@ public class GoodsController {
             String SeriesNo = request.getParameter("seriesNo");
             String Count = request.getParameter("count");
             String LocationNo = request.getParameter("locationNo");
+            String remarks1 = request.getParameter("remarks1");
+            String remarks2 = request.getParameter("remarks2");
 
 
             Goods user = new Goods();
@@ -70,6 +72,8 @@ public class GoodsController {
             user.setSize(Size);
             user.setCount(Integer.parseInt(Count));
             user.setLocationNo(LocationNo);
+            user.setRemarks1(remarks1);
+            user.setRemarks2(remarks2);
             int ret = 0;
             if (!userId.isEmpty()) {
                 //修改用户信息

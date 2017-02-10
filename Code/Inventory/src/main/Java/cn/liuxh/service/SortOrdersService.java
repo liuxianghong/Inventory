@@ -76,6 +76,8 @@ public class SortOrdersService {
 
     public int truncate() {return sortOrdersMapper.truncate();}
 
+    public int truncateSort() {return sortOrdersMapper.truncateSort();}
+
     public int adPickOrder(PickOrder order){return sortOrdersMapper.adPickOrder(order);}
     public int addPickSkus(List list){return sortOrdersMapper.addPickSkus(list);}
 

@@ -22,6 +22,19 @@ public class PickOrder {
 
     List<PickSku> skus;
 
+    public String getPo() {
+        return po;
+    }
+
+    public void setPo(String po) {
+        this.po = po;
+    }
+
+    @JsonIgnore
+    String po;
+
+
+
     public int getLockUserId() {
         return lockUserId;
     }

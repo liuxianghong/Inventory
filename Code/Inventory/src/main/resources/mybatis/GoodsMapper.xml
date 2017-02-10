@@ -24,8 +24,8 @@
 
     <insert id="add" parameterType="cn.liuxh.model.Goods" useGeneratedKeys="true"
             keyProperty="id">
-        insert into goods(seriesNo,size,name,count,locationNo)
-        values(#{seriesNo},#{size},#{name},#{count},#{locationNo})
+        insert into goods(seriesNo,size,name,count,locationNo,remarks1,remarks2)
+        values(#{seriesNo},#{size},#{name},#{count},#{locationNo},#{remarks1},#{remarks2})
     </insert>
 
     <insert id="importGoods" parameterType="java.util.List" useGeneratedKeys="true"
@@ -33,15 +33,15 @@
         insert into goods(seriesNo,size,name,count,locationNo)
         values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
-            (#{item.seriesNo},#{item.size},#{item.name},#{item.count},#{item.locationNo})
+            (#{item.seriesNo},#{item.size},#{item.name},#{item.count},#{item.locationNo},#{item.remarks1},#{item.remarks2})
         </foreach>
-        ON DUPLICATE KEY UPDATE size=VALUES(size),name=VALUES(name),count=VALUES(count),locationNo=VALUES(locationNo);
+        ON DUPLICATE KEY UPDATE size=VALUES(size),name=VALUES(name),count=VALUES(count),locationNo=VALUES(locationNo),remarks1=VALUES(remarks1),remarks2=VALUES(remarks2);
     </insert>
     <!--<if test="item.status != null and item.status != ''">-->
     <!-- 更新的配置 -->
     <update id="update" parameterType="cn.liuxh.model.Goods">
         update goods set
-        seriesNo=#{seriesNo},size=#{size},name=#{name},count=#{count},locationNo=#{locationNo}
+        seriesNo=#{seriesNo},size=#{size},name=#{name},count=#{count},locationNo=#{locationNo},remarks1=#{remarks1},remarks2=#{remarks2}
         where id=#{id}
     </update>
 

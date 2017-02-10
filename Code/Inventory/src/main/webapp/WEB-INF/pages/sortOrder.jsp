@@ -90,7 +90,7 @@
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {
-                                if (r==1) {
+                                if (r==0) {
                                     $("#dgSortOrder").datagrid('acceptChanges');
                                     $.messager.show({msg : '',title : '成功'});
                                     $("#dgSortOrder").datagrid('reload');
