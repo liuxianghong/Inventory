@@ -23,4 +23,6 @@ public interface SkuCheckOrderMapper {
     int haveGoods(@Param(value="seriesNo")String id);
 
     int truncate();
+
+    int importSkus(List skus);
 }

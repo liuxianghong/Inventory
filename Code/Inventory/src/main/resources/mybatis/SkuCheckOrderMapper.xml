@@ -47,4 +47,13 @@
         DELETE from SkuCheckOrder WHERE id != 0;
     </delete>
 
+    <insert id="importSkus" parameterType="java.util.List" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into SkuCheckOrder(seriesNo,orderName,size,calculate,time)
+        values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (#{item.seriesNo},#{item.orderName},#{item.size},#{item.calculate},#{item.time})
+        </foreach>
+    </insert>
+
 </mapper>

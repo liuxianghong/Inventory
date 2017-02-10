@@ -2,13 +2,17 @@ package cn.liuxh.controller;
 
 import cn.liuxh.model.*;
 import cn.liuxh.service.LocationCheckOrderService;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -288,6 +292,109 @@ public class LocationCheckOrderController {
 //        return JSONObject.toJSONString(modelMap);
     }
 
+    @RequestMapping(value = "/uploadLocation")
+    public String upload(@RequestParam(value = "file", required = false) MultipartFile file
+            , HttpServletRequest request, ModelMap model) {
+
+        System.out.println("upload:"+"开始");
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        String fileName = file.getOriginalFilename();
+        if (!validateExcel(fileName)){
+            return "index";
+        }
+        System.out.println("upload getRealPath:"+path);
+        File targetFile = new File(path, fileName);
+        if(!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+
+        //保存
+        try {
+            file.transferTo(targetFile);
+            getExcelInfo(fileName,targetFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("fileUrl", request.getContextPath()+"/upload/"+fileName);
+        return "index";
+    }
+
+    public boolean validateExcel(String filePath){
+        return(filePath.endsWith(".xls") || filePath.endsWith(".xlsx"));
+    }
+
+    public int safeInt(String string) {
+        try {
+            return (int)Double.parseDouble(string);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+
+        if (!validateExcel(fileName)){
+            return;
+        }
+
+        Workbook workbook = WorkbookFactory.create(file);//new HSSFWorkbook(fis);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        int totalRows=sheet.getPhysicalNumberOfRows();
+
+        int totalCells = 0;
+        //得到Excel的列数(前提是有行数)
+        if(totalRows>=1 && sheet.getRow(0) != null){
+            totalCells =sheet.getRow(0).getPhysicalNumberOfCells();
+        }
+
+        List<LocationSku> customerList=new ArrayList<LocationSku>();
+        //循环Excel行数,从第二行开始。标题不入库
+        for(int r=1;r<totalRows;r++){
+            Row row = sheet.getRow(r);
+            if (row == null) continue;
+            LocationSku goods = new LocationSku();
+            //循环Excel的列
+            for(int c = 0; c <totalCells; c++) {
+                Cell cell = row.getCell(c);
+                if (null != cell) {
+                    String str = "";
+                    if (cell.getCellTypeEnum() == CellType.NUMERIC){
+                        str += cell.getNumericCellValue();
+                    } else if (cell.getCellTypeEnum() == CellType.STRING) {
+                        str = cell.getStringCellValue();
+                    }
+                    if (c == 0) {
+                        goods.setName(str);
+                    } else if (c == 1) {
+                        goods.setSize(str);
+                    } else if (c == 2) {
+                        goods.setSeriesNo(str);
+                    } else if (c == 3) {
+                        goods.setLocationNo(str);
+                    } else if (c == 4) {
+                        goods.setCount(safeInt(str));
+                    }
+                    System.out.println("getExcelInfo:"+str);
+                }
+            }
+            if (goods.getSeriesNo() != null
+                    && !goods.getSeriesNo().trim().isEmpty()) {
+                customerList.add(goods);
+                //System.out.println("getExcelInfo:"+customerList.size());
+                if (customerList.size() > 2000) {
+                    locationCheckOrderService.importGoods(customerList);
+                    customerList.clear();
+                }
+            }
+        }
+        if (!customerList.isEmpty()) {
+            locationCheckOrderService.importGoods(customerList);
+            customerList.clear();
+        }
+        workbook.close();
+    }
 }
 
 

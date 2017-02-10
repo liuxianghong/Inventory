@@ -9,10 +9,22 @@
 
 
 <div id="toolbarLocationOrder">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importLocationOrder()">导入</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportLocationOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateLocationOrder()">清空</a>
 </div>
 
+<div id="locationFileWin" class="easyui-window" title="导入Excel"
+     style="width: 500px; height: auto;" closed="true">
+    <form name="locationFormFile" action="/uploadLocation" method="post"  enctype="multipart/form-data">
+        <h1>选择上传文件</h1>
+        <input type="file" name="file">
+
+        <div style="padding: 5px; text-align: center;">
+            <input type="submit" value="upload"/><a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#locationFileWin').window('close')">取消</a>
+        </div>
+    </form>
+</div>
 
 <script type="text/javascript">
 
@@ -40,6 +52,10 @@
         });
     });
 
+
+    function importLocationOrder(){
+        $("#locationFileWin").window('open');
+    }
 
     function exportLocationOrder(){
 

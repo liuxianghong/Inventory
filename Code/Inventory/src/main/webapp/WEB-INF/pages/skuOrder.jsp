@@ -9,10 +9,22 @@
 
 
 <div id="toolbarSkuOrder">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSkuOrder()">导入</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSkuOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSkuOrder()">清空</a>
 </div>
 
+<div id="skuFileWin" class="easyui-window" title="导入Excel"
+     style="width: 500px; height: auto;" closed="true">
+    <form name="skuFormFile" action="/uploadSku" method="post"  enctype="multipart/form-data">
+        <h1>选择上传文件</h1>
+        <input type="file" name="file">
+
+        <div style="padding: 5px; text-align: center;">
+            <input type="submit" value="upload"/><a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="javascript:$('#skuFileWin').window('close')">取消</a>
+        </div>
+    </form>
+</div>
 
 <script type="text/javascript">
 
@@ -40,6 +52,9 @@
         });
     });
 
+    function importSkuOrder(){
+        $("#skuFileWin").window('open');
+    }
 
     function exportSkuOrder(){
 
