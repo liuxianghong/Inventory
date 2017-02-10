@@ -44,6 +44,17 @@ public class PickSku {
     @JsonIgnore
     int lockUserId;
 
+    public String getPo() {
+        return po;
+    }
+
+    public void setPo(String po) {
+        this.po = po;
+    }
+
+    @JsonIgnore
+    String po;
+
     public String getName() {
         return name;
     }

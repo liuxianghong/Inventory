@@ -35,7 +35,6 @@
     <select id="getAllPickSku" resultType="cn.liuxh.model.PickSku">
         select *
         from pickSku INNER JOIN PickOrder ON PickOrder.id = pickSku.pickOrderId
-        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo
         order by shortName asc,location asc,pickOrderId asc, pickSku.LocationNo asc
         limit #{start},#{rows};
     </select>
