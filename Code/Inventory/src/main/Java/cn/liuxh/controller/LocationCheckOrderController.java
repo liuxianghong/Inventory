@@ -292,7 +292,7 @@ public class LocationCheckOrderController {
 //        return JSONObject.toJSONString(modelMap);
     }
 
-    @RequestMapping(value = "/uploadLocation")
+    @RequestMapping(value = "/uploadLocationOrder")
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
@@ -384,13 +384,13 @@ public class LocationCheckOrderController {
                 customerList.add(goods);
                 //System.out.println("getExcelInfo:"+customerList.size());
                 if (customerList.size() > 2000) {
-                    locationCheckOrderService.importGoods(customerList);
+                    //locationCheckOrderService.importGoods(customerList);
                     customerList.clear();
                 }
             }
         }
         if (!customerList.isEmpty()) {
-            locationCheckOrderService.importGoods(customerList);
+            //locationCheckOrderService.importGoods(customerList);
             customerList.clear();
         }
         workbook.close();

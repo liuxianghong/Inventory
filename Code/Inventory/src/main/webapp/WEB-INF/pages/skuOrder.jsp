@@ -9,7 +9,7 @@
 
 
 <div id="toolbarSkuOrder">
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSkuOrder()">导入</a>
+    <%--<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSkuOrder()">导入</a>--%>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSkuOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSkuOrder()">清空</a>
 </div>

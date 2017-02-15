@@ -238,6 +238,10 @@ public class GoodsController {
                         goods.setLocationNo(str);
                     } else if (c == 4) {
                         goods.setCount(safeInt(str));
+                    } else if (c == 5) {
+                        goods.setRemarks1(str);
+                    } else if (c == 6) {
+                        goods.setRemarks2(str);
                     }
                     System.out.println("getExcelInfo:"+str);
                 }
