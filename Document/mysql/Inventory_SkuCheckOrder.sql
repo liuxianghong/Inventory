@@ -16,31 +16,21 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `SkuCheckOrder`
+-- Table structure for table `skucheckorder`
 --
 
-DROP TABLE IF EXISTS `SkuCheckOrder`;
+DROP TABLE IF EXISTS `skucheckorder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `SkuCheckOrder` (
+CREATE TABLE `skucheckorder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `SeriesNo` varchar(45) NOT NULL,
   `Calculate` int(11) NOT NULL DEFAULT '1',
   `OrderName` varchar(45) DEFAULT NULL,
   `Time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `SkuCheckOrder`
---
-
-LOCK TABLES `SkuCheckOrder` WRITE;
-/*!40000 ALTER TABLE `SkuCheckOrder` DISABLE KEYS */;
-INSERT INTO `SkuCheckOrder` VALUES (1,'5',5,'11','2016-11-28 19:36:00');
-/*!40000 ALTER TABLE `SkuCheckOrder` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +41,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30 20:01:53
+-- Dump completed on 2017-02-24 17:46:23

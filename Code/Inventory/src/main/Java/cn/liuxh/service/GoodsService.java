@@ -17,8 +17,8 @@ public class GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    public List getAllE(@Param(value = "start") int start, @Param(value = "rows") int rows){
-        return  goodsMapper.getAllE(start, rows);
+    public List getAllE(@Param(value = "start") int start, @Param(value = "rows") int rows,@Param(value = "groupId") int groupId){
+        return  goodsMapper.getAllE(start, rows,groupId);
     }
     public List getAll(){
         return goodsMapper.getAll();

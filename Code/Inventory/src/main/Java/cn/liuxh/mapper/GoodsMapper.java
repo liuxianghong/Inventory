@@ -9,7 +9,7 @@ import java.util.List;
  * Created by liuxianghong on 2016/11/28.
  */
 public interface GoodsMapper {
-    List getAllE(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAllE(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
     List getAll();
 
     int count();

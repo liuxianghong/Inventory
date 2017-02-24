@@ -16,30 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `LocationCheckOrders`
+-- Table structure for table `locationcheckorders`
 --
 
-DROP TABLE IF EXISTS `LocationCheckOrders`;
+DROP TABLE IF EXISTS `locationcheckorders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `LocationCheckOrders` (
+CREATE TABLE `locationcheckorders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `OrderName` varchar(45) DEFAULT NULL,
   `LocationNo` varchar(45) DEFAULT NULL,
   `Time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `LocationCheckOrders`
---
-
-LOCK TABLES `LocationCheckOrders` WRITE;
-/*!40000 ALTER TABLE `LocationCheckOrders` DISABLE KEYS */;
-INSERT INTO `LocationCheckOrders` VALUES (4,'盘点1','A01-01-01','2016-11-29 13:53:18');
-/*!40000 ALTER TABLE `LocationCheckOrders` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -50,4 +40,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30 20:01:52
+-- Dump completed on 2017-02-24 17:46:23

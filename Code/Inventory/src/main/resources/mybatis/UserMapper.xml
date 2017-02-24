@@ -11,7 +11,7 @@
   </select>
 
   <select id="getAllUsers" resultType="cn.liuxh.model.User">
-    select * from User limit #{start},#{rows};
+    select * from User where groupId = #{groupId} limit #{start},#{rows};
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer">

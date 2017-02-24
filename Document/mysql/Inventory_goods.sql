@@ -29,20 +29,13 @@ CREATE TABLE `goods` (
   `Name` varchar(45) DEFAULT NULL,
   `Count` int(11) NOT NULL DEFAULT '1',
   `LocationNo` varchar(45) DEFAULT NULL,
+  `Remarks1` varchar(45) DEFAULT NULL,
+  `Remarks2` varchar(45) DEFAULT NULL,
+  `groupId` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `SeriesNo_UNIQUE` (`SeriesNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=518357 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `goods`
---
-
-LOCK TABLES `goods` WRITE;
-/*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-INSERT INTO `goods` VALUES (1,'43a','223a','1222',3,'5'),(2,'5','3','2',4,'6'),(3,'0x001','dsaddd','ads',1,'2'),(4,'MX000000001','ss','ss',12,'3'),(7,'MX000002','红色-XL','保暖1',1,'A01-01-01'),(8,'MX000003','红色-XL','保暖2',2,'A01-01-01'),(9,'MX000004','红色-XL','保暖3',3,'A01-01-01'),(10,'MX000005','红色-XL','保暖4',3,'A01-01-01'),(11,'MX000006','红色-XL','保暖5',3,'A01-01-01'),(12,'MX000007','红色-XL','保暖6',3,'A01-01-01'),(13,'MX000008','红色-XL','保暖7',3,'A01-01-01');
-/*!40000 ALTER TABLE `goods` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -53,4 +46,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30 20:01:53
+-- Dump completed on 2017-02-24 17:46:23

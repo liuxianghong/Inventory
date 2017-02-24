@@ -11,7 +11,7 @@
     </select>
 
     <select id="getAllE" resultType="cn.liuxh.model.Goods">
-        select * from goods limit #{start},#{rows};
+        select * from goods where groupId = #{groupId} limit #{start},#{rows};
     </select>
 
     <select id="getGoodsBySeriesNo" resultType="cn.liuxh.model.Goods">

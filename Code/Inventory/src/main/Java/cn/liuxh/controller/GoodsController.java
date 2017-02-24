@@ -1,6 +1,7 @@
 package cn.liuxh.controller;
 
 import cn.liuxh.model.Goods;
+import cn.liuxh.model.Group;
 import cn.liuxh.service.GoodsService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -33,12 +34,16 @@ public class GoodsController {
 
     @RequestMapping("/getAllGoodsE")
     @ResponseBody
-    public Map getAllOrdersE(int page, int rows) throws Exception{
+    public Map getAllOrdersE(HttpServletRequest request,int page, int rows) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
-        List students = goodsService.getAllE(start,rows);
-        map.put("rows",students);
-        map.put("total", goodsService.count());
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+            List students = goodsService.getAllE(start,rows,group.getId());
+            map.put("rows",students);
+            map.put("total", goodsService.count());
+        }
+
         return map;
     }
 
@@ -281,6 +286,14 @@ public class GoodsController {
 
     @RequestMapping("/exportProduct")
     public String exportProduct(HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        Group group = (Group) request.getSession().getAttribute("group");
+        int groupId = 0;
+        if (group != null && group.getId() != 0) {
+            groupId = group.getId();
+        } else {
+            return "";
+        }
         XSSFWorkbook webBook = new XSSFWorkbook();
         XSSFSheet sheet = webBook.createSheet("产品信息");
         XSSFRow row = sheet.createRow((int)0);
@@ -296,7 +309,7 @@ public class GoodsController {
         int count = goodsService.count();
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
-            List<Goods> goodsList = goodsService.getAllE(i*rows,rows);
+            List<Goods> goodsList = goodsService.getAllE(i*rows,rows,groupId);
 
             for (int j=0;j<goodsList.size();j++){
                 row = sheet.createRow(i * 2000 + j + 1);

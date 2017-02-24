@@ -33,8 +33,8 @@ public class UserService {
         return user;
     }
 
-    public List getAllUsers(int start, int rows){
-        return userMapper.getAllUsers(start, rows);
+    public List getAllUsers(int start, int rows,int groupId){
+        return userMapper.getAllUsers(start, rows,groupId);
     }
 
     public int selectCount(){

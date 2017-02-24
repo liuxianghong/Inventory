@@ -26,8 +26,6 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter {
         viewResolver.setPrefix("/WEB-INF/pages/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
-
-
     }
 
     @Bean

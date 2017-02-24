@@ -16,26 +16,22 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `sortsku`
+-- Table structure for table `pickorder`
 --
 
-DROP TABLE IF EXISTS `sortsku`;
+DROP TABLE IF EXISTS `pickorder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sortsku` (
+CREATE TABLE `pickorder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `calculate` int(11) DEFAULT NULL,
-  `productName` varchar(45) DEFAULT NULL,
-  `size` varchar(45) DEFAULT NULL,
-  `count` int(11) DEFAULT NULL,
-  `seriesNo` varchar(45) DEFAULT NULL,
+  `state` int(11) DEFAULT '0',
+  `shortName` varchar(45) DEFAULT NULL,
   `location` varchar(45) DEFAULT NULL,
-  `orderName` varchar(45) DEFAULT NULL,
-  `shipped` int(11) DEFAULT NULL,
-  `unShipped` int(11) DEFAULT NULL,
-  `goodNo` varchar(45) DEFAULT NULL,
+  `lockUserId` int(11) DEFAULT '0',
+  `pickState` int(11) DEFAULT '0',
+  `po` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=305457 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13084 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

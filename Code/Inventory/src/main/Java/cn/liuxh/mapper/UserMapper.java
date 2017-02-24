@@ -1,7 +1,6 @@
 package cn.liuxh.mapper;
 
 import cn.liuxh.model.User;
-import cn.liuxh.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface UserMapper {
     int login(User usr);
     User getUserInfoById(@Param(value="id")int id);
 
-    List getAllUsers(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAllUsers(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
     int selectCount();
     int updateUser(User User);
     int addUser(User User);

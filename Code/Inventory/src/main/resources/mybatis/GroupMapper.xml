@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.liuxh.mapper.GroupMapper">
+
+    <select id="findGroupInfo" resultType="cn.liuxh.model.Group">
+        select * from groupInfo WHERE admin = #{admin} LIMIT 1;
+    </select>
+
+</mapper>

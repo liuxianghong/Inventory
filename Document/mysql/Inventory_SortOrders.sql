@@ -16,32 +16,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `SortOrders`
+-- Table structure for table `sortorders`
 --
 
-DROP TABLE IF EXISTS `SortOrders`;
+DROP TABLE IF EXISTS `sortorders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `SortOrders` (
+CREATE TABLE `sortorders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `orderName` varchar(45) NOT NULL,
   `state` int(11) DEFAULT '0',
   `address` varchar(45) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
+  `po` varchar(45) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `inTime` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `orderName_UNIQUE` (`orderName`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `SortOrders`
---
-
-LOCK TABLES `SortOrders` WRITE;
-/*!40000 ALTER TABLE `SortOrders` DISABLE KEYS */;
-INSERT INTO `SortOrders` VALUES (14,'PICK-2000445473-25',0,'华中','2016-11-30 19:51:09'),(15,'PICK-2000445473-30',0,'华北','2016-11-30 19:51:09');
-/*!40000 ALTER TABLE `SortOrders` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -52,4 +45,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30 20:01:52
+-- Dump completed on 2017-02-24 17:46:23

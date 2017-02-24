@@ -1,5 +1,6 @@
 package cn.liuxh.controller;
 
+import cn.liuxh.model.Group;
 import cn.liuxh.model.User;
 import cn.liuxh.service.UserService;
 import org.apache.log4j.Logger;
@@ -34,12 +35,17 @@ public class UserController {
 
     @RequestMapping("/getAllUsersE")
     @ResponseBody
-    public Map getAllUsersE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
-        int start = (page-1)*rows;
-        List students = userService.getAllUsers(start,rows);
+    public Map getAllUsersE(HttpServletRequest request,@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+
         Map map = new HashMap();
-        map.put("rows",students);
-        map.put("total", userService.selectCount());
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+            int start = (page-1)*rows;
+            List students = userService.getAllUsers(start,rows,group.getId());
+
+            map.put("rows",students);
+            map.put("total", userService.selectCount());
+        }
         return map;
     }
 
@@ -146,4 +152,5 @@ public class UserController {
     public User getUser(int id) {
         return userService.getUserInfoById(id);
     }
+
 }
