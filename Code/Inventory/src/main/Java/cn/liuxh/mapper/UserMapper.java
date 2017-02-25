@@ -14,7 +14,7 @@ public interface UserMapper {
     User getUserInfoById(@Param(value="id")int id);
 
     List getAllUsers(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
-    int selectCount();
+    int selectCount(@Param(value="groupId")int groupId);
     int updateUser(User User);
     int addUser(User User);
     int delUser(@Param(value="id")int id);

@@ -16,12 +16,12 @@ public class SkuCheckOrderService {
     @Autowired
     private SkuCheckOrderMapper skuCheckOrderMapper;
 
-    public List getAll(int start,int rows){
-        return skuCheckOrderMapper.getAll(start, rows);
+    public List getAll(int start, int rows, int groupId){
+        return skuCheckOrderMapper.getAll(start, rows, groupId);
     }
 
-    public int count(){
-        return skuCheckOrderMapper.count();
+    public int count(int groupId){
+        return skuCheckOrderMapper.count(groupId);
     }
 
     public int update(SkuCheckOrder product){
@@ -37,9 +37,9 @@ public class SkuCheckOrderService {
         return skuCheckOrderMapper.getDetailById(id);
     }
 
-    public boolean haveGoods(String seriesNo) { return skuCheckOrderMapper.haveGoods(seriesNo) > 0;}
+    public boolean haveGoods(String seriesNo,int groupId) { return skuCheckOrderMapper.haveGoods(seriesNo,groupId) > 0;}
 
-    public int truncate() {return skuCheckOrderMapper.truncate();}
+    public int truncate(int groupId) {return skuCheckOrderMapper.truncate(groupId);}
 
     public int importSkus(List skus) {return skuCheckOrderMapper.importSkus(skus);}
 }

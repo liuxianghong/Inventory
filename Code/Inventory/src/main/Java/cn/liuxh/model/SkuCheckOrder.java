@@ -1,5 +1,7 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 
 /**
@@ -17,6 +19,17 @@ public class SkuCheckOrder {
     String locationNo;
     String name;
     String size;
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
 
     public int getId() {
         return id;

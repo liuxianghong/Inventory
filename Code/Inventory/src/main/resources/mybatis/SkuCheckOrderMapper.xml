@@ -8,27 +8,32 @@
 
     <select id="getAll" resultType="cn.liuxh.model.SkuCheckOrder">
         select *,goods.id AS gid from SkuCheckOrder
-        INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo
+        INNER JOIN goods ON
+        SkuCheckOrder.seriesNo = goods.seriesNo
+        AND SkuCheckOrder.groupId = goods.groupId
+        AND SkuCheckOrder.groupId = #{groupId}
         limit #{start},#{rows};
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from SkuCheckOrder;
+        select count(*) from SkuCheckOrder WHERE groupId = #{groupId};
     </select>
 
     <select id="haveGoods" resultType="java.lang.Integer">
-        select count(*) from goods where seriesNo=#{seriesNo};
+        select count(*) from goods where seriesNo=#{seriesNo} AND groupId = #{groupId};
     </select>
 
     <select id="getDetailById" resultType="cn.liuxh.model.SkuCheckOrder">
-        select *,goods.id AS gid from SkuCheckOrder INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo
+        select *,goods.id AS gid from SkuCheckOrder
+        INNER JOIN goods ON SkuCheckOrder.seriesNo = goods.seriesNo
+        AND SkuCheckOrder.groupId = goods.groupId
         AND SkuCheckOrder.id = #{id};
     </select>
 
     <insert id="add" parameterType="cn.liuxh.model.SkuCheckOrder" useGeneratedKeys="true"
             keyProperty="id">
-        insert into SkuCheckOrder(seriesNo,orderName,calculate,time)
-        values(#{seriesNo},#{orderName},#{calculate},#{time})
+        insert into SkuCheckOrder(seriesNo,orderName,calculate,time,groupId)
+        values(#{seriesNo},#{orderName},#{calculate},#{time},#{groupId})
     </insert>
 
     <!-- 更新的配置 -->
@@ -44,15 +49,15 @@
     </delete>
 
     <delete id="truncate">
-        DELETE from SkuCheckOrder WHERE id != 0;
+        DELETE from SkuCheckOrder WHERE id != 0 AND groupId = #{groupId};
     </delete>
 
     <insert id="importSkus" parameterType="java.util.List" useGeneratedKeys="true"
             keyProperty="id">
-        insert into SkuCheckOrder(seriesNo,orderName,size,calculate,time)
+        insert into SkuCheckOrder(seriesNo,orderName,size,calculate,time,groupId)
         values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
-            (#{item.seriesNo},#{item.orderName},#{item.size},#{item.calculate},#{item.time})
+            (#{item.seriesNo},#{item.orderName},#{item.size},#{item.calculate},#{item.time},#{item.groupId})
         </foreach>
     </insert>
 

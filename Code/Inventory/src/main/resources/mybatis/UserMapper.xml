@@ -15,13 +15,13 @@
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer">
-    select count(*) from User
+    select count(*) from User where groupId = #{groupId}
   </select>
 
   <insert id="addUser" parameterType="cn.liuxh.model.User" useGeneratedKeys="true"
           keyProperty="id">
-    insert into User(name,pw,nickName)
-    values(#{name},#{pw},#{nickName})
+    insert into User(name,pw,nickName,groupId)
+    values(#{name},#{pw},#{nickName},#{groupId})
   </insert>
 
   <!-- 更新的配置 -->

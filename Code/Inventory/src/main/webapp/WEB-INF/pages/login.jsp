@@ -64,6 +64,7 @@
             $("#showMsg").html("用户名或密码为空，请输入");
             $("input[name='login']").focus();
         } else {
+            $("#showMsg").html("登录中。。。");
             //ajax异步提交
             $.ajax({
                 url : '/adminLogin',

@@ -1,5 +1,7 @@
 package cn.liuxh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by liuxianghong on 2016/11/28.
  */
@@ -10,6 +12,17 @@ public class Goods {
     String name;
     int count;
     String locationNo;
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
 
     public String getRemarks1() {
         return remarks1;

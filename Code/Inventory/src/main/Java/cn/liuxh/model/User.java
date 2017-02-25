@@ -1,12 +1,23 @@
 package cn.liuxh.model;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by liuxianghong on 16/11/23.
  */
 public class User {
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
 
     @JsonProperty("userName")
     private String name;

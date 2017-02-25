@@ -12,7 +12,7 @@ public interface GoodsMapper {
     List getAllE(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
     List getAll();
 
-    int count();
+    int count(@Param(value="groupId")int groupId);
 
     int update(Goods product);
     int add(Goods product);
@@ -23,6 +23,6 @@ public interface GoodsMapper {
     int updateSkuLocation(Goods product);
 
     int importGoods(List godds);
-    int truncate();
+    int truncate(@Param(value="groupId")int id);
 
 }

@@ -1,6 +1,8 @@
 package cn.liuxh.controller;
 
+import cn.liuxh.model.Group;
 import cn.liuxh.model.SkuCheckOrder;
+import cn.liuxh.model.User;
 import cn.liuxh.service.SkuCheckOrderService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -36,9 +38,10 @@ public class SkuCheckOrderController {
             , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
-        if (!UserController.userController.haveUser(uid)) return null;
-        List students = skuCheckOrderService.getAll(start,rows);
-        map.put("total",skuCheckOrderService.count());
+        User user = UserController.userController.getUser(uid);
+        if (user == null) return map;
+        List students = skuCheckOrderService.getAll(start,rows,user.getGroupId());
+        map.put("total",skuCheckOrderService.count(user.getGroupId()));
         map.put("orders",students);
         return map;
     }
@@ -49,7 +52,9 @@ public class SkuCheckOrderController {
         try {
             String id =  request.getParameter("id");
             String uid = request.getParameter("uid");
-            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
+            if (!UserController.userController.haveUser(Integer.parseInt(uid)))
+                return null;
+            System.out.println("getSkuCheckOrderById: "+ id);
             return skuCheckOrderService.getDetailById(Integer.parseInt(id));
         } catch (Exception e) {
             // TODO: handle exception
@@ -62,17 +67,19 @@ public class SkuCheckOrderController {
     public SkuCheckOrder addProduct(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
             String uid = request.getParameter("uid");
-            if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
+            User user = UserController.userController.getUser(Integer.parseInt(uid));
+            if (user == null) return null;
             Timestamp time = new Timestamp(System.currentTimeMillis());
             String seriesNo =  request.getParameter("seriesNo");
             String orderName = request.getParameter("orderName");
             String calculate = request.getParameter("calculate");
             SkuCheckOrder sku = new SkuCheckOrder();
+            sku.setGroupId(user.getGroupId());
             sku.setOrderName(orderName);
             sku.setSeriesNo(seriesNo);
             sku.setCalculate(Integer.parseInt(calculate));
             sku.setTime(time);
-            if (skuCheckOrderService.haveGoods(seriesNo)) {
+            if (skuCheckOrderService.haveGoods(seriesNo,user.getGroupId())) {
                 int ret = 0;
                 ret = skuCheckOrderService.add(sku);
                 if (ret != 0){
@@ -136,27 +143,35 @@ public class SkuCheckOrderController {
 
     @RequestMapping(value = "/getAllSkuOrdersE")
     @ResponseBody
-    public Map getAllSkuOrdersE(@RequestParam(value="page", defaultValue="1") int page
+    public Map getAllSkuOrdersE(HttpServletRequest request,@RequestParam(value="page", defaultValue="1") int page
             , @RequestParam(value="rows", defaultValue="100") int rows) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
-        List students = skuCheckOrderService.getAll(start,rows);
-        map.put("rows",students);
-        map.put("total", skuCheckOrderService.count());
-        System.out.println("getAllSkuOrdersE: " + students.size());
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+            List students = skuCheckOrderService.getAll(start,rows, group.getId());
+            map.put("rows",students);
+            map.put("total", skuCheckOrderService.count(group.getId()));
+            System.out.println("getAllSkuOrdersE: " + students.size());
+        }
+
         return map;
     }
 
 
     @RequestMapping("/truncateSkuOrder")
     @ResponseBody
-    public int truncate() {
+    public int truncate(HttpServletRequest request) {
         try {
 
-            int ret = skuCheckOrderService.truncate();
-            if (ret != 0){
-                return 1;
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
+                int ret = skuCheckOrderService.truncate(group.getId());
+                if (ret != 0){
+                    return 1;
+                }
             }
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -165,6 +180,13 @@ public class SkuCheckOrderController {
 
     @RequestMapping("/exportSkuOrder")
     public String exportSortOrder(HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return "login";
+        }
         XSSFWorkbook webBook = new XSSFWorkbook();
         XSSFSheet sheet = webBook.createSheet("SKU盘点");
         XSSFRow row = sheet.createRow((int)0);
@@ -178,10 +200,10 @@ public class SkuCheckOrderController {
             cell.setCellStyle(style);
         }
 
-        int count = skuCheckOrderService.count();
+        int count = skuCheckOrderService.count(group.getId());
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
-            List<SkuCheckOrder> goodsList = skuCheckOrderService.getAll(i*rows,rows);
+            List<SkuCheckOrder> goodsList = skuCheckOrderService.getAll(i*rows,rows, group.getId());
 
             for (int j=0;j<goodsList.size();j++){
                 row = sheet.createRow(i * 2000 + j + 1);
@@ -264,6 +286,12 @@ public class SkuCheckOrderController {
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return "login";
+        }
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
@@ -279,7 +307,7 @@ public class SkuCheckOrderController {
         //保存
         try {
             file.transferTo(targetFile);
-            getExcelInfo(fileName,targetFile);
+            getExcelInfo(fileName,targetFile,group);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -300,7 +328,7 @@ public class SkuCheckOrderController {
         return 0;
     }
 
-    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName, File file, Group group) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return;
@@ -324,6 +352,7 @@ public class SkuCheckOrderController {
             Row row = sheet.getRow(r);
             if (row == null) continue;
             SkuCheckOrder goods = new SkuCheckOrder();
+            goods.setGroupId(group.getId());
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);

@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface SkuCheckOrderMapper {
 
-    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAll(@Param(value = "start") int start, @Param(value = "rows") int rows, @Param(value = "groupId") int groupId);
 
-    int count();
+    int count(@Param(value = "groupId") int groupId);
 
     int update(SkuCheckOrder product);
     int add(SkuCheckOrder product);
@@ -20,9 +20,9 @@ public interface SkuCheckOrderMapper {
 
     SkuCheckOrder getDetailById(@Param(value="id")int id);
 
-    int haveGoods(@Param(value="seriesNo")String id);
+    int haveGoods(@Param(value="seriesNo")String id,@Param(value = "groupId") int groupId);
 
-    int truncate();
+    int truncate(@Param(value = "groupId") int groupId);
 
     int importSkus(List skus);
 }

@@ -37,8 +37,8 @@ public class UserService {
         return userMapper.getAllUsers(start, rows,groupId);
     }
 
-    public int selectCount(){
-        return userMapper.selectCount();
+    public int selectCount(int groupId){
+        return userMapper.selectCount(groupId);
     }
 
     public int updateUser(User User) {

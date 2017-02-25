@@ -41,7 +41,7 @@ public class GoodsController {
         if (group != null && group.getId() != 0) {
             List students = goodsService.getAllE(start,rows,group.getId());
             map.put("rows",students);
-            map.put("total", goodsService.count());
+            map.put("total", goodsService.count(group.getId()));
         }
 
         return map;
@@ -87,7 +87,11 @@ public class GoodsController {
                 //ret = userService.updateUser(user);
             } else {
                 //ret = userService.addUser(user);
-                ret = goodsService.add(user);
+                Group group = (Group) request.getSession().getAttribute("group");
+                if (group != null && group.getId() != 0) {
+                    user.setGroupId(group.getId());
+                    ret = goodsService.add(user);
+                }
             }
             System.out.println("saveProduct:"+" ret: "+ret + " id: "+user.getId());
             if (ret != 0){
@@ -136,9 +140,12 @@ public class GoodsController {
 
         String locationNo = request.getParameter("locationNo");
 
+        String groupId = request.getParameter("groupId");
+
         Goods user = new Goods();
         user.setSeriesNo(seriesNo);
         user.setLocationNo(locationNo);
+        user.setGroupId(Integer.parseInt(groupId));
 
         goodsService.updateSkuLocation(user);
 
@@ -151,6 +158,11 @@ public class GoodsController {
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+        } else {
+            return "index";
+        }
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
@@ -167,7 +179,7 @@ public class GoodsController {
         //保存
         try {
             file.transferTo(targetFile);
-            getExcelInfo(fileName,targetFile);
+            getExcelInfo(fileName,targetFile,group);
 
 //            for (Goods good:
 //            goodses) {
@@ -200,7 +212,7 @@ public class GoodsController {
         return 0;
     }
 
-    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName, File file, Group group) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return;
@@ -223,6 +235,7 @@ public class GoodsController {
             Row row = sheet.getRow(r);
             if (row == null) continue;
             Goods goods = new Goods();
+            goods.setGroupId(group.getId());
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
@@ -271,13 +284,17 @@ public class GoodsController {
 
     @RequestMapping("/truncateProduct")
     @ResponseBody
-    public int truncate() {
+    public int truncate(HttpServletRequest request) {
         try {
 
-            int ret = goodsService.truncate();
-            if (ret != 0){
-                return 1;
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
+                int ret = goodsService.truncate(group.getId());
+                if (ret != 0){
+                    return 1;
+                }
             }
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -306,7 +323,7 @@ public class GoodsController {
             cell.setCellStyle(style);
         }
 
-        int count = goodsService.count();
+        int count = goodsService.count(group.getId());
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
             List<Goods> goodsList = goodsService.getAllE(i*rows,rows,groupId);

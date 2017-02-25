@@ -82,11 +82,11 @@
             columns:[[
                 {field:'name',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
-                {field:'count',title:'数量',width:100},
-                {field:'seriesNo',title:'条形码',width:200},
+                {field:'count',title:'数量',width:50},
+                {field:'seriesNo',title:'条形码',width:150},
                 {field:'locationNo',title:'库位',width:150},
-                {field:'remarks1',title:'备注1',width:150},
-                {field:'remarks2',title:'备注2',width:150}
+                {field:'remarks1',title:'备注1',width:100},
+                {field:'remarks2',title:'备注2',width:100}
             ]],
             toolbar:'#toolbarProduct',  //表格菜单
             loadMsg:'------------- 火速加载中 -------------', //加载提示

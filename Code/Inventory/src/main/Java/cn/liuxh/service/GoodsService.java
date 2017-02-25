@@ -24,8 +24,8 @@ public class GoodsService {
         return goodsMapper.getAll();
     }
 
-    public int count(){
-        return goodsMapper.count();
+    public int count(int groupId){
+        return goodsMapper.count(groupId);
     }
 
     public int update(Goods product){
@@ -50,5 +50,5 @@ public class GoodsService {
         return goodsMapper.importGoods(godds);
     }
 
-    public int truncate() {return goodsMapper.truncate();}
+    public int truncate(int id) {return goodsMapper.truncate(id);}
 }

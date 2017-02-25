@@ -44,7 +44,7 @@ public class UserController {
             List students = userService.getAllUsers(start,rows,group.getId());
 
             map.put("rows",students);
-            map.put("total", userService.selectCount());
+            map.put("total", userService.selectCount(group.getId()));
         }
         return map;
     }
@@ -60,6 +60,12 @@ public class UserController {
     public int saveUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
 
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
+
+            } else {
+                return 0;
+            }
             String userId = request.getParameter("id");
             String name =  request.getParameter("userName");
             String pw =  request.getParameter("password");
@@ -68,6 +74,7 @@ public class UserController {
             System.out.println("saveUser:"+" userId: "+userId + " name: "+ name);
 
             User user = new User();
+            user.setGroupId(group.getId());
             user.setName(name);
             user.setPw(pw);
             user.setNickName(nickName);
