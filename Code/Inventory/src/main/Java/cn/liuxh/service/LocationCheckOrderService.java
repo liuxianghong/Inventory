@@ -1,11 +1,9 @@
 package cn.liuxh.service;
 
 import cn.liuxh.mapper.LocationCheckOrderMapper;
-import cn.liuxh.mapper.SkuCheckOrderMapper;
 import cn.liuxh.model.Goods;
 import cn.liuxh.model.LocationCheckOrder;
 import cn.liuxh.model.LocationSku;
-import cn.liuxh.model.SkuCheckOrder;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,22 +19,22 @@ public class LocationCheckOrderService {
     @Autowired
     private LocationCheckOrderMapper locationCheckOrderMapper;
 
-    public List getAll(int start,int rows){
-        return locationCheckOrderMapper.getAll(start, rows);
+    public List getAll(int start,int rows, int groupId){
+        return locationCheckOrderMapper.getAll(start, rows,groupId);
     }
     public List<LocationSku> getAllSku(@Param(value="id")int id) {
         return locationCheckOrderMapper.getAllSku(id);
     }
 
-    public int count(){
-        return locationCheckOrderMapper.count();
+    public int count(int groupId){
+        return locationCheckOrderMapper.count(groupId);
     }
 
-    public List getAllLocationOrdersE(int start,int rows){
-        return locationCheckOrderMapper.getAllLocationOrdersE(start, rows);
+    public List getAllLocationOrdersE(int start, int rows, int groupId){
+        return locationCheckOrderMapper.getAllLocationOrdersE(start, rows,groupId);
     }
-    public int SkuCount(){
-        return locationCheckOrderMapper.SkuCount();
+    public int SkuCount(int groupId){
+        return locationCheckOrderMapper.SkuCount(groupId);
     }
 
     public int update(LocationCheckOrder product){
@@ -52,19 +50,19 @@ public class LocationCheckOrderService {
         return locationCheckOrderMapper.getDetailById(id);
     }
 
-    public List<Goods> getDetailByLocationNo(String id){
-        return locationCheckOrderMapper.getDetailByLocationNo(id);
+    public List<Goods> getDetailByLocationNo(String id,int groupId){
+        return locationCheckOrderMapper.getDetailByLocationNo(id,groupId);
     }
 
     public int deleteSku(@Param(value="id")int id){
         return locationCheckOrderMapper.deleteSku(id);
     }
-    public int addSku(List list){
-        return locationCheckOrderMapper.addSku(list);
+    public int addSku(List list,int groupId){
+        return locationCheckOrderMapper.addSku(list,groupId);
     }
     List<LocationSku> getSkus(@Param(value="orderId")int id) {
         return locationCheckOrderMapper.getSkus(id);
     }
 
-    public int truncate() {return locationCheckOrderMapper.truncate();}
+    public int truncate(int groupId) {return locationCheckOrderMapper.truncate(groupId);}
 }

@@ -28,8 +28,9 @@ CREATE TABLE `skucheckorder` (
   `Calculate` int(11) NOT NULL DEFAULT '1',
   `OrderName` varchar(45) DEFAULT NULL,
   `Time` datetime NOT NULL,
+  `groupId` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -41,4 +42,4 @@ CREATE TABLE `skucheckorder` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-24 17:46:23
+-- Dump completed on 2017-02-25 16:59:20

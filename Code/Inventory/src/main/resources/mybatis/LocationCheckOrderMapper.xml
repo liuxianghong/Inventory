@@ -7,15 +7,18 @@
     <!--</select>-->
 
     <select id="getAll" resultType="cn.liuxh.model.LocationCheckOrder">
-        select * from LocationCheckOrders limit #{start},#{rows};
+        select * from LocationCheckOrders WHERE groupId = #{groupId} limit #{start},#{rows};
     </select>
 
     <select id="getAllSku" resultType="cn.liuxh.model.LocationSku">
-        select * from LocationSKU INNER JOIN goods ON LocationSKU.seriesNo = goods.seriesNo AND LocationSKU.orderId = #{id};
+        select * from LocationSKU
+        INNER JOIN goods
+        ON LocationSKU.seriesNo = goods.seriesNo
+        AND LocationSKU.orderId = #{id};
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from LocationCheckOrders;
+        select count(*) from LocationCheckOrders WHERE groupId = #{groupId};
     </select>
 
     <select id="getAllLocationOrdersE" resultType="cn.liuxh.model.LocationSkuE">
@@ -24,12 +27,11 @@
         INNER JOIN LocationCheckOrders ON LocationSKU.OrderId = LocationCheckOrders.id
         limit #{start},#{rows};
     </select>
-    <select id="SkuCount" resultType="java.lang.Integer">
-        select count(*) from LocationSKU;
-    </select>
 
-    <select id="haveGoods" resultType="java.lang.Integer">
-        select count(*) from goods where seriesNo=#{seriesNo};
+    <select id="SkuCount" resultType="java.lang.Integer">
+        select count(*) from LocationSKU
+        INNER JOIN LocationCheckOrders ON LocationSKU.OrderId = LocationCheckOrders.id
+        AND LocationCheckOrders.groupId = #{groupId}
     </select>
 
     <select id="getDetailById" resultType="cn.liuxh.model.LocationCheckOrder">
@@ -37,7 +39,7 @@
     </select>
 
     <select id="getDetailByLocationNo" resultType="cn.liuxh.model.Goods">
-        select * from goods where locationNo = #{id};
+        select * from goods where locationNo = #{id} AND groupId = #{groupId};
     </select>
 
     <select id="getSkus" resultType="cn.liuxh.model.LocationCheckOrder">
@@ -46,8 +48,8 @@
 
     <insert id="add" parameterType="cn.liuxh.model.LocationCheckOrder" useGeneratedKeys="true"
             keyProperty="id">
-        insert into LocationCheckOrders(orderName,time)
-        values(#{orderName},#{time})
+        insert into LocationCheckOrders(orderName,time,groupId)
+        values(#{orderName},#{time},#{groupId})
     </insert>
 
     <insert id="addSku" parameterType="java.util.List">
@@ -76,8 +78,8 @@
     </delete>
 
     <delete id="truncate">
-        DELETE from LocationCheckOrders WHERE id != 0;
-        DELETE from LocationSKU WHERE id != 0;
+        DELETE from LocationCheckOrders WHERE id != 0 AND groupId = #{groupId};
+        DELETE from LocationSKU WHERE id != 0 AND groupId = #{groupId};
     </delete>
 
 </mapper>

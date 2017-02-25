@@ -19,6 +19,16 @@ public class LocationCheckOrder {
     String locationNo;
     private Timestamp time = new Timestamp(System.currentTimeMillis());
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
 
     public List<LocationLocation> getLocations() {
         return locations;

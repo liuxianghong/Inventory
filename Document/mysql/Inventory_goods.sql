@@ -33,8 +33,8 @@ CREATE TABLE `goods` (
   `Remarks2` varchar(45) DEFAULT NULL,
   `groupId` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `SeriesNo_UNIQUE` (`SeriesNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=518357 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `index2` (`SeriesNo`,`groupId`)
+) ENGINE=InnoDB AUTO_INCREMENT=518422 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -46,4 +46,4 @@ CREATE TABLE `goods` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-24 17:46:23
+-- Dump completed on 2017-02-25 16:59:19

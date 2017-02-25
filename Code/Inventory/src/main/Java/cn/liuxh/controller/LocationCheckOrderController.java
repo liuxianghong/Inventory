@@ -35,12 +35,16 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/getAllLocationOrdersE")
     @ResponseBody
-    public Map getAllLocationOrdersE(int page, int rows) throws Exception{
+    public Map getAllLocationOrdersE(HttpServletRequest request,int page, int rows) throws Exception{
         Map map = new HashMap();
-        int start = (page-1)*rows;
-        List students = locationCheckOrderService.getAllLocationOrdersE(start,rows);
-        map.put("rows",students);
-        map.put("total", locationCheckOrderService.SkuCount());
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+            int start = (page-1)*rows;
+            List students = locationCheckOrderService.getAllLocationOrdersE(start,rows,group.getId());
+            map.put("rows",students);
+            map.put("total", locationCheckOrderService.SkuCount(group.getId()));
+        }
+
         return map;
     }
 
@@ -51,9 +55,10 @@ public class LocationCheckOrderController {
             , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid)
             throws Exception{
         int start = (page-1)*rows;
-        if (!UserController.userController.haveUser(uid)) return null;
+        User user = UserController.userController.getUser(uid);
+            if (user == null) return null;
         Map map = new HashMap();
-        List<LocationCheckOrder> students = locationCheckOrderService.getAll(start, rows);
+        List<LocationCheckOrder> students = locationCheckOrderService.getAll(start, rows,user.getGroupId());
         for (int i = 0; i < students.size(); i++) {
             LocationCheckOrder order = students.get(i);
             List<LocationSku> skus = locationCheckOrderService.getAllSku(order.getId());
@@ -63,7 +68,7 @@ public class LocationCheckOrderController {
             }
             System.out.println("getLocationCheckOrders: "+order.toString());
         }
-        map.put("total",locationCheckOrderService.count());
+        map.put("total",locationCheckOrderService.count(user.getGroupId()));
         map.put("orders",students);
         return map;
     }
@@ -73,7 +78,8 @@ public class LocationCheckOrderController {
     public LocationCheckOrder addOrder(@RequestBody LocationCheckOrderUser orderUser,HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
 
-            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            User user = UserController.userController.getUser(orderUser.getUid());
+            if (user == null) return null;
             LocationCheckOrder order = orderUser.getOrder();
             Timestamp time = new Timestamp(System.currentTimeMillis());
             order.setTime(time);
@@ -89,7 +95,7 @@ public class LocationCheckOrderController {
                     sku.setOrderId(order.getId());
                 }
             }
-            locationCheckOrderService.addSku(skus);
+            locationCheckOrderService.addSku(skus,user.getGroupId());
 
             if (ret != 0){
                 return getOrderDetail(order.getId());
@@ -119,8 +125,9 @@ public class LocationCheckOrderController {
     public Map getSkuDetails(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String LocationNo = request.getParameter("locationNo");
         String uid = request.getParameter("uid");
-        if (!UserController.userController.haveUser(Integer.parseInt(uid))) return null;
-        List<Goods> goodses = locationCheckOrderService.getDetailByLocationNo(LocationNo);
+        User user = UserController.userController.getUser(Integer.parseInt(uid));
+        if (user == null) return null;
+        List<Goods> goodses = locationCheckOrderService.getDetailByLocationNo(LocationNo,user.getGroupId());
 
         Map map = new HashMap();
         map.put("locationNo",LocationNo);
@@ -133,7 +140,8 @@ public class LocationCheckOrderController {
     public LocationCheckOrder updateOrder(@RequestBody LocationCheckOrderUser orderUser) throws Exception {
         try {
             int ret = 0;
-            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            User user = UserController.userController.getUser(orderUser.getUid());
+            if (user == null) return null;
             LocationCheckOrder order = orderUser.getOrder();
             locationCheckOrderService.deleteSku(order.getId());
             ret = locationCheckOrderService.update(order);
@@ -146,7 +154,7 @@ public class LocationCheckOrderController {
             for (LocationSku sku:skus) {
                 sku.setOrderId(order.getId());
             }
-            locationCheckOrderService.addSku(skus);
+            locationCheckOrderService.addSku(skus,user.getGroupId());
             if (ret != 0){
                 return getOrderDetail(order.getId());
             }
@@ -181,13 +189,17 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/truncateLocationOrder")
     @ResponseBody
-    public int truncate() {
+    public int truncate(HttpServletRequest request) {
         try {
 
-            int ret = locationCheckOrderService.truncate();
-            if (ret != 0){
-                return 1;
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
+                int ret = locationCheckOrderService.truncate(group.getId());
+                if (ret != 0){
+                    return 1;
+                }
             }
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -197,6 +209,13 @@ public class LocationCheckOrderController {
 
     @RequestMapping("/exportLocationOrder")
     public String exportSortOrder(HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return  "login";
+        }
         XSSFWorkbook webBook = new XSSFWorkbook();
         XSSFSheet sheet = webBook.createSheet("SKU盘点");
         XSSFRow row = sheet.createRow((int)0);
@@ -210,10 +229,10 @@ public class LocationCheckOrderController {
             cell.setCellStyle(style);
         }
 
-        int count = locationCheckOrderService.count();
+        int count = locationCheckOrderService.count(group.getId());
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
-            List<LocationSkuE> goodsList = locationCheckOrderService.getAllLocationOrdersE(i*rows,rows);
+            List<LocationSkuE> goodsList = locationCheckOrderService.getAllLocationOrdersE(i*rows,rows, group.getId());
 
             for (int j=0;j<goodsList.size();j++){
                 row = sheet.createRow(i * 2000 + j + 1);
@@ -296,6 +315,12 @@ public class LocationCheckOrderController {
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return  "login";
+        }
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();

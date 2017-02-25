@@ -12,25 +12,25 @@ import java.util.List;
  */
 public interface LocationCheckOrderMapper {
 
-    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAll(@Param(value = "start") int start, @Param(value = "rows") int rows,@Param(value = "groupId") int groupId);
 
     List getAllSku(@Param(value="id")int id);
 
-    int count();
+    int count(@Param(value = "groupId") int groupId);
 
-    List getAllLocationOrdersE(@Param(value="start")int start, @Param(value="rows")int rows);
-    int SkuCount();
+    List getAllLocationOrdersE(@Param(value = "start") int start, @Param(value = "rows") int rows,@Param(value = "groupId") int groupId);
+    int SkuCount(@Param(value = "groupId") int groupId);
 
     int update(LocationCheckOrder product);
     int add(LocationCheckOrder product);
     int delete(@Param(value="id")int id);
 
     LocationCheckOrder getDetailById(@Param(value="id")int id);
-    List<Goods> getDetailByLocationNo(@Param(value="id")String id);
+    List<Goods> getDetailByLocationNo(@Param(value = "id") String id, @Param(value = "groupId") int groupId);
 
     int deleteSku(@Param(value="id")int id);
-    int addSku(List list);
+    int addSku(List list, int groupId);
     List<LocationSku> getSkus(@Param(value="orderId")int id);
 
-    int truncate();
+    int truncate(@Param(value = "groupId") int groupId);
 }
