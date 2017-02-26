@@ -11,16 +11,17 @@ import java.util.List;
  * Created by liuxianghong on 2016/11/30.
  */
 public interface SortOrdersMapper {
-    List getAll(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAll(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
 
-    List getAllSkuPage(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAllSkuPage(@Param(value = "start") int start, @Param(value = "rows") int rows, @Param(value = "groupId") int groupId);
 
-    List getAllSku(@Param(value="orderName")String orderName);
+    List getAllSku(@Param(value="orderName")String orderName, @Param(value = "groupId") int groupId);
 
-    List getAllSkuCountAndSort(@Param(value="orderName")String orderName,@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAllSkuCountAndSort(@Param(value="orderName")String orderName
+            ,@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
 
-    int count();
-    int selectSkUCount();
+    int count(@Param(value = "groupId") int groupId);
+    int selectSkUCount(@Param(value = "groupId") int groupId);
 
     int update(SortOrders product);
     int add(SortOrders product);
@@ -29,15 +30,15 @@ public interface SortOrdersMapper {
     SortOrders getDetailById(@Param(value="id")int id);
     SortOrders getDetailByLocationNo(@Param(value="id")String id);
 
-    int deleteSku(@Param(value="orderName")String orderName);
+    int deleteSku(@Param(value="orderName")String orderName,@Param(value = "groupId") int groupId);
     int addSku(List list);
     int updateSku(List list);
     List<SortSku> getSkus(@Param(value="orderId")int id);
 
     int importOrders(SortOrders list);
     int importSkus(List list);
-    int truncate();
-    int truncateSort();
+    int truncate(@Param(value = "groupId") int groupId);
+    int truncateSort(@Param(value = "groupId") int groupId);
 
     int adPickOrder(PickOrder order);
     int addPickSkus(List list);
@@ -61,15 +62,15 @@ public interface SortOrdersMapper {
 
     PickOrder getUnPickOrder(PickOrder order);
 
-    List getAllPickSku(@Param(value="start")int start, @Param(value="rows")int rows);
+    List getAllPickSku(@Param(value="start")int start, @Param(value="rows")int rows,@Param(value = "groupId") int groupId);
 
-    int selectPickSkuCount();
+    int selectPickSkuCount(@Param(value = "groupId") int groupId);
 
-    int selectPickOrderCount();
+    int selectPickOrderCount(@Param(value = "groupId") int groupId);
 
     int updatePickSkus(List skus);
 
-    int setSetting(@Param(value="key")String key,@Param(value="value") String value);
+    int setSetting(@Param(value="key")String key,@Param(value="value") String value,@Param(value = "groupId") int groupId);
 
-    String getSetting(@Param(value="key")String key);
+    String getSetting(@Param(value="key")String key,@Param(value = "groupId") int groupId);
 }

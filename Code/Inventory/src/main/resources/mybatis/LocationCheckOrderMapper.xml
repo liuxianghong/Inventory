@@ -25,6 +25,7 @@
         select * from LocationSKU
         INNER JOIN goods ON LocationSKU.seriesNo = goods.seriesNo
         INNER JOIN LocationCheckOrders ON LocationSKU.OrderId = LocationCheckOrders.id
+        AND LocationCheckOrders.groupId = #{groupId}
         limit #{start},#{rows};
     </select>
 

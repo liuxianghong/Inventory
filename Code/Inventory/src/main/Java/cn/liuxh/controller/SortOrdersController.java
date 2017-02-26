@@ -31,25 +31,33 @@ public class SortOrdersController {
 
     private int pickOrderMaxMun = 150;
 
-    @RequestMapping("/getAllSortOrdersE")
-    @ResponseBody
-    public Map getAllUsersE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
-        int start = (page-1)*rows;
-        List students = sortOrdersService.getAllSkuPage(start,rows);
-        Map map = new HashMap();
-        map.put("rows",students);
-        map.put("total", sortOrdersService.selectSkUCount());
-        return map;
-    }
+//    @RequestMapping("/getAllSortOrdersE")
+//    @ResponseBody
+//    public Map getAllUsersE(HttpServletRequest request,@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
+//        Map map = new HashMap();
+//        Group group = (Group) request.getSession().getAttribute("group");
+//        if (group != null && group.getId() != 0) {
+//            int start = (page-1)*rows;
+//            List students = sortOrdersService.getAllSkuPage(start,rows,group.getId());
+//            map.put("rows",students);
+//            map.put("total", sortOrdersService.selectSkUCount());
+//        }
+//
+//        return map;
+//    }
 
     @RequestMapping("/getAllPickSkuE")
     @ResponseBody
-    public Map getAllPickSkuE(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
-        int start = (page-1)*rows;
-        List students = sortOrdersService.getAllPickSku(start,rows);
+    public Map getAllPickSkuE(HttpServletRequest request,@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="rows", defaultValue="1000") int rows) throws Exception{
         Map map = new HashMap();
-        map.put("rows",students);
-        map.put("total", sortOrdersService.selectPickSkuCount());
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+            int start = (page-1)*rows;
+            List students = sortOrdersService.getAllPickSku(start,rows,group.getId());
+            map.put("rows",students);
+            map.put("total", sortOrdersService.selectPickSkuCount(group.getId()));
+        }
+
         return map;
     }
 
@@ -59,23 +67,24 @@ public class SortOrdersController {
             , @RequestParam(value="rows", defaultValue="100") int rows,@RequestParam(value="uid") int uid) throws Exception{
         Map map = new HashMap();
         int start = (page-1)*rows;
-        if (!UserController.userController.haveUser(uid)) return null;
-        List<SortOrders> students = sortOrdersService.getAll(start,rows);
+        User user = UserController.userController.getUser(uid);
+        if (user == null) return null;
+        List<SortOrders> students = sortOrdersService.getAll(start,rows,user.getGroupId());
         for (int i = 0; i < students.size(); i++) {
             SortOrders order = students.get(i);
 
-            List<SortSku> sku = sortOrdersService.getAllSku(order.getOrderName());
+            List<SortSku> sku = sortOrdersService.getAllSku(order.getOrderName(),user.getGroupId());
             order.setSku(sku);
         }
         map.put("orders",students);
-        map.put("total",sortOrdersService.count());
+        map.put("total",sortOrdersService.count(user.getGroupId()));
         return map;
     }
 
 
-    public SortOrders getOrderDetail(int id) {
+    public SortOrders getOrderDetail(int id,int groupId) {
         SortOrders order = sortOrdersService.getDetailById(id);
-        List skus = sortOrdersService.getAllSku(order.getOrderName());
+        List skus = sortOrdersService.getAllSku(order.getOrderName(),groupId);
         order.setSku(skus);
 
         return order;
@@ -88,14 +97,15 @@ public class SortOrdersController {
     public SortOrders updateOrder(@RequestBody SortOrdersUser orderUser) throws Exception {
         try {
             int ret = 0;
-            if (!UserController.userController.haveUser(orderUser.getUid())) return null;
+            User user = UserController.userController.getUser(orderUser.getUid());
+            if (user == null) return null;
             SortOrders order = orderUser.getOrder();
             System.out.println("updateSortOrder: "+order.toString());
             List<SortSku> skus = order.getSku();
             ret = sortOrdersService.updateSku(skus);
             System.out.println("updateSortOrder: "+ret);
             if (ret != 0){
-                return getOrderDetail(order.getId());
+                return getOrderDetail(order.getId(),user.getGroupId());
             }
         } catch (Exception e) {
             // TODO: handle exception
@@ -434,7 +444,13 @@ public class SortOrdersController {
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
-        pickOrderMaxMun = Integer.parseInt(sortOrdersService.getSetting("pickOrderMun"));
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return "login";
+        }
+        pickOrderMaxMun = Integer.parseInt(sortOrdersService.getSetting("pickOrderMun", group.getId()));
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
@@ -452,19 +468,19 @@ public class SortOrdersController {
         try {
             file.transferTo(targetFile);
 
-            sortOrdersService.truncateSort();
-            getExcelInfo(fileName,targetFile);
+            sortOrdersService.truncateSort(group.getId());
+            getExcelInfo(fileName,targetFile,group);
 
-            int orderCount = sortOrdersService.count();
+            int orderCount = sortOrdersService.count(group.getId());
             final int rows = 200;
             for (int i = 0 ; i * rows < orderCount; i++){
-                List<SortOrders> sortOrders = sortOrdersService.getAll(i * rows,rows);
+                List<SortOrders> sortOrders = sortOrdersService.getAll(i * rows,rows,group.getId());
                 for (SortOrders order: sortOrders) {
                     int j = 0;
                     String location = null;
                     PickOrder pickorder = null;
                     while (true){
-                        List<SortSku> skus = sortOrdersService.getAllSkuCountAndSort(order.getOrderName(),j * rows,rows);
+                        List<SortSku> skus = sortOrdersService.getAllSkuCountAndSort(order.getOrderName(),j * rows,rows,group.getId());
                         for (SortSku sku:
                                 skus) {
                             PickSku picksku = new PickSku(sku);
@@ -549,7 +565,7 @@ public class SortOrdersController {
         return 0;
     }
 
-    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName, File file, Group group) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return;
@@ -580,6 +596,7 @@ public class SortOrdersController {
                 neddSave = false;
             }
             SortSku sku = new SortSku();
+            sku.setGroupId(group.getId());
             sku.setCalculate(0);
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
@@ -600,9 +617,10 @@ public class SortOrdersController {
                             order = new SortOrders();
                             order.setOrderName(str);
                             order.setPo(po);
+                            order.setGroupId(group.getId());
                             if (str != null
                                     && !str.trim().isEmpty()) {
-                                sortOrdersService.deleteSku(order.getOrderName());
+                                sortOrdersService.deleteSku(order.getOrderName(),group.getId());
                                 neddSave = true;
                             }
                         }
@@ -663,14 +681,18 @@ public class SortOrdersController {
 
     @RequestMapping("/truncateOrder")
     @ResponseBody
-    public int truncate() {
+    public int truncate(HttpServletRequest request) {
         try {
 
-            int ret = sortOrdersService.truncate();
-            System.out.println("truncateOrder : ret" + ret);
-            if (ret != 0){
-                return 1;
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
+                int ret = sortOrdersService.truncate(group.getId());
+                System.out.println("truncateOrder : ret" + ret);
+                if (ret != 0){
+                    return 1;
+                }
             }
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -680,6 +702,12 @@ public class SortOrdersController {
 
     @RequestMapping("/exportSortOrder")
     public String exportSortOrder(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        Group group = (Group) request.getSession().getAttribute("group");
+        if (group != null && group.getId() != 0) {
+
+        } else {
+            return "login";
+        }
         XSSFWorkbook webBook = new XSSFWorkbook();
         XSSFSheet sheet = webBook.createSheet("订单数据");
         XSSFRow row = sheet.createRow((int)0);
@@ -692,10 +720,10 @@ public class SortOrdersController {
             cell.setCellStyle(style);
         }
 
-        int count = sortOrdersService.selectSkUCount();
+        int count = sortOrdersService.selectSkUCount(group.getId());
         int rows = 2000;
         for (int i=0 ;i*rows < count ; i++) {
-            List<PickSku> goodsList = sortOrdersService.getAllPickSku(i*rows,rows);
+            List<PickSku> goodsList = sortOrdersService.getAllPickSku(i*rows,rows,group.getId());
 
             for (int j=0;j<goodsList.size();j++){
                 row = sheet.createRow(i * 2000 + j + 1);
@@ -787,18 +815,23 @@ public class SortOrdersController {
     public int saveUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
 
-            String pickOrderMun = request.getParameter("pickOrderMun");
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0) {
 
-            System.out.println("savePickOrderMun : " + pickOrderMun);
-            int mun = Integer.parseInt(pickOrderMun);
-            if (mun > 0 && mun < 1000000) {
-                int ret = sortOrdersService.setSetting("pickOrderMun",pickOrderMun);
+                String pickOrderMun = request.getParameter("pickOrderMun");
 
-                //System.out.println("savePickOrderMun : get" + sortOrdersService.getSetting("pickOrderMun"));
-                if (ret != 0){
-                    return 1;
+                System.out.println("savePickOrderMun : " + pickOrderMun);
+                int mun = Integer.parseInt(pickOrderMun);
+                if (mun > 0 && mun < 1000000) {
+                    int ret = sortOrdersService.setSetting("pickOrderMun",pickOrderMun,group.getId());
+
+                    //System.out.println("savePickOrderMun : get" + sortOrdersService.getSetting("pickOrderMun"));
+                    if (ret != 0){
+                        return 1;
+                    }
                 }
             }
+
 
         } catch (Exception e) {
             // TODO: handle exception

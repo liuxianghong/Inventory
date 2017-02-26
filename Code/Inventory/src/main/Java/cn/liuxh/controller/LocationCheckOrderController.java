@@ -83,6 +83,7 @@ public class LocationCheckOrderController {
             LocationCheckOrder order = orderUser.getOrder();
             Timestamp time = new Timestamp(System.currentTimeMillis());
             order.setTime(time);
+            order.setGroupId(user.getGroupId());
             int ret = 0;
             ret = locationCheckOrderService.add(order);
 
@@ -95,13 +96,14 @@ public class LocationCheckOrderController {
                     sku.setOrderId(order.getId());
                 }
             }
-            locationCheckOrderService.addSku(skus,user.getGroupId());
+            locationCheckOrderService.addSku(skus);
 
             if (ret != 0){
                 return getOrderDetail(order.getId());
             }
         } catch (Exception e) {
             // TODO: handle exception
+            System.out.println("createLocationCheckOrder: "+e.toString());
         }
         return null;
     }
@@ -154,7 +156,7 @@ public class LocationCheckOrderController {
             for (LocationSku sku:skus) {
                 sku.setOrderId(order.getId());
             }
-            locationCheckOrderService.addSku(skus,user.getGroupId());
+            locationCheckOrderService.addSku(skus);
             if (ret != 0){
                 return getOrderDetail(order.getId());
             }

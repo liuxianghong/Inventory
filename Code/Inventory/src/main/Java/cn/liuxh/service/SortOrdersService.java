@@ -18,27 +18,27 @@ public class SortOrdersService {
     @Autowired
     private SortOrdersMapper sortOrdersMapper;
 
-    public List getAll(int start,int rows){
-        return sortOrdersMapper.getAll(start, rows);
+    public List getAll(int start,int rows,int groupId){
+        return sortOrdersMapper.getAll(start, rows, groupId);
     }
-    public List getAllSku(@Param(value="orderName")String orderName) {
-        return sortOrdersMapper.getAllSku(orderName);
-    }
-
-    public List getAllSkuCountAndSort(String orderName,int start,int rows) {
-        return sortOrdersMapper.getAllSkuCountAndSort(orderName,start,rows);
+    public List getAllSku(@Param(value="orderName")String orderName,int groupId) {
+        return sortOrdersMapper.getAllSku(orderName,groupId);
     }
 
-    public List getAllSkuPage(int start,int rows){
-        return sortOrdersMapper.getAllSkuPage(start, rows);
+    public List getAllSkuCountAndSort(String orderName,int start,int rows,int groupId) {
+        return sortOrdersMapper.getAllSkuCountAndSort(orderName,start,rows,groupId);
     }
 
-    public int selectSkUCount() {
-        return sortOrdersMapper.selectSkUCount();
+    public List getAllSkuPage(int start, int rows, int groupId){
+        return sortOrdersMapper.getAllSkuPage(start, rows, groupId);
     }
 
-    public int count(){
-        return sortOrdersMapper.count();
+    public int selectSkUCount(int groupId) {
+        return sortOrdersMapper.selectSkUCount(groupId);
+    }
+
+    public int count(int groupId){
+        return sortOrdersMapper.count(groupId);
     }
 
     public int update(SortOrders product){
@@ -58,8 +58,8 @@ public class SortOrdersService {
         return sortOrdersMapper.getDetailByLocationNo(id);
     }
 
-    public int deleteSku(@Param(value="orderName")String orderName){
-        return sortOrdersMapper.deleteSku(orderName);
+    public int deleteSku(@Param(value="orderName")String orderName,int grouId){
+        return sortOrdersMapper.deleteSku(orderName,grouId);
     }
     public int addSku(List list){
         return sortOrdersMapper.addSku(list);
@@ -74,9 +74,9 @@ public class SortOrdersService {
     public int importOrders(SortOrders list){return sortOrdersMapper.importOrders(list);}
     public int importSkus(List list){return sortOrdersMapper.importSkus(list);}
 
-    public int truncate() {return sortOrdersMapper.truncate();}
+    public int truncate(int groupId) {return sortOrdersMapper.truncate(groupId);}
 
-    public int truncateSort() {return sortOrdersMapper.truncateSort();}
+    public int truncateSort(int groupId) {return sortOrdersMapper.truncateSort(groupId);}
 
     public int adPickOrder(PickOrder order){return sortOrdersMapper.adPickOrder(order);}
     public int addPickSkus(List list){return sortOrdersMapper.addPickSkus(list);}
@@ -116,27 +116,27 @@ public class SortOrdersService {
         return sortOrdersMapper.getUnPickOrder(order);
     }
 
-    public List getAllPickSku(int start,int rows){
-        return sortOrdersMapper.getAllPickSku(start, rows);
+    public List getAllPickSku(int start,int rows,int groupId){
+        return sortOrdersMapper.getAllPickSku(start, rows,groupId);
     }
 
-    public int selectPickSkuCount() {
-        return sortOrdersMapper.selectPickSkuCount();
+    public int selectPickSkuCount(int groupId) {
+        return sortOrdersMapper.selectPickSkuCount(groupId);
     }
 
-    public int selectPickOrderCount() {
-        return sortOrdersMapper.selectPickOrderCount();
+    public int selectPickOrderCount(int groupId) {
+        return sortOrdersMapper.selectPickOrderCount(groupId);
     }
 
     public int updatePickSkus(List skus) {
         return sortOrdersMapper.updatePickSkus(skus);
     }
 
-    public int setSetting(String key, String value){
-        return sortOrdersMapper.setSetting(key,value);
+    public int setSetting(String key, String value, int groupId){
+        return sortOrdersMapper.setSetting(key,value,groupId);
     }
 
-    public String getSetting(String key) {
-        return sortOrdersMapper.getSetting(key);
+    public String getSetting(String key, int groupId) {
+        return sortOrdersMapper.getSetting(key,groupId);
     }
 }

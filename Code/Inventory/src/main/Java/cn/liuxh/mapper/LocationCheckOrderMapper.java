@@ -29,7 +29,7 @@ public interface LocationCheckOrderMapper {
     List<Goods> getDetailByLocationNo(@Param(value = "id") String id, @Param(value = "groupId") int groupId);
 
     int deleteSku(@Param(value="id")int id);
-    int addSku(List list, int groupId);
+    int addSku(List list);
     List<LocationSku> getSkus(@Param(value="orderId")int id);
 
     int truncate(@Param(value = "groupId") int groupId);

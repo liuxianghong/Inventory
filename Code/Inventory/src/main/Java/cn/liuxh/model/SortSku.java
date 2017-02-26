@@ -15,6 +15,16 @@ public class SortSku {
     String size;
     String location;
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
     @JsonIgnore
     String orderName;
     @JsonIgnore

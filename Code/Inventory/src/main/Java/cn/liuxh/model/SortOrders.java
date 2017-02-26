@@ -18,6 +18,16 @@ public class SortOrders {
     private Timestamp time = new Timestamp(System.currentTimeMillis());
     List<SortSku> sku;
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
+    int groupId;
     @JsonIgnore
     String po;
     @JsonIgnore

@@ -57,8 +57,8 @@ public class LocationCheckOrderService {
     public int deleteSku(@Param(value="id")int id){
         return locationCheckOrderMapper.deleteSku(id);
     }
-    public int addSku(List list,int groupId){
-        return locationCheckOrderMapper.addSku(list,groupId);
+    public int addSku(List list){
+        return locationCheckOrderMapper.addSku(list);
     }
     List<LocationSku> getSkus(@Param(value="orderId")int id) {
         return locationCheckOrderMapper.getSkus(id);
