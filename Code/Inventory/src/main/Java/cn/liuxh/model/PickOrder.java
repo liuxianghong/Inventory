@@ -16,6 +16,17 @@ public class PickOrder {
     String location;
 
     @JsonIgnore
+    int groupId;
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    @JsonIgnore
     int lockUserId;
     @JsonIgnore
     int pickState;

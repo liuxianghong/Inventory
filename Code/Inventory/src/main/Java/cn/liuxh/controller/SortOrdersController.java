@@ -293,6 +293,7 @@ public class SortOrdersController {
                 PickOrder unpickOrder = sortOrdersService.getUnPickOrder(pickOrder);
                 if (unpickOrder == null) {
                     unpickOrder = new PickOrder();
+                    unpickOrder.setGroupId(user.getGroupId());
                     unpickOrder.setLocation(pickOrder.getLocation());
                     unpickOrder.setShortName(pickOrder.getShortName());
                     sortOrdersService.adPickOrder(unpickOrder);
@@ -322,6 +323,7 @@ public class SortOrdersController {
                         addsku = pickskuCopy;
 
                         unpickOrder = new PickOrder();
+                        unpickOrder.setGroupId(user.getGroupId());
                         unpickOrder.setLocation(pickOrder.getLocation());
                         unpickOrder.setShortName(pickOrder.getShortName());
                         sortOrdersService.adPickOrder(unpickOrder);
@@ -494,6 +496,7 @@ public class SortOrdersController {
                             location = picksku.getLocation();
                             if (pickorder == null){
                                 pickorder = new PickOrder();
+                                pickorder.setGroupId(group.getId());
                                 pickorder.setLocation(location);
                                 pickorder.setShortName(order.getOrderName());
                                 pickorder.setPo(order.getPo());
@@ -515,6 +518,7 @@ public class SortOrdersController {
                                 picksku = pickskuCopy;
 
                                 pickorder = new PickOrder();
+                                pickorder.setGroupId(group.getId());
                                 pickorder.setLocation(location);
                                 pickorder.setShortName(order.getOrderName());
                                 sortOrdersService.adPickOrder(pickorder);
