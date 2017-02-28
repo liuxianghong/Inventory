@@ -452,7 +452,14 @@ public class SortOrdersController {
         } else {
             return "login";
         }
-        pickOrderMaxMun = Integer.parseInt(sortOrdersService.getSetting("pickOrderMun", group.getId()));
+        String str = sortOrdersService.getSetting("pickOrderMun", group.getId());
+
+        try {
+            pickOrderMaxMun = Integer.parseInt(str);
+        } catch (Exception e) {
+            pickOrderMaxMun = 150;
+        }
+
         System.out.println("upload:"+"开始");
         String path = request.getSession().getServletContext().getRealPath("upload");
         String fileName = file.getOriginalFilename();
