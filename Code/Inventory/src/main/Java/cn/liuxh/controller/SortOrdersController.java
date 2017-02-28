@@ -603,9 +603,11 @@ public class SortOrdersController {
             sku.setGroupId(group.getId());
             sku.setCalculate(0);
             //循环Excel的列
+
+            String po = "";
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
-                String po = "";
+
                 if (null != cell) {
                     String str = "";
                     if (cell.getCellTypeEnum() == CellType.NUMERIC){
@@ -717,7 +719,7 @@ public class SortOrdersController {
         XSSFRow row = sheet.createRow((int)0);
 
         XSSFCellStyle style = webBook.createCellStyle();
-        String[] strs = {"系统订单编码","拣货单","产品名称","规格","条形码","数量","订单状态","地址","PO单号"};
+        String[] strs = {"PO单号","条形码","数量","系统订单编码","拣货单","产品名称","规格","订单状态","地址","备注1","备注2"};
         for (int i = 0; i < strs.length; i++) {
             XSSFCell cell = row.createCell(i);
             cell.setCellValue(strs[i]);
@@ -733,21 +735,24 @@ public class SortOrdersController {
                 row = sheet.createRow(i * 2000 + j + 1);
 
                 PickSku goods = goodsList.get(j);
-                row.createCell(0).setCellValue(goods.getPickOrderId());
-                row.createCell(1).setCellValue(goods.getShortName());
-                row.createCell(2).setCellValue(goods.getProductName());
-                row.createCell(3).setCellValue(goods.getSize());
-                row.createCell(4).setCellValue(goods.getSeriesNo());
-                row.createCell(5).setCellValue(goods.getCount());
+                row.createCell(0).setCellValue(goods.getPo());
+                row.createCell(1).setCellValue(goods.getSeriesNo());
+                row.createCell(2).setCellValue(goods.getCount());
+                row.createCell(3).setCellValue(goods.getPickOrderId());
+                row.createCell(4).setCellValue(goods.getShortName());
+                row.createCell(5).setCellValue(goods.getName());
+                row.createCell(6).setCellValue(goods.getSize());
                 String state = "未开始";
                 if (goods.getState() == 1){
                     state = "已完成";
                 } else if (goods.getLockUserId() != 0){
                     state = "分拣中";
                 }
-                row.createCell(6).setCellValue(state);
-                row.createCell(7).setCellValue(goods.getLocation());
-                row.createCell(8).setCellValue(goods.getPo());
+                row.createCell(7).setCellValue(state);
+                row.createCell(8).setCellValue(goods.getLocation());
+                row.createCell(9).setCellValue(goods.getRemarks1());
+                row.createCell(10).setCellValue(goods.getRemarks2());
+
             }
         }
 

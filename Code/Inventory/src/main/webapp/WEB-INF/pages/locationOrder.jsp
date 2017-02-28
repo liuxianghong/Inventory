@@ -9,14 +9,14 @@
 
 
 <div id="toolbarLocationOrder">
-    <%--<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importLocationOrder()">导入</a>--%>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importLocationOrder()">导入</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportLocationOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateLocationOrder()">清空</a>
 </div>
 
 <div id="locationFileWin" class="easyui-window" title="导入Excel"
      style="width: 500px; height: auto;" closed="true">
-    <form name="locationFormFile" action="/uploadLocationOrder" method="post"  enctype="multipart/form-data">
+    <form name="locationFormFile" action="/Inventory/uploadLocationOrder" method="post"  enctype="multipart/form-data">
         <h1>选择上传文件</h1>
         <input type="file" name="file">
 
@@ -30,7 +30,7 @@
 
     $(function(){
         $("#dgLocationOrder").datagrid({
-            url:"/getAllLocationOrdersE",
+            url:ur+"/getAllLocationOrdersE",
             columns:[[
                 {field:'orderName',title:'盘点表单名称',width:150},
                 {field:'name',title:'产品名称',width:150},
@@ -59,7 +59,7 @@
 
     function exportLocationOrder(){
 
-        var url="/exportLocationOrder";
+        var url=ur+"/exportLocationOrder";
         window.open(url);
 
     }
@@ -69,7 +69,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateLocationOrder',
+                            url : ur + '/truncateLocationOrder',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {

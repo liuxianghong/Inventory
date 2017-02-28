@@ -18,6 +18,7 @@
     <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
 </head>
 <body>
+
 <%@ include file="user.jsp"%>
 <%@ include file="product.jsp"%>
 <%@ include file="sortOrder.jsp"%>
@@ -51,4 +52,8 @@
 </div>
 
 </body>
+
+<script type="text/javascript">
+    var ur = '/Inventory'
+</script>
 </html>

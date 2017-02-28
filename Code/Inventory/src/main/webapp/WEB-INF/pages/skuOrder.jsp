@@ -9,14 +9,14 @@
 
 
 <div id="toolbarSkuOrder">
-    <%--<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSkuOrder()">导入</a>--%>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="importSkuOrder()">导入</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSkuOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSkuOrder()">清空</a>
 </div>
 
 <div id="skuFileWin" class="easyui-window" title="导入Excel"
      style="width: 500px; height: auto;" closed="true">
-    <form name="skuFormFile" action="/uploadSku" method="post"  enctype="multipart/form-data">
+    <form name="skuFormFile" action="/Inventory/uploadSku" method="post"  enctype="multipart/form-data">
         <h1>选择上传文件</h1>
         <input type="file" name="file">
 
@@ -30,7 +30,7 @@
 
     $(function(){
         $("#dgSkuOrder").datagrid({
-            url:"/getAllSkuOrdersE",
+            url:ur + "/getAllSkuOrdersE",
             columns:[[
                 {field:'orderName',title:'盘点表单名称',width:150},
                 {field:'name',title:'产品名称',width:150},
@@ -58,7 +58,7 @@
 
     function exportSkuOrder(){
 
-        var url="/exportSkuOrder";
+        var url=ur+"/exportSkuOrder";
         window.open(url);
 
     }
@@ -68,7 +68,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateSkuOrder',
+                            url : ur + '/truncateSkuOrder',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {

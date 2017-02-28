@@ -138,7 +138,7 @@
         </if>
     </select>
 
-    <select id="getSetting">
+    <select id="getSetting" resultType="java.lang.String">
         select value FROM setting
         WHERE name = #{key} AND groupId = #{groupId}
     </select>

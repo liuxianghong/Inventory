@@ -83,4 +83,7 @@
         DELETE from LocationSKU WHERE id != 0 AND groupId = #{groupId};
     </delete>
 
+    <select id="selectedGood" resultType="cn.liuxh.model.Goods">
+        SELECT * FROM goods WHERE seriesNo = #{seriesNo} AND groupId = #{groupId};
+    </select>
 </mapper>

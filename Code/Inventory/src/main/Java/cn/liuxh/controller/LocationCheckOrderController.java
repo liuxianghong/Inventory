@@ -338,7 +338,7 @@ public class LocationCheckOrderController {
         //保存
         try {
             file.transferTo(targetFile);
-            getExcelInfo(fileName,targetFile);
+            getExcelInfo(fileName,targetFile,group);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -359,7 +359,7 @@ public class LocationCheckOrderController {
         return 0;
     }
 
-    public void getExcelInfo(String fileName,File file) throws IOException, InvalidFormatException {
+    public void getExcelInfo(String fileName, File file, Group group) throws IOException, InvalidFormatException {
 
         if (!validateExcel(fileName)){
             return;
@@ -376,12 +376,15 @@ public class LocationCheckOrderController {
             totalCells =sheet.getRow(0).getPhysicalNumberOfCells();
         }
 
-        List<LocationSku> customerList=new ArrayList<LocationSku>();
+
+        LocationCheckOrder order = new LocationCheckOrder();
+        List<String> locationList = new ArrayList<String>();
         //循环Excel行数,从第二行开始。标题不入库
         for(int r=1;r<totalRows;r++){
             Row row = sheet.getRow(r);
             if (row == null) continue;
-            LocationSku goods = new LocationSku();
+            String name = "";
+            String seriesNo = "";
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
@@ -393,32 +396,60 @@ public class LocationCheckOrderController {
                         str = cell.getStringCellValue();
                     }
                     if (c == 0) {
-                        goods.setName(str);
+                        name = str;
                     } else if (c == 1) {
-                        goods.setSize(str);
                     } else if (c == 2) {
-                        goods.setSeriesNo(str);
                     } else if (c == 3) {
-                        goods.setLocationNo(str);
+                        seriesNo = str;
                     } else if (c == 4) {
-                        goods.setCount(safeInt(str));
                     }
                     System.out.println("getExcelInfo:"+str);
                 }
             }
-            if (goods.getSeriesNo() != null
-                    && !goods.getSeriesNo().trim().isEmpty()) {
-                customerList.add(goods);
-                //System.out.println("getExcelInfo:"+customerList.size());
-                if (customerList.size() > 2000) {
-                    //locationCheckOrderService.importGoods(customerList);
-                    customerList.clear();
+
+            if (name.trim().isEmpty() || seriesNo.trim().isEmpty()) {
+                continue;
+            }
+
+            Goods good = locationCheckOrderService.selectedGood(seriesNo,group.getId());
+            if (good == null || good.getLocationNo().trim().isEmpty()) {
+                continue;
+            }
+
+            if (order.getOrderName() == null || !name.equals(order.getOrderName())) {
+                Timestamp time = new Timestamp(System.currentTimeMillis());
+                order = new LocationCheckOrder();
+                order.setTime(time);
+                order.setOrderName(name);
+                order.setGroupId(group.getId());
+                locationCheckOrderService.add(order);
+            }
+
+            boolean contain = false;
+            for (String l:
+                    locationList) {
+                if (l.equals(good.getLocationNo())){
+                    contain = true;
+                    break;
                 }
             }
-        }
-        if (!customerList.isEmpty()) {
-            //locationCheckOrderService.importGoods(customerList);
-            customerList.clear();
+            if (contain) {
+                continue;
+            }
+            locationList.add(good.getLocationNo());
+
+            List<Goods> goodsList = locationCheckOrderService.getDetailByLocationNo(good.getLocationNo(),group.getId());
+            List<LocationSku> skus = new ArrayList<LocationSku>();
+            for (Goods g:
+                    goodsList) {
+                LocationSku sku = new LocationSku();
+                sku.setCalculate(0);
+                sku.setSeriesNo(g.getSeriesNo());
+                sku.setOrderId(order.getId());
+                skus.add(sku);
+            }
+            locationCheckOrderService.addSku(skus);
+
         }
         workbook.close();
     }

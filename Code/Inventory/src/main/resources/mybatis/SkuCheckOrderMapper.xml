@@ -54,10 +54,10 @@
 
     <insert id="importSkus" parameterType="java.util.List" useGeneratedKeys="true"
             keyProperty="id">
-        insert into SkuCheckOrder(seriesNo,orderName,size,calculate,time,groupId)
+        insert into SkuCheckOrder(seriesNo,orderName,calculate,time,groupId)
         values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
-            (#{item.seriesNo},#{item.orderName},#{item.size},#{item.calculate},#{item.time},#{item.groupId})
+            (#{item.seriesNo},#{item.orderName},#{item.calculate},#{item.time},#{item.groupId})
         </foreach>
     </insert>
 

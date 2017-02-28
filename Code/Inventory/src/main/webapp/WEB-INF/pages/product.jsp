@@ -19,7 +19,7 @@
 
 <div id="productFileWin" class="easyui-window" title="导入Excel"
      style="width: 500px; height: auto;" closed="true">
-    <form name="FormFile" action="/upload" method="post"  enctype="multipart/form-data">
+    <form name="FormFile" action="/Inventory/upload" method="post"  enctype="multipart/form-data">
         <h1>选择上传文件</h1>
         <input type="file" name="file">
 
@@ -78,7 +78,7 @@
 
     $(function(){
         $("#dgProduct").datagrid({
-            url:"/getAllGoodsE",
+            url:ur + "/getAllGoodsE",
             columns:[[
                 {field:'name',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
@@ -108,7 +108,7 @@
 
     function saveProduct(){
         $('#productInfoForm').form('submit',{
-            url: '/saveGoods',
+            url: ur + '/saveGoods',
             method:'post',
             success:function(data){
                 var r = data;
@@ -149,7 +149,7 @@
 
     function exportProduct() {
 
-        var url="/exportProduct";
+        var url=ur+"/exportProduct";
         window.open(url);
 //        $.ajax({
 //            url : '/exportProduct',
@@ -170,7 +170,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateProduct',
+                            url : ur + '/truncateProduct',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {
@@ -202,7 +202,7 @@
                     function(t) {
                         if (t) {
                             $.ajax({
-                                url : '/delGoods',
+                                url : ur + '/delGoods',
                                 method : 'POST',
                                 data : rows[0],
                                 dataType : 'json',

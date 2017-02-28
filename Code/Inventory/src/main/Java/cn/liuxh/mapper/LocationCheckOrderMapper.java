@@ -33,4 +33,6 @@ public interface LocationCheckOrderMapper {
     List<LocationSku> getSkus(@Param(value="orderId")int id);
 
     int truncate(@Param(value = "groupId") int groupId);
+
+    Goods selectedGood(@Param(value = "seriesNo")String seriesNo,@Param(value = "groupId")int groupId);
 }

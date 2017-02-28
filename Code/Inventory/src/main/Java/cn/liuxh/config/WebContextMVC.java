@@ -41,7 +41,7 @@ public class WebContextMVC {
     @Bean
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/Inventory?characterEncoding=UTF-8&amp;useUnicode=true&allowMultiQueries=true");
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/Inventory2?characterEncoding=UTF-8&amp;useUnicode=true&allowMultiQueries=true");
         dataSource.setUsername("root");
         dataSource.setPassword("210749Qq");
         dataSource.setInitialSize(1);

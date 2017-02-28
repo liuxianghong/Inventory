@@ -17,7 +17,7 @@
 
 <div id="SortOrderFileWin" class="easyui-window" title="导入Excel"
      style="width: 500px; height: auto;" closed="true">
-    <form name="FormFile" action="/uploadOrder" method="post"  enctype="multipart/form-data">
+    <form name="FormFile" action="/Inventory/uploadOrder" method="post"  enctype="multipart/form-data">
         <h1>选择上传文件</h1>
         <input type="file" name="file">
 
@@ -50,7 +50,7 @@
 
     $(function(){
         $("#dgSortOrder").datagrid({
-            url:"/getAllPickSkuE",
+            url:ur + "/getAllPickSkuE",
             columns:[[
                 {field:'productName',title:'产品名称',width:150},
                 {field:'size',title:'规格',width:150},
@@ -76,7 +76,7 @@
 
     function exportSortOrder(){
 
-        var url="/exportSortOrder";
+        var url=ur+"/exportSortOrder";
         window.open(url);
 
     }
@@ -86,7 +86,7 @@
                 function(t) {
                     if (t) {
                         $.ajax({
-                            url : '/truncateOrder',
+                            url : ur + '/truncateOrder',
                             method : 'POST',
                             dataType : 'json',
                             success : function(r) {
@@ -112,7 +112,7 @@
 
     function savenum(){
         $('#sortOrderMunForm').form('submit',{
-            url: '/savePickOrderMun',
+            url: ur + '/savePickOrderMun',
             method:'post',
             success:function(data){
                 var r = data;

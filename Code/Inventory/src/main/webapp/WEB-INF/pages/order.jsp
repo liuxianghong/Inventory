@@ -54,7 +54,7 @@
 
     $(function(){
         $("#dgOrder").datagrid({
-            url:"/getAllOrdersE",
+            url:ur + "/getAllOrdersE",
             columns:[[
                 {field:'name',title:'产品名称',width:150},
                 {field:'format',title:'规格',width:150},
@@ -82,7 +82,7 @@
 
     function saveUsers(){
         $('#oderInfoForm').form('submit',{
-            url: '/saveOrder',
+            url: ur + '/saveOrder',
             method:'post',
             success:function(data){
                 var r = data;
@@ -130,7 +130,7 @@
                     function(t) {
                         if (t) {
                             $.ajax({
-                                url : '/delOrder',
+                                url : ur + '/delOrder',
                                 method : 'POST',
                                 data : rows[0],
                                 dataType : 'json',

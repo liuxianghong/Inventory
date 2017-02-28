@@ -30,7 +30,7 @@ public class GroupController {
     public Map adminLogin(HttpServletRequest request, ModelMap modelMap, HttpServletResponse response) throws Exception {
         Map map = new HashMap();
         map.put("result", "1");
-        map.put("msg", "用户名或密码不正确");
+
         try {
             String name =  request.getParameter("userName");
             String pw =  request.getParameter("password");
@@ -46,12 +46,17 @@ public class GroupController {
                     map.put("result", "0");
                     map.put("msg", "登录成功");
                     modelMap.addAttribute("group",groupResult);
+                } else {
+                    map.put("msg", "用户名或密码不正确");
                 }
+            } else {
+                map.put("msg", "用户名和密码不正确");
             }
             return map;
 
         } catch (Exception e) {
             // TODO: handle exception
+            map.put("msg", e.toString());
         }
         return map;
     }

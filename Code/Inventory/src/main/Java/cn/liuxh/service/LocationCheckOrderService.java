@@ -65,4 +65,6 @@ public class LocationCheckOrderService {
     }
 
     public int truncate(int groupId) {return locationCheckOrderMapper.truncate(groupId);}
+
+    public Goods selectedGood(String seriesNo,int groupId) {return locationCheckOrderMapper.selectedGood(seriesNo,groupId);}
 }

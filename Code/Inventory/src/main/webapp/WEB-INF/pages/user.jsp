@@ -49,7 +49,7 @@
 
     $(function(){
         $("#dgUser").datagrid({
-            url:"/getAllUsersE",
+            url: ur + "/getAllUsersE",
             columns:[[
                 {field:'userName',title:'用户名',width:150},
                 {field:'password',title:'密码',width:150},
@@ -87,7 +87,7 @@
 
     function saveUsers(){
         $('#userInfoForm').form('submit',{
-            url: '/saveUser',
+            url: ur + '/saveUser',
             method:'post',
             success:function(data){
                 var r = data;
@@ -135,7 +135,7 @@
                     function(t) {
                         if (t) {
                             $.ajax({
-                                url : '/delUser',
+                                url : ur + '/delUser',
                                 method : 'POST',
                                 data : rows[0],
                                 dataType : 'json',

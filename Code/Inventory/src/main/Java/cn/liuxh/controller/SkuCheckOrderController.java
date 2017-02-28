@@ -282,7 +282,7 @@ public class SkuCheckOrderController {
 //        return JSONObject.toJSONString(modelMap);
     }
 
-    @RequestMapping(value = "/uploadLocation")
+    @RequestMapping(value = "/uploadSku")
     public String upload(@RequestParam(value = "file", required = false) MultipartFile file
             , HttpServletRequest request, ModelMap model) {
 
@@ -352,7 +352,10 @@ public class SkuCheckOrderController {
             Row row = sheet.getRow(r);
             if (row == null) continue;
             SkuCheckOrder goods = new SkuCheckOrder();
+            goods.setCalculate(0);
             goods.setGroupId(group.getId());
+            Timestamp time = new Timestamp(System.currentTimeMillis());
+            goods.setTime(time);
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
@@ -372,13 +375,14 @@ public class SkuCheckOrderController {
                     } else if (c == 3) {
                         goods.setSeriesNo(str);
                     } else if (c == 4) {
-                        goods.setCalculate(safeInt(str));
+                        //goods.setCalculate(safeInt(str));
                     }
                     System.out.println("getExcelInfo:"+str);
                 }
             }
             if (goods.getSeriesNo() != null
-                    && !goods.getSeriesNo().trim().isEmpty()) {
+                    && !goods.getSeriesNo().trim().isEmpty()
+                    && skuCheckOrderService.haveGoods(goods.getSeriesNo(),group.getId())) {
                 customerList.add(goods);
                 //System.out.println("getExcelInfo:"+customerList.size());
                 if (customerList.size() > 2000) {
