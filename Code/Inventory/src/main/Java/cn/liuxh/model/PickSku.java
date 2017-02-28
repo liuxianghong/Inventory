@@ -65,6 +65,17 @@ public class PickSku {
 
     String name;
 
+    public String getGoodSize() {
+        return goodSize;
+    }
+
+    public void setGoodSize(String goodSize) {
+        this.goodSize = goodSize;
+    }
+
+    @JsonIgnore
+    String goodSize;
+
     public String getRemarks1() {
         return remarks1;
     }

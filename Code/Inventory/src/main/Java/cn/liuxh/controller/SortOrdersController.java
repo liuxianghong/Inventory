@@ -741,7 +741,7 @@ public class SortOrdersController {
                 row.createCell(3).setCellValue(goods.getPickOrderId());
                 row.createCell(4).setCellValue(goods.getShortName());
                 row.createCell(5).setCellValue(goods.getName());
-                row.createCell(6).setCellValue(goods.getSize());
+                row.createCell(6).setCellValue(goods.getGoodSize());
                 String state = "未开始";
                 if (goods.getState() == 1){
                     state = "已完成";
