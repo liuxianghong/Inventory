@@ -288,4 +288,21 @@
 --         TRUNCATE TABLE SortOrders;
     </delete>
 
+    <select id="allOrderCount">
+        select count(*) from PickOrder
+    </select>
+
+    <delete id="truncateZero">
+        TRUNCATE TABLE PickOrder;
+        TRUNCATE TABLE pickSku;
+    </delete>
+
+    <select id="searchRemake" resultType="int">
+        SELECT distinct pickOrderId FROM pickSku
+        INNER JOIN PickOrder ON PickOrder.id = pickSku.pickOrderId
+        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo AND goods.groupId = PickOrder.groupId
+        AND goods.groupId = #{groupId}
+        where (Remarks1 = #{remake} or Remarks2 = #{remake});
+    </select>
+
 </mapper>

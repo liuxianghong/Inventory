@@ -73,4 +73,10 @@ public interface SortOrdersMapper {
     int setSetting(@Param(value="key")String key,@Param(value="value") String value,@Param(value = "groupId") int groupId);
 
     String getSetting(@Param(value="key")String key,@Param(value = "groupId") int groupId);
+
+    int allOrderCount();
+
+    int truncateZero();
+
+    List searchRemake(@Param(value = "remake")String remake, @Param(value = "groupId")int groupId);
 }

@@ -440,6 +440,34 @@ public class SortOrdersController {
         return map;
     }
 
+    @RequestMapping("/searchText")
+    @ResponseBody
+    public Map searchText(@RequestBody JSONObject jsonObj) {
+        Map map = new HashMap();
+        map.put("state",1);
+        try {
+            int uid = jsonObj.getInteger("uid");
+            String remake = jsonObj.getString("remake");
+            User user = UserController.userController.getUser(uid);
+            if (user == null) {
+                map.put("msg","用户不存在");
+                return map;
+            }
+
+            List orders = sortOrdersService.searchRemake(remake,user.getGroupId());
+            map.put("orders",orders);
+            map.put("msg","成功");
+            map.put("state",0);
+
+
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            map.put("msg",e.toString());
+        }
+        return map;
+    }
+
 
 
     @RequestMapping(value = "/uploadOrder")
@@ -712,6 +740,25 @@ public class SortOrdersController {
         return 0;
     }
 
+    @RequestMapping("/truncateZero")
+    @ResponseBody
+    public int truncateZero(HttpServletRequest request) {
+        try {
+
+            Group group = (Group) request.getSession().getAttribute("group");
+            if (group != null && group.getId() != 0 && (sortOrdersService.allOrderCount() == 0)) {
+                int ret = sortOrdersService.truncateZero();
+                System.out.println("truncateOrder : ret" + ret);
+                if (ret != 0){
+                    return 1;
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return 0;
+    }
 
     @RequestMapping("/exportSortOrder")
     public String exportSortOrder(HttpServletRequest request,HttpServletResponse response) throws IOException {

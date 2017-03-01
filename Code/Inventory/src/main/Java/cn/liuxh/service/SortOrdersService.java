@@ -139,4 +139,12 @@ public class SortOrdersService {
     public String getSetting(String key, int groupId) {
         return sortOrdersMapper.getSetting(key,groupId);
     }
+
+    public int allOrderCount(){return sortOrdersMapper.allOrderCount();}
+
+    public int truncateZero(){return sortOrdersMapper.truncateZero();}
+
+    public List searchRemake(String remake, int groupId){
+        return sortOrdersMapper.searchRemake(remake,groupId);
+    }
 }

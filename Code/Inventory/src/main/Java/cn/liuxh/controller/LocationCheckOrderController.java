@@ -384,7 +384,7 @@ public class LocationCheckOrderController {
             Row row = sheet.getRow(r);
             if (row == null) continue;
             String name = "";
-            String seriesNo = "";
+            String locationNo = "";
             //循环Excel的列
             for(int c = 0; c <totalCells; c++) {
                 Cell cell = row.getCell(c);
@@ -400,21 +400,21 @@ public class LocationCheckOrderController {
                     } else if (c == 1) {
                     } else if (c == 2) {
                     } else if (c == 3) {
-                        seriesNo = str;
+                        locationNo = str;
                     } else if (c == 4) {
                     }
                     System.out.println("getExcelInfo:"+str);
                 }
             }
 
-            if (name.trim().isEmpty() || seriesNo.trim().isEmpty()) {
+            if (name.trim().isEmpty() || locationNo.trim().isEmpty()) {
                 continue;
             }
 
-            Goods good = locationCheckOrderService.selectedGood(seriesNo,group.getId());
-            if (good == null || good.getLocationNo().trim().isEmpty()) {
-                continue;
-            }
+//            Goods good = locationCheckOrderService.selectedGood(seriesNo,group.getId());
+//            if (good == null || good.getLocationNo().trim().isEmpty()) {
+//                continue;
+//            }
 
             if (order.getOrderName() == null || !name.equals(order.getOrderName())) {
                 Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -422,13 +422,14 @@ public class LocationCheckOrderController {
                 order.setTime(time);
                 order.setOrderName(name);
                 order.setGroupId(group.getId());
+                locationList.clear();
                 locationCheckOrderService.add(order);
             }
 
             boolean contain = false;
             for (String l:
                     locationList) {
-                if (l.equals(good.getLocationNo())){
+                if (l.equals(locationNo)){
                     contain = true;
                     break;
                 }
@@ -436,9 +437,9 @@ public class LocationCheckOrderController {
             if (contain) {
                 continue;
             }
-            locationList.add(good.getLocationNo());
+            locationList.add(locationNo);
 
-            List<Goods> goodsList = locationCheckOrderService.getDetailByLocationNo(good.getLocationNo(),group.getId());
+            List<Goods> goodsList = locationCheckOrderService.getDetailByLocationNo(locationNo,group.getId());
             List<LocationSku> skus = new ArrayList<LocationSku>();
             for (Goods g:
                     goodsList) {

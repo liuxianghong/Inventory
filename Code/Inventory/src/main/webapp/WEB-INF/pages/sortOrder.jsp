@@ -13,6 +13,7 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true" onclick="exportSortOrder()">导出</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="truncateSortOrder()">清空</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editnum()">设置</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="truncateZero()">清0</a>
 </div>
 
 <div id="SortOrderFileWin" class="easyui-window" title="导入Excel"
@@ -108,6 +109,30 @@
     function editnum(){
         $("#sortOrderMunWin").window('open');
         $("#sortOrderMunForm").form("load", row);
+    }
+
+    function truncateZero() {
+        $.messager.confirm('警告','您确定要清0吗',
+                function(t) {
+                    if (t) {
+                        $.ajax({
+                            url : ur + '/truncateZero',
+                            method : 'POST',
+                            dataType : 'json',
+                            success : function(r) {
+                                if (r!=0) {
+                                    $("#dgSortOrder").datagrid('acceptChanges');
+                                    $.messager.show({msg : '',title : '成功'});
+                                    $("#dgSortOrder").datagrid('reload');
+                                } else {
+                                    $("#dgSortOrder").datagrid('beginEdit',editRow);
+                                    $.messager.alert('错误','','error');
+                                }
+                                $("#dgSortOrder").datagrid('unselectAll');
+                            }
+                        });
+                    }
+                });
     }
 
     function savenum(){
