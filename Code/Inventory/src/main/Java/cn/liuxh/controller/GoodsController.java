@@ -2,6 +2,7 @@ package cn.liuxh.controller;
 
 import cn.liuxh.model.Goods;
 import cn.liuxh.model.Group;
+import cn.liuxh.model.User;
 import cn.liuxh.service.GoodsService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -140,14 +141,17 @@ public class GoodsController {
 
         String locationNo = request.getParameter("locationNo");
 
-        String groupId = request.getParameter("groupId");
+        String uid = request.getParameter("uid");
 
-        Goods user = new Goods();
-        user.setSeriesNo(seriesNo);
-        user.setLocationNo(locationNo);
-        user.setGroupId(Integer.parseInt(groupId));
+        User user = UserController.userController.getUser(Integer.parseInt(uid));
+        if (user == null) return null;
 
-        goodsService.updateSkuLocation(user);
+        Goods good = new Goods();
+        good.setSeriesNo(seriesNo);
+        good.setLocationNo(locationNo);
+        good.setGroupId(user.getGroupId());
+
+        goodsService.updateSkuLocation(good);
 
 
         return goodsService.getGoodsBySeriesNo(seriesNo);

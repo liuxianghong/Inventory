@@ -363,30 +363,30 @@ public class SortOrdersController {
                 return map;
             }
 
-            PickOrder pickOrder = sortOrdersService.getPickOrderDetailById(orderId);
-            if (pickOrder == null){
-                map.put("msg","订单不存在");
-            }
-            else if (pickOrder.getState() == 1) {
-                map.put("msg","订单已完成");
-            }
-            else
-                {
-                if (pickOrder.getLockUserId() != 0) {
-                    User userLock = UserController.userController.getUser(pickOrder.getLockUserId());
-                    map.put("msg","已被锁定");
-                    map.put("data",userLock);
-                } else {
-                    int ret = sortOrdersService.lockPickOrderById(orderId,uid);
-                    if (ret == 0) {
-                        map.put("msg","锁定失败");
-                    } else {
-                        map.put("state",0);
-                        map.put("msg","锁定成功");
-                    }
-
+            synchronized(this){
+                PickOrder pickOrder = sortOrdersService.getPickOrderDetailById(orderId);
+                if (pickOrder == null){
+                    map.put("msg","订单不存在");
                 }
-
+                else if (pickOrder.getState() == 1) {
+                    map.put("msg","订单已完成");
+                }
+                else
+                {
+                    if (pickOrder.getLockUserId() != 0) {
+                        User userLock = UserController.userController.getUser(pickOrder.getLockUserId());
+                        map.put("msg","已被锁定");
+                        map.put("data",userLock);
+                    } else {
+                        int ret = sortOrdersService.lockPickOrderById(orderId,uid);
+                        if (ret == 0) {
+                            map.put("msg","锁定失败");
+                        } else {
+                            map.put("state",0);
+                            map.put("msg","锁定成功");
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             // TODO: handle exception

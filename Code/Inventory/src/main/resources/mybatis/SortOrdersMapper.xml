@@ -146,7 +146,7 @@
 
     <select id="getAllPickSkus" resultType="cn.liuxh.model.PickSku">
         select pickSku.id,pickSku.productName
-        ,pickSku.size,pickSku.locationNo
+        ,goods.size,pickSku.locationNo
         ,pickSku.count,pickSku.seriesNo,pickSku.pickOrderId
         ,goods.name,goods.remarks1,goods.remarks2 from pickSku
         Left JOIN goods ON pickSku.seriesNo = goods.seriesNo where pickOrderId = #{id};
