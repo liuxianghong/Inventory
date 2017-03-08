@@ -18,6 +18,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -651,7 +652,8 @@ public class SortOrdersController {
                         str = cell.getStringCellValue();
                     }
                     if (c == 0) {
-                        po = str;
+                        BigDecimal bd = new BigDecimal(str);
+                        po = bd.toPlainString();
                     } else if (c == 1) {
                         sku.setOrderName(str);
                         if (order == null || !order.getOrderName().equalsIgnoreCase(str)) {
