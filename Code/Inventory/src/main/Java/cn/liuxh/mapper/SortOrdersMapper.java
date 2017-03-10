@@ -2,7 +2,6 @@ package cn.liuxh.mapper;
 
 import cn.liuxh.model.PickOrder;
 import cn.liuxh.model.SortOrders;
-import cn.liuxh.model.SortSku;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public interface SortOrdersMapper {
     int deleteSku(@Param(value="orderName")String orderName,@Param(value = "groupId") int groupId);
     int addSku(List list);
     int updateSku(List list);
-    List<SortSku> getSkus(@Param(value="orderId")int id);
+//    List<SortSku> getSkus(@Param(value="orderId")int id);
 
     int importOrders(SortOrders list);
     int importSkus(List list);

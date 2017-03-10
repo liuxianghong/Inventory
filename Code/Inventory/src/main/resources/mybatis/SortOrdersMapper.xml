@@ -23,18 +23,20 @@
     </select>
 
     <select id="getAllSkuCountAndSort" resultType="cn.liuxh.model.SortSku">
-        select SortSku.id,SortSku.orderName,SortSku.count,SortSku.productName
+        select distinct SortSku.id,SortSku.orderName,SortSku.count,SortSku.productName
         ,SortSku.size,SortSku.location,SortSku.calculate,SortSku.seriesNo,
         goods.LocationNo,SortSku.groupId
          from SortSku
-         Left JOIN goods ON SortSku.seriesNo = goods.seriesNo AND SortSku.groupId = #{groupId}
+         Left JOIN goods ON SortSku.seriesNo = goods.seriesNo
+         AND goods.groupId = SortSku.groupId
+         AND SortSku.groupId = #{groupId}
         where orderName = #{orderName}
         order by location asc,LocationNo asc
         limit #{start},#{rows};
     </select>
 
     <select id="getAllPickSku" resultType="cn.liuxh.model.PickSku">
-        select pickSku.*,PickOrder.*
+        select distinct pickSku.id,pickSku.*,PickOrder.*
         ,goods.name,goods.remarks1,goods.remarks2,goods.size as goodSize
         from pickSku INNER JOIN PickOrder ON PickOrder.id = pickSku.pickOrderId
         AND PickOrder.groupId = #{groupId}
@@ -85,9 +87,9 @@
         select * from SortOrders where locationNo = #{id};
     </select>
 
-    <select id="getSkus" resultType="cn.liuxh.model.SortOrders">
-        select * from SortSku where orderId = #{orderId};
-    </select>
+    <!--<select id="getSkus" resultType="cn.liuxh.model.SortOrders">-->
+        <!--select * from SortSku where orderId = #{orderId};-->
+    <!--</select>-->
 
     <select id="getPickOrderDetailById" resultType="cn.liuxh.model.PickOrder">
         select * from PickOrder where id = #{id};

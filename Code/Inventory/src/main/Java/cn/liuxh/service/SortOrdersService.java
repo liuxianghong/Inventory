@@ -67,9 +67,9 @@ public class SortOrdersService {
     public int updateSku(List list){
         return sortOrdersMapper.updateSku(list);
     }
-    List<SortSku> getSkus(@Param(value="orderId")int id) {
-        return sortOrdersMapper.getSkus(id);
-    }
+//    List<SortSku> getSkus(@Param(value="orderId")int id) {
+//        return sortOrdersMapper.getSkus(id);
+//    }
 
     public int importOrders(SortOrders list){return sortOrdersMapper.importOrders(list);}
     public int importSkus(List list){return sortOrdersMapper.importSkus(list);}
