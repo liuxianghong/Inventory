@@ -173,7 +173,7 @@ public class SortOrdersController {
             if (orderList == null) orderList = new ArrayList();
             for (int i = 0; i < orderList.size(); i++) {
                 PickOrder order = orderList.get(i);
-                List<PickSku> skus = sortOrdersService.getAllPickSkus(order.getId());
+                List<PickSku> skus = sortOrdersService.getAllPickSkus(order.getId(),user.getGroupId());
                 if (skus == null) skus = new ArrayList();
                 order.setSkus(skus);
 
@@ -252,7 +252,7 @@ public class SortOrdersController {
                 map.put("msg","订单已被他人锁定");
                 return map;
             }
-            List<PickSku> skus = sortOrdersService.getAllPickSkus(id);
+            List<PickSku> skus = sortOrdersService.getAllPickSkus(id,user.getGroupId());
 
             List<PickSku> unSkus = new ArrayList<>();
 
@@ -300,7 +300,7 @@ public class SortOrdersController {
                     sortOrdersService.adPickOrder(unpickOrder);
                 }
 
-                List<PickSku> unpickOrderskus = sortOrdersService.getAllPickSkus(unpickOrder.getId());
+                List<PickSku> unpickOrderskus = sortOrdersService.getAllPickSkus(unpickOrder.getId(),user.getGroupId());
                 for (PickSku ss:
                         unpickOrderskus) {
                     sortOrdersService.deletePickSku(ss.getId());

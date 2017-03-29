@@ -54,7 +54,7 @@ public interface SortOrdersMapper {
     int getPickOrdersCount(@Param(value="start")int start, @Param(value="rows")int rows
             ,@Param(value="state")int state, @Param(value="location")String location);
 
-    List getAllPickSkus(@Param(value="id")int orderid);
+    List getAllPickSkus(@Param(value="id")int orderid,@Param(value = "groupId") int groupId);
     List getAllPickLocations();
 
     int deletePickSku(@Param(value="id")int id);

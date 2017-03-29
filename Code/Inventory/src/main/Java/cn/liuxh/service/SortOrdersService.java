@@ -100,8 +100,8 @@ public class SortOrdersService {
         return sortOrdersMapper.getPickOrdersCount(start, rows, state, location);
     }
 
-    public List getAllPickSkus(@Param(value="orderName")int orderid) {
-        return sortOrdersMapper.getAllPickSkus(orderid);
+    public List getAllPickSkus(@Param(value="orderName")int orderid,int groupId) {
+        return sortOrdersMapper.getAllPickSkus(orderid, groupId);
     }
 
     public List getAllPickLocations() {

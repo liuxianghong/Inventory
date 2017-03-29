@@ -151,7 +151,8 @@
         ,goods.size,pickSku.locationNo
         ,pickSku.count,pickSku.seriesNo,pickSku.pickOrderId
         ,goods.name,goods.remarks1,goods.remarks2 from pickSku
-        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo where pickOrderId = #{id};
+        Left JOIN goods ON pickSku.seriesNo = goods.seriesNo AND goods.groupId = #{groupId}
+        where pickOrderId = #{id};
     </select>
 
     <insert id="add" parameterType="cn.liuxh.model.SortOrders" useGeneratedKeys="true"
