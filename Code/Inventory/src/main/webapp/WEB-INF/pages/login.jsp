@@ -21,17 +21,17 @@
 
 
 <div style="margin:20px 0;"></div>
-<div id="loginWin" class="easyui-window" title="登录" style="width:350px;height:188px;padding:5px;"
+<div id="loginWin" class="easyui-window" title="登 录" style="width:350px;height:188px;padding:5px;"
      minimizable="false" maximizable="false" resizable="false" collapsible="false">
     <div class="easyui-layout" fit="true">
         <div region="center" border="false" style="padding:5px;background:#fff;border:1px solid #ccc;">
             <form id="loginForm" method="post">
                 <div style="padding:5px 0;">
-                    <label for="login">帐号:</label>
+                    <label for="login">帐 号:</label>
                     <input type="text" name="userName" style="width:260px;" />
                 </div>
                 <div style="padding:5px 0;">
-                    <label for="password">密码:</label>
+                    <label for="password">密 码:</label>
                     <input type="password" name="password" style="width:260px;" />
                 </div>
                 <div style="padding:5px 0;text-align: center;color: red;" id="showMsg"></div>

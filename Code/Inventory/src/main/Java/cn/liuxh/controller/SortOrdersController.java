@@ -784,11 +784,13 @@ public class SortOrdersController {
 
         int count = sortOrdersService.selectSkUCount(group.getId());
         int rows = 2000;
+        int r = 1;
         for (int i=0 ;i*rows < count ; i++) {
             List<PickSku> goodsList = sortOrdersService.getAllPickSku(i*rows,rows,group.getId());
 
             for (int j=0;j<goodsList.size();j++){
-                row = sheet.createRow(i * 2000 + j + 1);
+                row = sheet.createRow(r);
+                r++;
 
                 PickSku goods = goodsList.get(j);
                 row.createCell(0).setCellValue(goods.getPo());

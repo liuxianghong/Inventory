@@ -231,13 +231,15 @@ public class LocationCheckOrderController {
             cell.setCellStyle(style);
         }
 
-        int count = locationCheckOrderService.count(group.getId());
+        int count = locationCheckOrderService.SkuCount(group.getId());
         int rows = 2000;
+        int r = 1;
         for (int i=0 ;i*rows < count ; i++) {
             List<LocationSkuE> goodsList = locationCheckOrderService.getAllLocationOrdersE(i*rows,rows, group.getId());
 
             for (int j=0;j<goodsList.size();j++){
-                row = sheet.createRow(i * 2000 + j + 1);
+                row = sheet.createRow(r);
+                r++;
 
                 LocationSkuE goods = goodsList.get(j);
                 row.createCell(0).setCellValue(goods.getOrderName());
