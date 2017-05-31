@@ -168,8 +168,8 @@ public class SortOrdersController {
                 return map;
             }
             int start = (page-1)*row;
-            List<PickOrder> orderList = sortOrdersService.getAllPickOrders(start,row,state,location);
-            int total = sortOrdersService.getPickOrdersCount(start,row,state,location);
+            List<PickOrder> orderList = sortOrdersService.getAllPickOrders(start,row,state,location,user.getGroupId());
+            int total = sortOrdersService.getPickOrdersCount(start,row,state,location,user.getGroupId());
             if (orderList == null) orderList = new ArrayList();
             for (int i = 0; i < orderList.size(); i++) {
                 PickOrder order = orderList.get(i);

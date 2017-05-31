@@ -119,6 +119,7 @@
         <if test="location != null and location != '' ">
             AND location = #{location}
         </if>
+        AND groupId = #{groupId}
         limit #{start},#{rows};
     </select>
 
@@ -139,6 +140,7 @@
         <if test="location != null and location != '' ">
             AND location = #{location}
         </if>
+        AND groupId = #{groupId};
     </select>
 
     <select id="getSetting" resultType="java.lang.String">

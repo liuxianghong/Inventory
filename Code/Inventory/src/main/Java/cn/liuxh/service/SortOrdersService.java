@@ -92,12 +92,12 @@ public class SortOrdersService {
         return sortOrdersMapper.lockPickOrderById(id,uid);
     }
 
-    public List getAllPickOrders(int start,int rows,int state,String location){
-        return sortOrdersMapper.getAllPickOrders(start, rows, state, location);
+    public List getAllPickOrders(int start,int rows,int state,String location,int groupId){
+        return sortOrdersMapper.getAllPickOrders(start, rows, state, location,groupId);
     }
 
-    public int getPickOrdersCount(int start,int rows,int state,String location){
-        return sortOrdersMapper.getPickOrdersCount(start, rows, state, location);
+    public int getPickOrdersCount(int start,int rows,int state,String location,int groupId){
+        return sortOrdersMapper.getPickOrdersCount(start, rows, state, location,groupId);
     }
 
     public List getAllPickSkus(@Param(value="orderName")int orderid,int groupId) {

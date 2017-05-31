@@ -50,9 +50,9 @@ public interface SortOrdersMapper {
     int lockPickOrderById(@Param(value="id")int id,@Param(value="uid")int uid);
 
     List getAllPickOrders(@Param(value="start")int start, @Param(value="rows")int rows
-            ,@Param(value="state")int state, @Param(value="location")String location);
+            ,@Param(value="state")int state, @Param(value="location")String location,@Param(value = "groupId") int groupId);
     int getPickOrdersCount(@Param(value="start")int start, @Param(value="rows")int rows
-            ,@Param(value="state")int state, @Param(value="location")String location);
+            ,@Param(value="state")int state, @Param(value="location")String location,@Param(value = "groupId") int groupId);
 
     List getAllPickSkus(@Param(value="id")int orderid,@Param(value = "groupId") int groupId);
     List getAllPickLocations();
